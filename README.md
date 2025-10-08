@@ -34,7 +34,26 @@ This project provides an **undergraduate-level introduction** to quasiperiodic f
 
 ## 🎯 Features
 
-### 1. Interactive Torus Trajectory Explorer
+### 1. Interactive "Draw Your Own Line" App ⭐ NEW!
+
+**The most intuitive way to understand geodesics on the flat torus!**
+
+Students click two points to draw a line, then watch it wrap in real-time:
+
+- **Click-to-draw interface**: Define lines by clicking two points
+- **Live animation**: Watch lines wrap at edges continuously
+- **Instant feedback**: See if your line is periodic (rational) or dense (irrational)
+- **Preset slopes**: Try 1/2, 2/3, √2, φ, π with one click
+- **Play/Pause controls**: Control animation speed (1-10x)
+- **Visual classification**: Red = closes (periodic), Green = fills densely
+
+**Run it:**
+```bash
+python app/interactive_draw_app.py
+```
+Then open http://127.0.0.1:8051 to start drawing!
+
+### 2. Interactive Torus Trajectory Explorer
 
 Visualize the fundamental difference between periodic and quasiperiodic motion:
 
@@ -42,6 +61,8 @@ Visualize the fundamental difference between periodic and quasiperiodic motion:
 - **Adjustable winding number** (α) with rational/irrational presets
 - **Poincaré sections** showing finite points vs dense circles
 - **Real-time comparison** of closed orbits and dense trajectories
+- **Flat torus view**: See geodesics on the unwrapped square
+- **Density heatmaps**: Visualize how irrational lines fill the space
 
 **Run it:**
 ```bash
@@ -49,7 +70,7 @@ python app/dash_torus_app.py
 ```
 Then open http://127.0.0.1:8050 in your browser.
 
-### 2. Triply Periodic Minimal Surface Visualizer
+### 3. Triply Periodic Minimal Surface Visualizer
 
 Explore surfaces defined by functions like:
 
@@ -62,14 +83,14 @@ Features:
 - **Level set animation** to see topology changes
 - **Curvature coloring** for geometric insight
 
-### 3. Quasicrystal and Penrose Tiling Generator
+### 4. Quasicrystal and Penrose Tiling Generator
 
 - **Penrose tiling** with adjustable subdivision iterations
 - **Cut-and-project method** visualization
 - **Diffraction patterns** showing n-fold symmetry
 - **2D quasiperiodic functions** as sum of incommensurate frequencies
 
-### 4. Educational Jupyter Notebooks
+### 5. Educational Jupyter Notebooks
 
 Interactive tutorials covering:
 1. Introduction to quasiperiodic functions
