@@ -44,8 +44,8 @@
         }
 
         .visualization-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 30px;
             margin-bottom: 30px;
         }
@@ -55,6 +55,8 @@
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1400px;
         }
 
         .viz-card h2 {
@@ -67,7 +69,7 @@
 
         .viz-card iframe {
             width: 100%;
-            height: 800px;
+            height: 900px;
             border: none;
             border-radius: 10px;
         }
@@ -89,12 +91,6 @@
 
         footer a:hover {
             text-decoration: underline;
-        }
-
-        @media (max-width: 1200px) {
-            .visualization-container {
-                grid-template-columns: 1fr;
-            }
         }
 
         .info-badge {
