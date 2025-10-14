@@ -93,45 +93,34 @@
             text-decoration: underline;
         }
 
-        .info-badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="main-container">
         <header>
-            <h1>🌀 Quasiperiodic Functions Educational Platform</h1>
-            <p class="subtitle">Interactive Visualizations of Torus Geodesics</p>
-            <div>
-                <span class="info-badge">2D Flat Torus</span>
-                <span class="info-badge">3D Embedded Torus</span>
-            </div>
+            <h1>Quasiperiodic Functions & Torus Geodesics</h1>
+            <p class="subtitle">Interactive Visualizations of Geodesic Curves on the Flat and Embedded Torus</p>
         </header>
 
         <div class="visualization-container">
             <!-- 2D Flat Torus -->
             <div class="viz-card">
-                <h2>🎨 2D Flat Torus Geodesics</h2>
+                <h2>Flat Torus Geodesics (2D)</h2>
                 <p style="color: #666; margin-bottom: 15px;">
-                    Click two points on the square to draw a line. Watch it wrap around the edges!
-                    Will it close (rational slope) or fill the square (irrational slope)?
+                    Click two points on the square to define a geodesic. The visualization demonstrates
+                    how geodesics wrap on the flat torus (identified square), revealing periodic behavior
+                    for rational slopes and dense trajectories for irrational slopes.
                 </p>
                 <iframe src="js/index.html" title="2D Flat Torus Geodesics"></iframe>
             </div>
 
             <!-- 3D Torus -->
             <div class="viz-card">
-                <h2>🍩 3D Torus Geodesics</h2>
+                <h2>Embedded Torus Geodesics (3D)</h2>
                 <p style="color: #666; margin-bottom: 15px;">
-                    Click two points on the donut-shaped torus surface to visualize geodesic curves.
-                    Rotate, zoom, and explore shortest paths on the curved surface.
+                    Click two points on the embedded torus surface to visualize geodesic curves.
+                    This representation shows how geodesics behave on the standard torus embedded in
+                    three-dimensional space.
                 </p>
                 <iframe src="js-3d/index.html" title="3D Torus Geodesics"></iframe>
             </div>
@@ -139,10 +128,7 @@
 
         <footer>
             <p>
-                <strong>Quasiperiodic Functions Educational Platform</strong><br>
-                Exploring quasiperiodic functions, torus dynamics, and minimal surfaces<br>
-                <a href="https://deleo.website/" target="_blank">De Leo Research Group</a> |
-                <a href="https://github.com/yourusername/quasi-periodicity" target="_blank">GitHub Repository</a>
+                Interactive Educational Platform for Quasiperiodic Functions and Torus Dynamics
             </p>
         </footer>
     </div>
