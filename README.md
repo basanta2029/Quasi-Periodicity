@@ -34,41 +34,46 @@ This project provides an **undergraduate-level introduction** to quasiperiodic f
 
 ## 🎯 Features
 
-### 1. Interactive "Draw Your Own Line" App ⭐ NEW!
+### 1. Interactive "Draw Your Own Geodesic" App ⭐ PRIMARY FEATURE
 
-**The most intuitive way to understand geodesics on the flat torus!**
+**Real-time, zero-latency geodesic visualization in pure JavaScript**
 
-Students click two points to draw a line, then watch it wrap in real-time:
+The most intuitive way to understand geodesics on the flat torus! Students click two points to draw a line, then watch it wrap in real-time:
 
+**Features:**
 - **Click-to-draw interface**: Define lines by clicking two points
-- **Live animation**: Watch lines wrap at edges continuously
-- **Instant feedback**: See if your line is periodic (rational) or dense (irrational)
-- **Preset slopes**: Try 1/2, 2/3, √2, φ, π with one click
-- **Play/Pause controls**: Control animation speed (1-10x)
-- **Visual classification**: Red = closes (periodic), Green = fills densely
+- **Draggable points**: Adjust geodesics in real-time by dragging
+- **Live animation**: Smooth 60fps animation with adjustable speed (0.25x - 12x)
+- **Instant classification**: See if your line is periodic (rational) or dense (irrational)
+- **Educational explanations**: Clear badges showing "RATIONAL" vs "IRRATIONAL"
+- **Preset slopes**: Try 1/2, 2/3, 3/5, √2, φ, π/4 with one click
+- **Visual aids**: Point labels, coordinates, axis labels, grid lines
+- **Performance**: <1ms response time, works offline
 
 **Run it:**
 ```bash
-python app/interactive_draw_app.py
+cd app/js
+python -m http.server 8888
 ```
-Then open http://127.0.0.1:8051 to start drawing!
+Then open **http://localhost:8888**
 
-### 2. Interactive Torus Trajectory Explorer
+**Or deploy to GitHub Pages for free static hosting!**
 
-Visualize the fundamental difference between periodic and quasiperiodic motion:
+See `app/js/README.md` for complete documentation and deployment instructions.
 
-- **3D torus visualization** with parametric trajectories
-- **Adjustable winding number** (α) with rational/irrational presets
-- **Poincaré sections** showing finite points vs dense circles
-- **Real-time comparison** of closed orbits and dense trajectories
-- **Flat torus view**: See geodesics on the unwrapped square
-- **Density heatmaps**: Visualize how irrational lines fill the space
+### 2. Educational Jupyter Notebooks
 
-**Run it:**
+Interactive tutorials covering:
+1. Introduction to quasiperiodic functions
+2. Torus dynamics and winding numbers
+3. Flat torus geodesics (complements the interactive app)
+4. Quasicrystals and aperiodic order
+5. Minimal surface topology
+
+**Run notebooks:**
 ```bash
-python app/dash_torus_app.py
+jupyter notebook notebooks/
 ```
-Then open http://127.0.0.1:8050 in your browser.
 
 ### 3. Triply Periodic Minimal Surface Visualizer
 
@@ -135,57 +140,59 @@ pip install -r requirements.txt
 ### Step 4: Verify Installation
 
 ```bash
-python -c "import numpy, plotly, dash, pyvista; print('All imports successful!')"
+python -c "import numpy, plotly, pyvista; print('All imports successful!')"
 ```
+
+**Note:** The interactive app now runs in JavaScript and requires no Python dependencies!
 
 ---
 
 ## ⚡ Quick Start
 
-### Option 1: Interactive Dash App
+### Option 1: Interactive JavaScript App (Recommended)
 
-Launch the main interactive application:
+Launch the interactive geodesic drawer:
 
 ```bash
-python app/dash_torus_app.py
+cd app/js
+python -m http.server 8888
 ```
 
-Visit **http://127.0.0.1:8050** to:
-- Adjust winding number α with sliders
-- Toggle between periodic/quasiperiodic motion
-- View Poincaré sections in real-time
-- Explore preset rational and irrational values
+Visit **http://localhost:8888** and start clicking to draw geodesics!
+
+**Features:**
+- Click two points to draw a line
+- Drag points to adjust in real-time
+- Watch lines wrap with smooth 60fps animation
+- Instantly see if slopes are rational or irrational
+- Learn with clear educational explanations
 
 ### Option 2: Jupyter Notebooks
 
-Start Jupyter and explore the tutorials:
+Explore the mathematics with interactive tutorials:
 
 ```bash
-jupyter notebook notebooks/01_introduction_to_quasiperiodic_functions.ipynb
+jupyter notebook notebooks/
 ```
 
-Work through interactive examples covering:
-- 1D quasiperiodic functions
-- Torus trajectory visualization
+Work through examples covering:
+- Quasiperiodic functions theory
+- Flat torus geodesics
 - Penrose tilings
 - Minimal surfaces
 
-### Option 3: Run Individual Visualizations
+### Option 3: Python Quickstart Demo
 
-Generate standalone HTML visualizations:
+Run the educational demo script:
 
 ```bash
-# Torus trajectories
-python src/visualizations/torus_trajectories.py
-
-# Minimal surfaces
-python src/visualizations/minimal_surfaces.py
-
-# Quasicrystals
-python src/visualizations/quasicrystals.py
+python quickstart.py
 ```
 
-This creates interactive HTML files you can open in any browser.
+This generates static visualizations showing:
+- Rational vs irrational slope comparison
+- Density heatmaps
+- Poincaré sections
 
 ---
 

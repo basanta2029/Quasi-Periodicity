@@ -1,20 +1,14 @@
-# Core Scientific Computing
+# Core Scientific Computing (for Jupyter notebooks and research)
 numpy>=1.24.0
 scipy>=1.10.0
 matplotlib>=3.7.0
 
-# Interactive Visualization
+# Interactive Visualization (for Jupyter notebooks)
 plotly>=5.18.0
-dash>=2.14.0
-dash-bootstrap-components>=1.5.0
 
-# 3D Visualization
+# 3D Visualization (for research tools)
 pyvista>=0.43.0
 vtk>=9.3.0
-
-# Streamlit Integration
-streamlit>=1.29.0
-stpyvista>=0.0.9
 
 # Image Processing (for marching cubes)
 scikit-image>=0.22.0
@@ -22,11 +16,7 @@ scikit-image>=0.22.0
 # Jupyter and Documentation
 jupyter>=1.0.0
 jupyterlab>=4.0.0
-jupyter-book>=0.15.0
 ipywidgets>=8.1.0
-
-# Quasicrystal/Penrose Tiling
-# Note: penrose package from https://github.com/xnx/penrose
 
 # Utilities
 pandas>=2.1.0
@@ -34,3 +24,6 @@ seaborn>=0.13.0
 
 # Optional: Animation
 celluloid>=0.2.0
+
+# Note: The interactive flat torus app is now JavaScript-based and requires no Python dependencies!
+# Just open app/js/index.html in a web browser or use: python -m http.server 8888

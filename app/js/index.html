@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Your Own Geodesic - Interactive Flat Torus</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Draw Your Own Geodesic on the Flat Torus</h1>
+            <p class="subtitle">
+                Click <strong>two points</strong> on the square to draw a line.
+                Watch it wrap around the edges! Will it close (rational slope) or fill the square (irrational slope)?
+            </p>
+        </header>
+
+        <div class="main-content">
+            <!-- Left: Canvas -->
+            <div class="canvas-section">
+                <canvas id="torusCanvas" width="600" height="600"></canvas>
+
+                <div class="controls">
+                    <div class="button-group">
+                        <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                        <button id="playBtn" class="btn btn-success">Play</button>
+                        <button id="pauseBtn" class="btn btn-warning" disabled>Pause</button>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="speedSlider">Animation Speed:</label>
+                        <input type="range" id="speedSlider" min="0" max="12" value="6" step="1">
+                        <span id="speedValue">1x</span>
+                    </div>
+                    <div class="speed-labels">
+                        <span>0.25x</span>
+                        <span>Slow</span>
+                        <span>Fast</span>
+                        <span>10x</span>
+                    </div>
+
+                    <div class="preset-group">
+                        <label>Try these slopes:</label>
+                        <div class="button-group">
+                            <button class="btn btn-preset btn-rational" data-preset="half">1/2</button>
+                            <button class="btn btn-preset btn-rational" data-preset="two-thirds">2/3</button>
+                            <button class="btn btn-preset btn-rational" data-preset="three-fifths">3/5</button>
+                            <button class="btn btn-preset btn-irrational" data-preset="sqrt2">√2</button>
+                            <button class="btn btn-preset btn-irrational" data-preset="phi">φ</button>
+                            <button class="btn btn-preset btn-irrational" data-preset="pi-4">π/4</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Info Panel -->
+            <div class="info-section">
+                <div class="info-card">
+                    <h3>Your Geodesic</h3>
+                    <div id="slopeInfo">
+                        <p class="text-muted">Click two points on the square to get started!</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Understanding the Result</h3>
+                    <p>
+                        <strong>Rational Slope (e.g., 1/2, 2/3):</strong><br>
+                        The line <span class="periodic">closes</span> after a finite number of wraps.
+                        It traces a periodic orbit.
+                    </p>
+                    <p>
+                        <strong>Irrational Slope (e.g., √2, φ, π):</strong><br>
+                        The line <span class="dense">never closes</span> and becomes
+                        <span class="dense">dense</span> - it eventually passes arbitrarily close to every point!
+                    </p>
+                    <hr>
+                    <p class="small text-muted">
+                        <strong>The Flat Torus:</strong><br>
+                        The square with opposite edges identified. When the line hits an edge,
+                        it wraps to the opposite edge and continues.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                <strong>JavaScript Version</strong> - Instant rendering with zero latency |
+                <a href="../interactive_draw_app.py">Python/Dash Version</a> |
+                <a href="https://github.com/yourusername/quasi-periodicity">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="mathUtils.js"></script>
+    <script src="flatTorusApp.js"></script>
+</body>
+</html>

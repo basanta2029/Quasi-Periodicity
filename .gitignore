@@ -49,6 +49,9 @@ ENV/
 !docs/**/*.html
 !docs/**/*.png
 
+# Except app files
+!app/**/*.html
+
 # Data
 *.csv
 *.dat
