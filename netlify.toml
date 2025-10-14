@@ -1,0 +1,9 @@
+[build]
+  # No build command needed - this is a static site
+  publish = "app"
+  command = "echo 'No build required - static HTML/JS'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

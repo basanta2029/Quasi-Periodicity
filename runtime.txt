@@ -1,0 +1,2 @@
+# This file intentionally left blank
+# No runtime needed - static HTML/JS site
