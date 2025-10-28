@@ -434,9 +434,15 @@ class FlatTorusApp {
     }
 
     drawGeodesic(startPoint, slope, tMax) {
+        // Safety check: ensure directionPoint exists
+        if (!this.directionPoint) return;
+
+        // Ensure minimum tMax to show initial geodesic
+        const effectiveTMax = Math.max(tMax, 0.1);
+
         // Generate points using direction vector to ensure line passes through direction point
-        const nPoints = Math.max(1000, Math.floor(tMax * 500));
-        const points = MathUtils.generateGeodesicFromDirection(startPoint, this.directionPoint, tMax, nPoints);
+        const nPoints = Math.max(1000, Math.floor(effectiveTMax * 500));
+        const points = MathUtils.generateGeodesicFromDirection(startPoint, this.directionPoint, effectiveTMax, nPoints);
 
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
