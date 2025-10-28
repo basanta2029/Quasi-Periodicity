@@ -11,7 +11,7 @@ class FlatTorusApp {
         this.height = this.canvas.height;
 
         // State
-        this.origin = { x: 0, y: 0 }; // Always use origin as first point
+        this.origin = { x: 0.5, y: 0.5 }; // Origin at center of square
         this.directionPoint = null; // User selects only the direction
         this.slope = null;
         this.slopeInfo = null;
@@ -249,8 +249,8 @@ class FlatTorusApp {
     updateVisualization() {
         this.drawEmptyCanvas();
 
-        // Draw angle guide and preview (if mouse is over canvas and no direction point set)
-        if (this.mousePosition && !this.directionPoint && this.showAngleGuide) {
+        // Draw angle guide and preview (if mouse is over canvas)
+        if (this.mousePosition && this.showAngleGuide) {
             this.drawAngleGuide();
             this.drawAnglePreview(this.mousePosition);
         }
@@ -280,17 +280,20 @@ class FlatTorusApp {
     }
 
     drawAngleGuide() {
-        // Draw a quarter circle from origin with angle markers
-        const originCanvas = this.unitToCanvasCoords(0, 0);
+        // Draw a quarter circle from center with angle markers
+        const originCanvas = this.unitToCanvasCoords(this.origin.x, this.origin.y);
         const radius = this.width * 0.15; // 15% of canvas width
 
-        // Draw quarter circle arc (0° to 90°)
+        // Draw quarter circle arc from 0° (right/east) to 90° (up/north)
+        // In canvas: 0° is right, angles increase clockwise
+        // But we want mathematical convention: 0° right, 90° up (counterclockwise)
         this.ctx.save();
         this.ctx.strokeStyle = '#999';
         this.ctx.lineWidth = 1.5;
         this.ctx.setLineDash([5, 5]);
         this.ctx.beginPath();
-        this.ctx.arc(originCanvas.x, originCanvas.y, radius, -Math.PI / 2, 0);
+        // Start at 0° (right), go counterclockwise to -90° (up in canvas coords)
+        this.ctx.arc(originCanvas.x, originCanvas.y, radius, 0, -Math.PI / 2, true);
         this.ctx.stroke();
         this.ctx.setLineDash([]);
 
@@ -301,7 +304,8 @@ class FlatTorusApp {
         this.ctx.textAlign = 'center';
 
         angles.forEach(deg => {
-            const rad = (deg - 90) * Math.PI / 180; // -90 because canvas y is inverted
+            // Convert to canvas radians: 0° = right, positive angles go UP (counterclockwise)
+            const rad = -deg * Math.PI / 180; // Negative for counterclockwise
             const tickRadius = radius;
             const labelRadius = radius + 15;
 
@@ -326,13 +330,16 @@ class FlatTorusApp {
     }
 
     drawAnglePreview(mousePoint) {
-        // Draw line from origin to mouse cursor
-        const originCanvas = this.unitToCanvasCoords(0, 0);
+        // Draw line from center origin to mouse cursor
+        const originCanvas = this.unitToCanvasCoords(this.origin.x, this.origin.y);
         const mouseCanvas = this.unitToCanvasCoords(mousePoint.x, mousePoint.y);
 
-        // Calculate angle and slope
-        const dx = mousePoint.x - 0;
-        const dy = mousePoint.y - 0;
+        // Calculate angle and slope from center
+        const dx = mousePoint.x - this.origin.x;
+        const dy = mousePoint.y - this.origin.y;
+
+        // atan2 gives angle from positive x-axis, counterclockwise
+        // We want: 0° = right, 90° = up
         const angleRad = Math.atan2(dy, dx);
         const angleDeg = angleRad * 180 / Math.PI;
         const slope = dy / dx;
@@ -349,13 +356,16 @@ class FlatTorusApp {
         this.ctx.lineTo(mouseCanvas.x, mouseCanvas.y);
         this.ctx.stroke();
 
-        // Draw angle arc
+        // Draw angle arc from 0° to current angle
         const arcRadius = 40;
         this.ctx.strokeStyle = '#2196F3';
         this.ctx.lineWidth = 1.5;
         this.ctx.setLineDash([]);
         this.ctx.beginPath();
-        this.ctx.arc(originCanvas.x, originCanvas.y, arcRadius, -Math.PI / 2, angleRad - Math.PI / 2);
+        // Arc from 0° (right) counterclockwise to current angle
+        // In canvas: counterclockwise = negative direction, but atan2 gives positive for up
+        // So we need to negate for canvas
+        this.ctx.arc(originCanvas.x, originCanvas.y, arcRadius, 0, -angleRad, angleRad < 0);
         this.ctx.stroke();
 
         // Draw info box near mouse
