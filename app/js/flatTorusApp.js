@@ -255,7 +255,7 @@ class FlatTorusApp {
             this.drawAnglePreview(this.mousePosition);
         }
 
-        // Note: Origin at (0,0) is used internally but not drawn (due to translation invariance)
+        // Note: Origin at center (0.5, 0.5) is used internally but not drawn (due to translation invariance)
 
         if (!this.directionPoint) {
             this.updateInfo(null, this.mousePosition);
