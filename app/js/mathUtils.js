@@ -175,7 +175,7 @@ class MathUtils {
     }
 
     /**
-     * Generate geodesic line with wrapping
+     * Generate geodesic line with wrapping (LEGACY - uses slope)
      * @param {Object} startPoint - {x, y} starting point
      * @param {number} slope - Slope of the line
      * @param {number} tMax - How far to trace the line
@@ -201,6 +201,33 @@ class MathUtils {
                 const y = this.wrap(startPoint.y + slope * t);
                 points.push({ x, y });
             }
+        }
+
+        return points;
+    }
+
+    /**
+     * Generate geodesic line from direction vector (ensures line passes through both points)
+     * @param {Object} startPoint - {x, y} starting point (origin)
+     * @param {Object} directionPoint - {x, y} point that defines the direction
+     * @param {number} tMax - How far to trace the line (in multiples of direction vector)
+     * @param {number} nPoints - Number of points to generate
+     * @returns {Array} Array of {x, y} points with wrapping applied
+     */
+    static generateGeodesicFromDirection(startPoint, directionPoint, tMax, nPoints = 1000) {
+        const points = [];
+
+        // Calculate direction vector from start to direction point
+        const dx = directionPoint.x - startPoint.x;
+        const dy = directionPoint.y - startPoint.y;
+
+        // Parametric form: (x0 + dx*t, y0 + dy*t)
+        // When t=1, we reach the direction point exactly
+        for (let i = 0; i < nPoints; i++) {
+            const t = (i / nPoints) * tMax;
+            const x = this.wrap(startPoint.x + dx * t);
+            const y = this.wrap(startPoint.y + dy * t);
+            points.push({ x, y });
         }
 
         return points;

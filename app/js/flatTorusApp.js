@@ -249,8 +249,8 @@ class FlatTorusApp {
     updateVisualization() {
         this.drawEmptyCanvas();
 
-        // Draw angle guide and preview (if mouse is over canvas)
-        if (this.mousePosition && this.showAngleGuide) {
+        // Draw angle guide and preview (if mouse is over canvas and not animating)
+        if (this.mousePosition && this.showAngleGuide && !this.isAnimating) {
             this.drawAngleGuide();
             this.drawAnglePreview(this.mousePosition);
         }
@@ -434,9 +434,9 @@ class FlatTorusApp {
     }
 
     drawGeodesic(startPoint, slope, tMax) {
-        // Generate points
+        // Generate points using direction vector to ensure line passes through direction point
         const nPoints = Math.max(1000, Math.floor(tMax * 500));
-        const points = MathUtils.generateGeodesic(startPoint, slope, tMax, nPoints);
+        const points = MathUtils.generateGeodesicFromDirection(startPoint, this.directionPoint, tMax, nPoints);
 
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
