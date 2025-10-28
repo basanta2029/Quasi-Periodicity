@@ -137,9 +137,9 @@ class MathUtils {
             { value: -2 * Math.PI, symbol: '-2π', name: 'negative two pi' }
         ];
 
-        // Check for exact match (within floating point precision 1e-14)
+        // Check for match with known irrationals (lenient tolerance for user clicks)
         for (const irrational of knownIrrationals) {
-            if (Math.abs(slope - irrational.value) < 1e-14) {
+            if (Math.abs(slope - irrational.value) < 1e-6) {
                 const { p, q } = this.rationalApproximation(slope, 10000);
                 return {
                     slope: slope,
