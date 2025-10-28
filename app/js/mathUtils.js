@@ -94,7 +94,7 @@ class MathUtils {
      * @param {number} tolerance
      * @returns {Object} Classification info
      */
-    static classifySlope(slope, tolerance = 1e-10) {
+    static classifySlope(slope, tolerance = 1e-12) {
         if (!isFinite(slope)) {
             return {
                 slope: slope,
