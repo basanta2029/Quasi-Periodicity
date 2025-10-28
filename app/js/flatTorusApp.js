@@ -255,8 +255,7 @@ class FlatTorusApp {
             this.drawAnglePreview(this.mousePosition);
         }
 
-        // Always draw origin marker
-        this.drawPoints([this.origin], '#FF5722', 8); // Orange for origin
+        // Note: Origin at (0,0) is used internally but not drawn (due to translation invariance)
 
         if (!this.directionPoint) {
             this.updateInfo(null, this.mousePosition);
