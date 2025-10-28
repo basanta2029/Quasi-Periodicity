@@ -160,6 +160,25 @@ class FlatTorusApp {
         this.ctx.rotate(-Math.PI / 2);
         this.ctx.fillText('y', 0, 0);
         this.ctx.restore();
+
+        // Draw center marker at (0.5, 0.5) for reference
+        const centerCanvas = this.unitToCanvasCoords(0.5, 0.5);
+        this.ctx.fillStyle = 'rgba(255, 87, 34, 0.3)';
+        this.ctx.beginPath();
+        this.ctx.arc(centerCanvas.x, centerCanvas.y, 8, 0, 2 * Math.PI);
+        this.ctx.fill();
+
+        // Center crosshair
+        this.ctx.strokeStyle = 'rgba(255, 87, 34, 0.5)';
+        this.ctx.lineWidth = 1;
+        this.ctx.setLineDash([3, 3]);
+        this.ctx.beginPath();
+        this.ctx.moveTo(centerCanvas.x - 15, centerCanvas.y);
+        this.ctx.lineTo(centerCanvas.x + 15, centerCanvas.y);
+        this.ctx.moveTo(centerCanvas.x, centerCanvas.y - 15);
+        this.ctx.lineTo(centerCanvas.x, centerCanvas.y + 15);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
     }
 
     canvasToUnitCoords(canvasX, canvasY) {
