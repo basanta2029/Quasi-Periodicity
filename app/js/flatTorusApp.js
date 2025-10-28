@@ -491,8 +491,8 @@ class FlatTorusApp {
                 const angleRad = Math.atan2(dy, dx);
                 const angleDeg = angleRad * 180 / Math.PI;
 
-                // Classify the slope
-                const slopeInfo = MathUtils.classifySlope(slope);
+                // Classify the slope with lenient tolerance for preview (shows "close enough" matches)
+                const slopeInfo = MathUtils.classifySlope(slope, 1e-4);
                 const icon = slopeInfo.isRational ? '🟢' : '🔴';
                 const colorClass = slopeInfo.isRational ? 'text-success' : 'text-danger';
 
