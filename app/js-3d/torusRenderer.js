@@ -29,7 +29,8 @@ class TorusApp {
         this.mouse = new THREE.Vector2();
 
         // State
-        this.clickedPoints = []; // Array of {theta, phi, mesh}
+        this.originPoint = { theta: 0, phi: 0, mesh: null }; // Always at origin
+        this.directionPoint = null; // User selects only the direction
         this.windingNumbers = null;
         this.windingInfo = null;
 
@@ -54,9 +55,25 @@ class TorusApp {
         this.setupScene();
         this.setupLights();
         this.createTorus();
+        this.createOriginMarker(); // Always show origin
         this.setupEventListeners();
         this.updateInfo(null);
         this.animate();
+    }
+
+    createOriginMarker() {
+        // Create permanent origin marker
+        const pos = TorusGeometry.toroidalTo3D(0, 0);
+        const geometry = new THREE.SphereGeometry(0.15, 16, 16);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0xFF5722,  // Orange for origin
+            emissive: 0xFF5722,
+            emissiveIntensity: 0.3,
+            shininess: 100
+        });
+        this.originPoint.mesh = new THREE.Mesh(geometry, material);
+        this.originPoint.mesh.position.set(pos.x, pos.y, pos.z);
+        this.scene.add(this.originPoint.mesh);
     }
 
     setupScene() {
@@ -188,40 +205,39 @@ class TorusApp {
             // Convert to toroidal coordinates
             const toroidal = TorusGeometry.cartesianToToroidal(point3D.x, point3D.y, point3D.z);
 
-            // Create point marker
-            const marker = this.createPointMarker(point3D);
-
-            if (this.clickedPoints.length < 2) {
-                this.clickedPoints.push({
-                    theta: toroidal.theta,
-                    phi: toroidal.phi,
-                    x: point3D.x,
-                    y: point3D.y,
-                    z: point3D.z,
-                    mesh: marker
-                });
-            } else {
-                // Reset and start new
-                this.clear();
-                this.clickedPoints.push({
-                    theta: toroidal.theta,
-                    phi: toroidal.phi,
-                    x: point3D.x,
-                    y: point3D.y,
-                    z: point3D.z,
-                    mesh: marker
-                });
+            // Remove old direction marker if exists
+            if (this.directionPoint && this.directionPoint.mesh) {
+                this.scene.remove(this.directionPoint.mesh);
             }
 
+            // Create new direction marker
+            const marker = this.createPointMarker(point3D, false); // false = not origin
+
+            // Set direction point (origin is always first)
+            this.directionPoint = {
+                theta: toroidal.theta,
+                phi: toroidal.phi,
+                x: point3D.x,
+                y: point3D.y,
+                z: point3D.z,
+                mesh: marker
+            };
+
+            this.animationProgress = 0;
+            this.pause();
             this.updateVisualization();
         }
     }
 
-    createPointMarker(position) {
+    createPointMarker(position, isOrigin = false) {
         const geometry = new THREE.SphereGeometry(0.15, 16, 16);
+        const color = isOrigin ? 0xFF5722 : 0x2196F3; // Orange for origin, blue for direction
+        const emissive = isOrigin ? 0xFF5722 : 0x2196F3;
+
         const material = new THREE.MeshPhongMaterial({
-            color: 0xffff00,
-            emissive: 0xffaa00,
+            color: color,
+            emissive: emissive,
+            emissiveIntensity: 0.3,
             shininess: 100
         });
         const marker = new THREE.Mesh(geometry, material);
@@ -258,20 +274,15 @@ class TorusApp {
         // Reset pre-generated curve data
         this.fullGeodesicPoints = null;
 
-        if (this.clickedPoints.length === 0) {
+        if (!this.directionPoint) {
             this.updateInfo(null);
             return;
         }
 
-        if (this.clickedPoints.length === 1) {
-            this.updateInfo({ status: 'one_point' });
-            return;
-        }
-
-        // Calculate winding numbers
+        // Calculate winding numbers from origin to direction point
         this.windingNumbers = TorusGeometry.calculateWindingNumbers(
-            this.clickedPoints[0],
-            this.clickedPoints[1]
+            this.originPoint,
+            this.directionPoint
         );
 
         // Classify
@@ -296,7 +307,7 @@ class TorusApp {
     }
 
     drawGeodesic(tMax) {
-        if (this.clickedPoints.length < 2) return;
+        if (!this.directionPoint) return;
 
         // Skip if this is a pre-generated irrational curve (use progressive reveal instead)
         if (this.windingInfo && !this.windingInfo.isRational && this.fullGeodesicPoints) {
@@ -314,7 +325,7 @@ class TorusApp {
             this.scene.remove(this.geodesicCurve);
         }
 
-        const startPoint = this.clickedPoints[0];
+        const startPoint = this.originPoint;
         const { p, q } = this.windingNumbers;
 
         // Generate geodesic points (capped at 1000 for performance)
@@ -355,7 +366,7 @@ class TorusApp {
     pregenerateIrrationalCurve() {
         // Pre-generate FULL geodesic curve for irrational slopes
         // This allows progressive reveal without regenerating geometry
-        const startPoint = this.clickedPoints[0];
+        const startPoint = this.originPoint;
         const { p, q } = this.windingNumbers;
 
         // Generate complete geodesic at maxProgress (200)
@@ -413,18 +424,21 @@ class TorusApp {
         if (!this.geodesicCurve || !this.fullGeodesicPoints) return;
 
         // Calculate how much to reveal (0 to 1)
-        const revealRatio = progress / this.maxProgress;
+        const revealRatio = Math.min(1, progress / this.maxProgress);
 
         // Update draw range to reveal more of the geometry
         const totalIndices = this.geodesicCurve.geometry.index.count;
         const maxIndex = Math.floor(totalIndices * revealRatio);
         this.geodesicCurve.geometry.setDrawRange(0, maxIndex);
 
-        // Update marker position to match revealed portion
-        const pointIndex = Math.floor(this.fullGeodesicPoints.length * revealRatio);
-        if (pointIndex < this.fullGeodesicPoints.length && this.travelingMarker) {
+        // Update marker position to EXACTLY match revealed portion endpoint
+        const pointIndex = Math.floor((this.fullGeodesicPoints.length - 1) * revealRatio);
+        if (pointIndex >= 0 && pointIndex < this.fullGeodesicPoints.length && this.travelingMarker) {
             const point = this.fullGeodesicPoints[pointIndex];
             this.travelingMarker.position.set(point.x, point.y, point.z);
+
+            // Make marker visible
+            this.travelingMarker.visible = true;
         }
     }
 
@@ -448,16 +462,32 @@ class TorusApp {
             this.scene.add(this.travelingMarker);
         }
 
-        // Update marker position
+        // Update marker position to exactly match the geodesic endpoint
         this.travelingMarker.position.set(lastPoint.x, lastPoint.y, lastPoint.z);
+    }
+
+    interpolateMarkerPosition(currentProgress) {
+        // Smoothly interpolate marker between geometry updates (reduces jitter)
+        if (!this.travelingMarker || !this.directionPoint) return;
+
+        const startPoint = this.originPoint;
+        const { p, q } = this.windingNumbers;
+
+        // Calculate exact position at current progress
+        const { dtheta, dphi } = TorusGeometry.geodesicDirection(p, q);
+        const theta = TorusGeometry.wrapAngle(startPoint.theta + dtheta * currentProgress);
+        const phi = TorusGeometry.wrapAngle(startPoint.phi + dphi * currentProgress);
+
+        const pos = TorusGeometry.toroidalTo3D(theta, phi);
+        this.travelingMarker.position.set(pos.x, pos.y, pos.z);
     }
 
     animateMarkerBeyondCurve(currentProgress) {
         // Calculate marker position beyond the drawn curve
         // Optimized: Direct calculation without generating arrays
-        if (!this.travelingMarker || !this.clickedPoints.length) return;
+        if (!this.travelingMarker || !this.directionPoint) return;
 
-        const startPoint = this.clickedPoints[0];
+        const startPoint = this.originPoint;
         const { p, q } = this.windingNumbers;
 
         // Direct calculation (no loop, no array generation - huge performance boost)
@@ -474,26 +504,18 @@ class TorusApp {
 
         if (!info) {
             infoDiv.innerHTML = `
-                <p class="text-muted">Click two points on the torus surface to get started!</p>
+                <p class="text-muted">Click anywhere on the torus to set the geodesic direction!</p>
                 <hr>
                 <p class="small"><strong>💡 How to interact:</strong></p>
                 <ul class="small">
-                    <li>Click two points on the torus to define a geodesic</li>
+                    <li>The <strong style="color: #FF5722;">orange marker</strong> shows the origin</li>
+                    <li>Click to set the direction (creates a <strong style="color: #2196F3;">blue marker</strong>)</li>
                     <li>Drag to rotate the view</li>
                     <li>Scroll to zoom in/out</li>
                     <li>Watch the geodesic curve grow along the surface</li>
                 </ul>
-            `;
-            return;
-        }
-
-        if (info.status === 'one_point') {
-            const pt1 = this.clickedPoints[0];
-            infoDiv.innerHTML = `
-                <p><strong>Point 1 selected!</strong></p>
-                <p class="small"><strong>Coordinates:</strong> (x: ${pt1.x.toFixed(3)}, y: ${pt1.y.toFixed(3)}, z: ${pt1.z.toFixed(3)})</p>
                 <hr>
-                <p class="text-primary"><strong>Click a second point to draw the geodesic!</strong></p>
+                <p class="small"><strong>ℹ️ Note:</strong> Due to translation invariance, all geodesics start from the origin.</p>
             `;
             return;
         }
@@ -545,12 +567,12 @@ class TorusApp {
             `;
         }
 
-        // Format clicked point coordinates
-        const pt1 = this.clickedPoints[0];
-        const pt2 = this.clickedPoints[1];
+        // Format point coordinates
+        const pt1 = this.originPoint;
+        const pt2 = this.directionPoint;
         const coordsInfo = `
-            <p class="small"><strong>📍 Point 1:</strong> (x: ${pt1.x.toFixed(3)}, y: ${pt1.y.toFixed(3)}, z: ${pt1.z.toFixed(3)})</p>
-            <p class="small"><strong>📍 Point 2:</strong> (x: ${pt2.x.toFixed(3)}, y: ${pt2.y.toFixed(3)}, z: ${pt2.z.toFixed(3)})</p>
+            <p class="small"><strong>📍 Origin:</strong> (θ: ${pt1.theta.toFixed(3)}, φ: ${pt1.phi.toFixed(3)})</p>
+            <p class="small"><strong>📍 Direction:</strong> (θ: ${pt2.theta.toFixed(3)}, φ: ${pt2.phi.toFixed(3)})</p>
         `;
 
         infoDiv.innerHTML = `
@@ -572,7 +594,7 @@ class TorusApp {
     }
 
     play() {
-        if (this.clickedPoints.length < 2) return;
+        if (!this.directionPoint) return;
 
         this.isAnimating = true;
         document.getElementById('playBtn').disabled = true;
@@ -588,13 +610,11 @@ class TorusApp {
     clear() {
         this.pause();
 
-        // Remove point markers
-        this.clickedPoints.forEach(point => {
-            if (point.mesh) {
-                this.scene.remove(point.mesh);
-            }
-        });
-        this.clickedPoints = [];
+        // Remove direction marker (keep origin)
+        if (this.directionPoint && this.directionPoint.mesh) {
+            this.scene.remove(this.directionPoint.mesh);
+        }
+        this.directionPoint = null;
 
         // Remove geodesic curve
         if (this.geodesicCurve) {
@@ -636,21 +656,18 @@ class TorusApp {
     applyPreset(presetName) {
         this.clear();
 
-        const points = TorusGeometry.getPresetPoints(presetName);
+        const directionPoint = TorusGeometry.getPresetDirectionPoint(presetName);
+        const pos3D = TorusGeometry.toroidalTo3D(directionPoint.theta, directionPoint.phi);
+        const marker = this.createPointMarker(new THREE.Vector3(pos3D.x, pos3D.y, pos3D.z), false);
 
-        points.forEach(point => {
-            const pos3D = TorusGeometry.toroidalTo3D(point.theta, point.phi);
-            const marker = this.createPointMarker(new THREE.Vector3(pos3D.x, pos3D.y, pos3D.z));
-
-            this.clickedPoints.push({
-                theta: point.theta,
-                phi: point.phi,
-                x: pos3D.x,
-                y: pos3D.y,
-                z: pos3D.z,
-                mesh: marker
-            });
-        });
+        this.directionPoint = {
+            theta: directionPoint.theta,
+            phi: directionPoint.phi,
+            x: pos3D.x,
+            y: pos3D.y,
+            z: pos3D.z,
+            mesh: marker
+        };
 
         this.animationProgress = 0;
         this.updateVisualization();
@@ -664,7 +681,7 @@ class TorusApp {
             this.controls.update();
 
             // Animation logic
-            if (this.isAnimating && this.clickedPoints.length >= 2) {
+            if (this.isAnimating && this.directionPoint) {
                 this.animationProgress += this.animationSpeed * 0.05;
 
                 // Make traveling marker visible once animation starts
@@ -682,24 +699,25 @@ class TorusApp {
                         }
                     }
 
-                    // Throttle geometry updates - don't redraw every frame!
+                    // Update geometry and marker together to maintain sync
                     this.frameCounter++;
                     if (this.frameCounter >= this.updateInterval) {
                         this.drawGeodesic(this.animationProgress);
+                        // Update marker position to match the end of the geodesic
+                        this.updateTravelingMarker();
                         this.frameCounter = 0;
+                    } else {
+                        // Between geometry updates, smoothly interpolate marker position
+                        this.interpolateMarkerPosition(this.animationProgress);
                     }
                 } else {
                     // Irrational: progressive reveal (no geometry regeneration!)
                     if (this.animationProgress < this.maxProgress) {
-                        // Reveal more of the pre-generated curve (cheap operation)
+                        // Reveal more of the pre-generated curve AND update marker in sync
                         this.revealIrrationalCurveUpTo(this.animationProgress);
                     } else {
-                        // Curve is complete - only animate marker
-                        this.frameCounter++;
-                        if (this.frameCounter >= 2) {
-                            this.animateMarkerBeyondCurve(this.animationProgress);
-                            this.frameCounter = 0;
-                        }
+                        // Curve is complete - continue animating marker beyond
+                        this.animateMarkerBeyondCurve(this.animationProgress);
                     }
 
                     // Loop after showing extended animation (1.5x maxProgress)

@@ -273,18 +273,27 @@ class MathUtils {
     }
 
     /**
-     * Calculate preset points for a given slope
+     * Calculate preset points for a given slope (DEPRECATED - use getPresetDirectionPoint)
      */
     static getPresetPoints(slope) {
-        // Choose points that give the desired slope
-        const x1 = 0.1;
-        const y1 = 0.1;
-        const dx = 0.6;
+        // Legacy function - now all geodesics start from origin
+        const origin = { x: 0, y: 0 };
+        const directionPoint = this.getPresetDirectionPoint(slope);
+        return [origin, directionPoint];
+    }
+
+    /**
+     * Get direction point for a given slope (starting from origin)
+     */
+    static getPresetDirectionPoint(slope) {
+        // All geodesics start from origin (0, 0)
+        // Direction point is chosen to give the desired slope
+        const dx = 0.5; // Go halfway across the square
         const dy = slope * dx;
 
-        return [
-            { x: x1, y: y1 },
-            { x: this.wrap(x1 + dx), y: this.wrap(y1 + dy) }
-        ];
+        return {
+            x: this.wrap(dx),
+            y: this.wrap(dy)
+        };
     }
 }
