@@ -323,17 +323,18 @@ class MathUtils {
     }
 
     /**
-     * Get direction point for a given slope (starting from origin)
+     * Get direction point for a given slope (starting from given origin)
+     * @param {number} slope - The desired slope
+     * @param {Object} origin - Origin point {x, y}, defaults to center (0.5, 0.5)
      */
-    static getPresetDirectionPoint(slope) {
-        // All geodesics start from origin (0, 0)
-        // Direction point is chosen to give the desired slope
-        const dx = 0.5; // Go halfway across the square
-        const dy = slope * dx;
+    static getPresetDirectionPoint(slope, origin = {x: 0.5, y: 0.5}) {
+        // Direction point is chosen to give the desired slope from the origin
+        const dx = 0.3; // Distance to travel in x direction
+        const dy = slope * dx; // Distance to travel in y direction (maintains slope)
 
         return {
-            x: this.wrap(dx),
-            y: this.wrap(dy)
+            x: this.wrap(origin.x + dx),
+            y: this.wrap(origin.y + dy)
         };
     }
 }

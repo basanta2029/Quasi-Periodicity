@@ -623,7 +623,7 @@ class FlatTorusApp {
     applyPreset(presetName) {
         this.pause();
         const slope = MathUtils.getPresetSlope(presetName);
-        const directionPoint = MathUtils.getPresetDirectionPoint(slope);
+        const directionPoint = MathUtils.getPresetDirectionPoint(slope, this.origin);
 
         this.directionPoint = directionPoint;
         this.animationProgress = 0;
