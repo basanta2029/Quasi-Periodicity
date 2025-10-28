@@ -484,9 +484,9 @@ class FlatTorusApp {
         if (!info) {
             let previewHTML = '';
             if (mousePoint) {
-                // Calculate preview info
-                const dx = mousePoint.x - 0;
-                const dy = mousePoint.y - 0;
+                // Calculate preview info from center origin
+                const dx = mousePoint.x - this.origin.x;
+                const dy = mousePoint.y - this.origin.y;
                 const slope = dy / dx;
                 const angleRad = Math.atan2(dy, dx);
                 const angleDeg = angleRad * 180 / Math.PI;
@@ -511,7 +511,7 @@ class FlatTorusApp {
                 ${previewHTML}
                 <p class="text-muted">Click anywhere to set the geodesic direction from the origin!</p>
                 <hr class="small-divider">
-                <p class="small"><strong>ℹ️ Note:</strong> Due to translation invariance, all geodesics start from the origin <strong>(0, 0)</strong> at the bottom-left corner.</p>
+                <p class="small"><strong>ℹ️ Note:</strong> Due to translation invariance, all geodesics start from the origin <strong>(0.5, 0.5)</strong> in the center.</p>
             `;
             return;
         }

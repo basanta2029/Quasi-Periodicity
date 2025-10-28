@@ -109,19 +109,32 @@ class MathUtils {
         }
 
         // FIRST: Check if slope matches a KNOWN irrational constant (exact match within floating point precision)
+        // Include both positive and negative versions
         const knownIrrationals = [
             { value: Math.SQRT2, symbol: '√2', name: 'square root of 2' },
+            { value: -Math.SQRT2, symbol: '-√2', name: 'negative square root of 2' },
             { value: Math.sqrt(3), symbol: '√3', name: 'square root of 3' },
+            { value: -Math.sqrt(3), symbol: '-√3', name: 'negative square root of 3' },
             { value: Math.sqrt(5), symbol: '√5', name: 'square root of 5' },
+            { value: -Math.sqrt(5), symbol: '-√5', name: 'negative square root of 5' },
             { value: Math.PI, symbol: 'π', name: 'pi' },
+            { value: -Math.PI, symbol: '-π', name: 'negative pi' },
             { value: Math.PI / 2, symbol: 'π/2', name: 'pi over 2' },
+            { value: -Math.PI / 2, symbol: '-π/2', name: 'negative pi over 2' },
             { value: Math.PI / 3, symbol: 'π/3', name: 'pi over 3' },
+            { value: -Math.PI / 3, symbol: '-π/3', name: 'negative pi over 3' },
             { value: Math.PI / 4, symbol: 'π/4', name: 'pi over 4' },
+            { value: -Math.PI / 4, symbol: '-π/4', name: 'negative pi over 4' },
             { value: Math.PI / 6, symbol: 'π/6', name: 'pi over 6' },
+            { value: -Math.PI / 6, symbol: '-π/6', name: 'negative pi over 6' },
             { value: (1 + Math.sqrt(5)) / 2, symbol: 'φ', name: 'golden ratio (phi)' },
+            { value: -(1 + Math.sqrt(5)) / 2, symbol: '-φ', name: 'negative golden ratio' },
             { value: (Math.sqrt(5) - 1) / 2, symbol: 'φ-1', name: 'phi minus 1' },
+            { value: -(Math.sqrt(5) - 1) / 2, symbol: '-(φ-1)', name: 'negative (phi minus 1)' },
             { value: Math.E, symbol: 'e', name: 'Euler\'s number' },
-            { value: 2 * Math.PI, symbol: '2π', name: 'two pi' }
+            { value: -Math.E, symbol: '-e', name: 'negative Euler\'s number' },
+            { value: 2 * Math.PI, symbol: '2π', name: 'two pi' },
+            { value: -2 * Math.PI, symbol: '-2π', name: 'negative two pi' }
         ];
 
         // Check for exact match (within floating point precision 1e-14)
