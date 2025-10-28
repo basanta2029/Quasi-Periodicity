@@ -38,7 +38,7 @@ class TorusApp {
         this.geodesicCurve = null;
         this.geodesicPoints = [];
         this.fullGeodesicPoints = null; // Pre-generated full curve for irrational
-        this.travelingMarker = null; // Animated endpoint marker
+        // Note: Traveling marker removed for cleaner visualization
 
         // Animation
         this.isAnimating = false;
@@ -259,18 +259,6 @@ class TorusApp {
             this.geodesicCurve = null;
         }
 
-        // Remove old traveling marker
-        if (this.travelingMarker) {
-            if (this.travelingMarker.geometry) {
-                this.travelingMarker.geometry.dispose();
-            }
-            if (this.travelingMarker.material) {
-                this.travelingMarker.material.dispose();
-            }
-            this.scene.remove(this.travelingMarker);
-            this.travelingMarker = null;
-        }
-
         // Reset pre-generated curve data
         this.fullGeodesicPoints = null;
 
@@ -358,9 +346,6 @@ class TorusApp {
 
         this.geodesicCurve = new THREE.Mesh(tubeGeometry, material);
         this.scene.add(this.geodesicCurve);
-
-        // Add/update traveling marker at endpoint
-        this.updateTravelingMarker();
     }
 
     pregenerateIrrationalCurve() {
@@ -397,26 +382,6 @@ class TorusApp {
         this.geodesicCurve = new THREE.Mesh(tubeGeometry, material);
         this.geodesicCurve.geometry.setDrawRange(0, 0); // Start hidden
         this.scene.add(this.geodesicCurve);
-
-        // Create traveling marker
-        if (!this.travelingMarker) {
-            const geometry = new THREE.SphereGeometry(0.2, 16, 16);
-            const markerMaterial = new THREE.MeshPhongMaterial({
-                color: 0x888888,
-                emissive: 0x666666,
-                emissiveIntensity: 0.5,
-                shininess: 100
-            });
-            this.travelingMarker = new THREE.Mesh(geometry, markerMaterial);
-            this.travelingMarker.visible = false; // Hidden until animation starts
-            this.scene.add(this.travelingMarker);
-        }
-
-        // Set initial marker position
-        if (this.fullGeodesicPoints.length > 0) {
-            const firstPoint = this.fullGeodesicPoints[0];
-            this.travelingMarker.position.set(firstPoint.x, firstPoint.y, firstPoint.z);
-        }
     }
 
     revealIrrationalCurveUpTo(progress) {
@@ -430,74 +395,9 @@ class TorusApp {
         const totalIndices = this.geodesicCurve.geometry.index.count;
         const maxIndex = Math.floor(totalIndices * revealRatio);
         this.geodesicCurve.geometry.setDrawRange(0, maxIndex);
-
-        // Update marker position to EXACTLY match revealed portion endpoint
-        const pointIndex = Math.floor((this.fullGeodesicPoints.length - 1) * revealRatio);
-        if (pointIndex >= 0 && pointIndex < this.fullGeodesicPoints.length && this.travelingMarker) {
-            const point = this.fullGeodesicPoints[pointIndex];
-            this.travelingMarker.position.set(point.x, point.y, point.z);
-
-            // Make marker visible
-            this.travelingMarker.visible = true;
-        }
     }
 
-    updateTravelingMarker() {
-        if (this.geodesicPoints.length === 0) return;
-
-        // Get the last point on the current geodesic
-        const lastPoint = this.geodesicPoints[this.geodesicPoints.length - 1];
-
-        if (!this.travelingMarker) {
-            // Create the traveling marker (grey color)
-            const geometry = new THREE.SphereGeometry(0.2, 16, 16);
-            const material = new THREE.MeshPhongMaterial({
-                color: 0x888888,
-                emissive: 0x666666,
-                emissiveIntensity: 0.5,
-                shininess: 100
-            });
-            this.travelingMarker = new THREE.Mesh(geometry, material);
-            this.travelingMarker.visible = false; // Hidden until animation starts
-            this.scene.add(this.travelingMarker);
-        }
-
-        // Update marker position to exactly match the geodesic endpoint
-        this.travelingMarker.position.set(lastPoint.x, lastPoint.y, lastPoint.z);
-    }
-
-    interpolateMarkerPosition(currentProgress) {
-        // Smoothly interpolate marker between geometry updates (reduces jitter)
-        if (!this.travelingMarker || !this.directionPoint) return;
-
-        const startPoint = this.originPoint;
-        const { p, q } = this.windingNumbers;
-
-        // Calculate exact position at current progress
-        const { dtheta, dphi } = TorusGeometry.geodesicDirection(p, q);
-        const theta = TorusGeometry.wrapAngle(startPoint.theta + dtheta * currentProgress);
-        const phi = TorusGeometry.wrapAngle(startPoint.phi + dphi * currentProgress);
-
-        const pos = TorusGeometry.toroidalTo3D(theta, phi);
-        this.travelingMarker.position.set(pos.x, pos.y, pos.z);
-    }
-
-    animateMarkerBeyondCurve(currentProgress) {
-        // Calculate marker position beyond the drawn curve
-        // Optimized: Direct calculation without generating arrays
-        if (!this.travelingMarker || !this.directionPoint) return;
-
-        const startPoint = this.originPoint;
-        const { p, q } = this.windingNumbers;
-
-        // Direct calculation (no loop, no array generation - huge performance boost)
-        const { dtheta, dphi } = TorusGeometry.geodesicDirection(p, q);
-        const theta = TorusGeometry.wrapAngle(startPoint.theta + dtheta * currentProgress);
-        const phi = TorusGeometry.wrapAngle(startPoint.phi + dphi * currentProgress);
-
-        const pos = TorusGeometry.toroidalTo3D(theta, phi);
-        this.travelingMarker.position.set(pos.x, pos.y, pos.z);
-    }
+    // Traveling marker functions removed for cleaner visualization
 
     updateInfo(info) {
         const infoDiv = document.getElementById('geodesicInfo');
@@ -628,18 +528,6 @@ class TorusApp {
             this.geodesicCurve = null;
         }
 
-        // Remove traveling marker
-        if (this.travelingMarker) {
-            if (this.travelingMarker.geometry) {
-                this.travelingMarker.geometry.dispose();
-            }
-            if (this.travelingMarker.material) {
-                this.travelingMarker.material.dispose();
-            }
-            this.scene.remove(this.travelingMarker);
-            this.travelingMarker = null;
-        }
-
         this.windingNumbers = null;
         this.windingInfo = null;
         this.fullGeodesicPoints = null; // Reset pre-generated curve
@@ -684,40 +572,23 @@ class TorusApp {
             if (this.isAnimating && this.directionPoint) {
                 this.animationProgress += this.animationSpeed * 0.05;
 
-                // Make traveling marker visible once animation starts
-                if (this.travelingMarker && this.animationProgress > 0) {
-                    this.travelingMarker.visible = true;
-                }
-
                 if (this.windingInfo && this.windingInfo.isRational) {
                     // Rational: loop back to show periodic closing
                     if (this.animationProgress > this.maxProgress) {
                         this.animationProgress = 0;
-                        // Hide marker when resetting
-                        if (this.travelingMarker) {
-                            this.travelingMarker.visible = false;
-                        }
                     }
 
-                    // Update geometry and marker together to maintain sync
+                    // Update geometry
                     this.frameCounter++;
                     if (this.frameCounter >= this.updateInterval) {
                         this.drawGeodesic(this.animationProgress);
-                        // Update marker position to match the end of the geodesic
-                        this.updateTravelingMarker();
                         this.frameCounter = 0;
-                    } else {
-                        // Between geometry updates, smoothly interpolate marker position
-                        this.interpolateMarkerPosition(this.animationProgress);
                     }
                 } else {
                     // Irrational: progressive reveal (no geometry regeneration!)
                     if (this.animationProgress < this.maxProgress) {
-                        // Reveal more of the pre-generated curve AND update marker in sync
+                        // Reveal more of the pre-generated curve
                         this.revealIrrationalCurveUpTo(this.animationProgress);
-                    } else {
-                        // Curve is complete - continue animating marker beyond
-                        this.animateMarkerBeyondCurve(this.animationProgress);
                     }
 
                     // Loop after showing extended animation (1.5x maxProgress)
