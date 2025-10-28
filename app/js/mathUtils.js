@@ -329,7 +329,8 @@ class MathUtils {
      */
     static getPresetDirectionPoint(slope, origin = {x: 0.5, y: 0.5}) {
         // Direction point is chosen to give the desired slope from the origin
-        const dx = 0.3; // Distance to travel in x direction
+        // Use smaller dx to keep point visible and prevent wrapping
+        const dx = 0.25; // Distance to travel in x direction (reduced for better visibility)
         const dy = slope * dx; // Distance to travel in y direction (maintains slope)
 
         return {

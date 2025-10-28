@@ -13,6 +13,7 @@ class FlatTorusApp {
         // State
         this.origin = { x: 0.5, y: 0.5 }; // Origin at center of square
         this.directionPoint = null; // User selects only the direction
+        this.currentPreset = null; // Track which preset is active
         this.slope = null;
         this.slopeInfo = null;
         this.isAnimating = false;
@@ -185,6 +186,7 @@ class FlatTorusApp {
 
         // Always use origin as first point, user's click is the direction
         this.directionPoint = point;
+        this.currentPreset = null; // Clear preset when manually clicking
         this.pause();
         this.animationProgress = 0;
 
@@ -262,8 +264,8 @@ class FlatTorusApp {
             return;
         }
 
-        // Draw direction point
-        this.drawPoints([this.directionPoint], '#2196F3', 8); // Blue for direction
+        // Draw direction point (larger and more prominent)
+        this.drawPoints([this.directionPoint], '#2196F3', 12); // Blue for direction, larger: 12px
 
         // Calculate slope and classify (from origin to direction point)
         this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
@@ -400,12 +402,12 @@ class FlatTorusApp {
             this.ctx.fill();
             this.ctx.stroke();
 
-            // Add label for origin and direction point
-            const isOrigin = (point.x === 0 && point.y === 0);
+            // Add label for direction point
             const isDirection = (this.directionPoint && point.x === this.directionPoint.x && point.y === this.directionPoint.y);
 
-            if (isOrigin || isDirection) {
-                const label = isOrigin ? 'Origin' : 'Direction';
+            if (isDirection) {
+                // Show preset name if available, otherwise just "Direction"
+                const label = this.currentPreset ? this.getPresetDisplayName(this.currentPreset) : 'Direction';
 
                 // Draw label background
                 this.ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
@@ -591,6 +593,7 @@ class FlatTorusApp {
     clear() {
         this.pause();
         this.directionPoint = null;
+        this.currentPreset = null; // Clear preset
         this.slope = null;
         this.slopeInfo = null;
         this.animationProgress = 0;
@@ -620,12 +623,25 @@ class FlatTorusApp {
         requestAnimationFrame(() => this.animate());
     }
 
+    getPresetDisplayName(presetName) {
+        const names = {
+            'half': '1/2',
+            'two-thirds': '2/3',
+            'three-fifths': '3/5',
+            'sqrt2': '√2',
+            'phi': 'φ',
+            'pi-4': 'π/4'
+        };
+        return names[presetName] || presetName;
+    }
+
     applyPreset(presetName) {
         this.pause();
         const slope = MathUtils.getPresetSlope(presetName);
         const directionPoint = MathUtils.getPresetDirectionPoint(slope, this.origin);
 
         this.directionPoint = directionPoint;
+        this.currentPreset = presetName; // Track which preset is active
         this.animationProgress = 0;
         this.updateVisualization();
     }
