@@ -294,7 +294,7 @@ class FlatTorusApp {
         this.slopeInfo = MathUtils.classifySlope(this.slope);
 
         // Set dynamic maxWraps based on slope type
-        this.maxWraps = this.slopeInfo.isRational ? 30 : 200;
+        this.maxWraps = this.slopeInfo.isRational ? 60 : 200;
 
         // Draw geodesic starting from origin
         this.drawGeodesic(this.origin, this.slope, this.animationProgress);
