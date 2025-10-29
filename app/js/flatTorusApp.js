@@ -133,17 +133,20 @@ class FlatTorusApp {
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'top';
 
-            // Bottom tick labels (x-axis)
+            // Bottom tick labels (x-axis) - relative to origin at (0.5, 0.5)
             if (i % 2 === 0) { // Label every 0.2
-                const label = (i / 10).toFixed(1);
+                const relativeX = (i / 10) - 0.5; // Convert to coordinates relative to origin
+                const label = relativeX >= 0 ? `+${relativeX.toFixed(1)}` : relativeX.toFixed(1);
                 this.ctx.fillText(label, pos, this.height + 5);
             }
 
-            // Left tick labels (y-axis)
+            // Left tick labels (y-axis) - relative to origin at (0.5, 0.5)
             this.ctx.textAlign = 'right';
             this.ctx.textBaseline = 'middle';
             if (i % 2 === 0) {
-                const label = (i / 10).toFixed(1); // Standard orientation: bottom = 0, top = 1
+                const absoluteY = (i / 10); // Standard orientation: bottom = 0, top = 1
+                const relativeY = absoluteY - 0.5; // Convert to coordinates relative to origin
+                const label = relativeY >= 0 ? `+${relativeY.toFixed(1)}` : relativeY.toFixed(1);
                 this.ctx.fillText(label, -5, this.height - pos);
             }
         }
@@ -445,7 +448,12 @@ class FlatTorusApp {
                 this.ctx.fillText(label, canvasCoords.x + 16, canvasCoords.y - 22);
 
                 this.ctx.font = '10px Arial';
-                this.ctx.fillText(`(${point.x.toFixed(3)}, ${point.y.toFixed(3)})`,
+                // Display relative coordinates from origin (0.5, 0.5)
+                const relX = point.x - this.origin.x;
+                const relY = point.y - this.origin.y;
+                const relXStr = relX >= 0 ? `+${relX.toFixed(3)}` : relX.toFixed(3);
+                const relYStr = relY >= 0 ? `+${relY.toFixed(3)}` : relY.toFixed(3);
+                this.ctx.fillText(`(${relXStr}, ${relYStr})`,
                                   canvasCoords.x + 16, canvasCoords.y - 10);
 
                 // Reset stroke style
