@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Torus Geodesics</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js (local files for better reliability) -->
+    <script src="three.min.js"></script>
+    <script src="OrbitControls.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🍩 Interactive 3D Torus Geodesics</h1>
+            <p class="subtitle">Click anywhere on the torus to set the geodesic direction from the origin</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- 3D Canvas Section -->
+            <div class="canvas-section">
+                <div id="canvas-container"></div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <!-- Animation Controls -->
+                    <div class="button-group">
+                        <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                        <button id="playBtn" class="btn btn-success">Play</button>
+                        <button id="pauseBtn" class="btn btn-warning" disabled>Pause</button>
+                        <button id="resetCameraBtn" class="btn btn-secondary">Reset Camera</button>
+                    </div>
+
+                    <!-- Speed Slider -->
+                    <div class="slider-group">
+                        <label for="speedSlider">Animation Speed:</label>
+                        <input type="range" id="speedSlider" min="0" max="12" value="3" step="1">
+                        <span id="speedValue">1x</span>
+                    </div>
+                    <div class="speed-labels">
+                        <span>0.25x</span>
+                        <span>12x</span>
+                    </div>
+
+                    <!-- Preset Buttons -->
+                    <div class="preset-group">
+                        <label>Preset Geodesics:</label>
+                        <div class="button-group">
+                            <button class="btn btn-preset btn-rational" data-preset="1-1">(1,1)</button>
+                            <button class="btn btn-preset btn-rational" data-preset="2-3">(2,3)</button>
+                            <button class="btn btn-preset btn-rational" data-preset="3-5">(3,5)</button>
+                            <button class="btn btn-preset btn-irrational" data-preset="sqrt2">(√2,1)</button>
+                            <button class="btn btn-preset btn-irrational" data-preset="phi">(φ,1)</button>
+                            <button class="btn btn-preset btn-irrational" data-preset="pi">(π,1)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="info-section">
+                <div class="info-card">
+                    <h3>Geodesic Information</h3>
+                    <div id="geodesicInfo">
+                        <p class="text-muted">Click two points on the torus surface to get started!</p>
+                        <hr>
+                        <p class="small"><strong>💡 How to interact:</strong></p>
+                        <ul class="small">
+                            <li>Click two points on the torus to define a geodesic</li>
+                            <li>Drag to rotate the view</li>
+                            <li>Scroll to zoom in/out</li>
+                            <li>Watch the geodesic curve grow along the surface</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>About 3D Torus Geodesics</h3>
+                    <p class="small">
+                        A <strong>torus</strong> is a donut-shaped surface in 3D space.
+                        A <strong>geodesic</strong> is the shortest path between two points on the surface.
+                    </p>
+                    <hr class="small-divider">
+                    <p class="small">
+                        <strong>Winding Numbers (p, q):</strong><br>
+                        • p = wraps around the major circle<br>
+                        • q = wraps around the minor circle
+                    </p>
+                    <hr class="small-divider">
+                    <p class="small">
+                        <strong>🟢 Rational Geodesics</strong> (p,q integers):<br>
+                        Close after finite time → periodic curves
+                    </p>
+                    <p class="small">
+                        <strong>🔴 Irrational Geodesics</strong> (p/q irrational):<br>
+                        Never close → densely fill the surface
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>
+                Part of the <strong>Quasiperiodic Functions Educational Platform</strong> |
+                <a href="https://deleo.website/" target="_blank">De Leo Research Group</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script src="torusGeometry.js?v=2.4"></script>
+    <script src="torusRenderer.js?v=2.4"></script>
+</body>
+</html>
