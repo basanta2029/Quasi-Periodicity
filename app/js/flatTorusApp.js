@@ -11,7 +11,9 @@ class FlatTorusApp {
         this.height = this.canvas.height;
 
         // State
-        this.clickedPoints = [];
+        this.origin = { x: 0.5, y: 0.5 }; // Origin at center of square
+        this.directionPoint = null; // User selects only the direction
+        this.currentPreset = null; // Track which preset is active
         this.slope = null;
         this.slopeInfo = null;
         this.isAnimating = false;
@@ -22,6 +24,10 @@ class FlatTorusApp {
         // Dragging state
         this.isDragging = false;
         this.draggedPointIndex = -1;
+
+        // Angle preview state
+        this.mousePosition = null;
+        this.showAngleGuide = true;
 
         this.init();
     }
@@ -35,11 +41,15 @@ class FlatTorusApp {
         // Canvas click
         this.canvas.addEventListener('click', (e) => this.handleCanvasClick(e));
 
-        // Canvas mouse move (for dragging)
+        // Canvas mouse move (for dragging and angle preview)
         this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('mouseup', () => this.handleMouseUp());
-        this.canvas.addEventListener('mouseleave', () => this.handleMouseUp());
+        this.canvas.addEventListener('mouseleave', () => {
+            this.handleMouseUp();
+            this.mousePosition = null;
+            if (!this.isAnimating) this.updateVisualization();
+        });
 
         // Buttons
         document.getElementById('clearBtn').addEventListener('click', () => this.clear());
@@ -123,18 +133,21 @@ class FlatTorusApp {
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'top';
 
-            // Bottom tick labels (x-axis)
+            // Bottom tick labels (x-axis) - relative to origin at (0.5, 0.5)
             if (i % 2 === 0) { // Label every 0.2
-                const label = (i / 10).toFixed(1);
+                const relativeX = (i / 10) - 0.5; // Convert to coordinates relative to origin
+                const label = relativeX >= 0 ? `+${relativeX.toFixed(1)}` : relativeX.toFixed(1);
                 this.ctx.fillText(label, pos, this.height + 5);
             }
 
-            // Left tick labels (y-axis)
+            // Left tick labels (y-axis) - relative to origin at (0.5, 0.5)
             this.ctx.textAlign = 'right';
             this.ctx.textBaseline = 'middle';
             if (i % 2 === 0) {
-                const label = (1 - i / 10).toFixed(1); // Invert for y-axis
-                this.ctx.fillText(label, -5, pos);
+                const absoluteY = (i / 10); // Standard orientation: bottom = 0, top = 1
+                const relativeY = absoluteY - 0.5; // Convert to coordinates relative to origin
+                const label = relativeY >= 0 ? `+${relativeY.toFixed(1)}` : relativeY.toFixed(1);
+                this.ctx.fillText(label, -5, this.height - pos);
             }
         }
 
@@ -150,12 +163,31 @@ class FlatTorusApp {
         this.ctx.rotate(-Math.PI / 2);
         this.ctx.fillText('y', 0, 0);
         this.ctx.restore();
+
+        // Draw center marker at (0.5, 0.5) for reference
+        const centerCanvas = this.unitToCanvasCoords(0.5, 0.5);
+        this.ctx.fillStyle = 'rgba(255, 87, 34, 0.3)';
+        this.ctx.beginPath();
+        this.ctx.arc(centerCanvas.x, centerCanvas.y, 8, 0, 2 * Math.PI);
+        this.ctx.fill();
+
+        // Center crosshair
+        this.ctx.strokeStyle = 'rgba(255, 87, 34, 0.5)';
+        this.ctx.lineWidth = 1;
+        this.ctx.setLineDash([3, 3]);
+        this.ctx.beginPath();
+        this.ctx.moveTo(centerCanvas.x - 15, centerCanvas.y);
+        this.ctx.lineTo(centerCanvas.x + 15, centerCanvas.y);
+        this.ctx.moveTo(centerCanvas.x, centerCanvas.y - 15);
+        this.ctx.lineTo(centerCanvas.x, centerCanvas.y + 15);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
     }
 
     canvasToUnitCoords(canvasX, canvasY) {
         const rect = this.canvas.getBoundingClientRect();
         const x = (canvasX - rect.left) / this.width;
-        const y = (canvasY - rect.top) / this.height;
+        const y = 1 - (canvasY - rect.top) / this.height;  // Inverted: origin at bottom-left
         return {
             x: Math.max(0, Math.min(1, x)),
             y: Math.max(0, Math.min(1, y))
@@ -165,7 +197,7 @@ class FlatTorusApp {
     unitToCanvasCoords(unitX, unitY) {
         return {
             x: unitX * this.width,
-            y: unitY * this.height
+            y: (1 - unitY) * this.height  // Inverted: origin at bottom-left
         };
     }
 
@@ -174,63 +206,58 @@ class FlatTorusApp {
 
         const point = this.canvasToUnitCoords(e.clientX, e.clientY);
 
-        if (this.clickedPoints.length < 2) {
-            this.clickedPoints.push(point);
-        } else {
-            // Reset and start new line
-            this.clickedPoints = [point];
-            this.pause();
-        }
+        // Always use origin as first point, user's click is the direction
+        this.directionPoint = point;
+        this.currentPreset = null; // Clear preset when manually clicking
+        this.pause();
+        this.animationProgress = 0;
 
         this.updateVisualization();
     }
 
     handleMouseDown(e) {
-        if (this.clickedPoints.length === 0) return;
+        if (!this.directionPoint) return;
 
         const point = this.canvasToUnitCoords(e.clientX, e.clientY);
 
-        // Check if clicking near an existing point
-        for (let i = 0; i < this.clickedPoints.length; i++) {
-            const dx = Math.abs(point.x - this.clickedPoints[i].x);
-            const dy = Math.abs(point.y - this.clickedPoints[i].y);
-            const distance = Math.sqrt(dx * dx + dy * dy);
+        // Check if clicking near the direction point (can't drag origin)
+        const dx = Math.abs(point.x - this.directionPoint.x);
+        const dy = Math.abs(point.y - this.directionPoint.y);
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 0.03) { // Within 3% of canvas
-                this.isDragging = true;
-                this.draggedPointIndex = i;
-                this.canvas.style.cursor = 'grabbing';
-                e.preventDefault();
-                return;
-            }
+        if (distance < 0.03) { // Within 3% of canvas
+            this.isDragging = true;
+            this.draggedPointIndex = 1; // Always dragging the direction point
+            this.canvas.style.cursor = 'grabbing';
+            e.preventDefault();
         }
     }
 
     handleMouseMove(e) {
+        const point = this.canvasToUnitCoords(e.clientX, e.clientY);
+
         if (!this.isDragging || this.draggedPointIndex === -1) {
-            // Check if hovering near a point
-            if (this.clickedPoints.length > 0) {
-                const point = this.canvasToUnitCoords(e.clientX, e.clientY);
-                let nearPoint = false;
+            // Update mouse position for angle preview
+            this.mousePosition = point;
 
-                for (const clickedPoint of this.clickedPoints) {
-                    const dx = Math.abs(point.x - clickedPoint.x);
-                    const dy = Math.abs(point.y - clickedPoint.y);
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+            // Check if hovering near the direction point
+            if (this.directionPoint) {
+                const dx = Math.abs(point.x - this.directionPoint.x);
+                const dy = Math.abs(point.y - this.directionPoint.y);
+                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < 0.03) {
-                        nearPoint = true;
-                        break;
-                    }
-                }
+                this.canvas.style.cursor = (distance < 0.03) ? 'grab' : 'crosshair';
+            }
 
-                this.canvas.style.cursor = nearPoint ? 'grab' : 'crosshair';
+            // Redraw to show angle preview (only if not animating)
+            if (!this.isAnimating) {
+                this.updateVisualization();
             }
             return;
         }
 
-        const point = this.canvasToUnitCoords(e.clientX, e.clientY);
-        this.clickedPoints[this.draggedPointIndex] = point;
+        // Dragging
+        this.directionPoint = point;
         this.animationProgress = 0; // Reset animation
         this.updateVisualization();
     }
@@ -246,33 +273,141 @@ class FlatTorusApp {
     updateVisualization() {
         this.drawEmptyCanvas();
 
-        if (this.clickedPoints.length === 0) {
-            this.updateInfo(null);
+        // Draw angle guide and preview (if mouse is over canvas and not animating)
+        if (this.mousePosition && this.showAngleGuide && !this.isAnimating) {
+            this.drawAngleGuide();
+            this.drawAnglePreview(this.mousePosition);
+        }
+
+        // Note: Origin at center (0.5, 0.5) is used internally but not drawn (due to translation invariance)
+
+        if (!this.directionPoint) {
+            this.updateInfo(null, this.mousePosition);
             return;
         }
 
-        // Draw clicked points
-        this.drawPoints(this.clickedPoints, '#2196F3', 8);
+        // Draw direction point (larger and more prominent)
+        this.drawPoints([this.directionPoint], '#2196F3', 12); // Blue for direction, larger: 12px
 
-        if (this.clickedPoints.length === 1) {
-            this.updateInfo({ status: 'one_point', point: this.clickedPoints[0] });
-            return;
-        }
-
-        // Calculate slope and classify
-        const point1 = this.clickedPoints[0];
-        const point2 = this.clickedPoints[1];
-        this.slope = MathUtils.calculateSlope(point1, point2);
+        // Calculate slope and classify (from origin to direction point)
+        this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
         this.slopeInfo = MathUtils.classifySlope(this.slope);
 
         // Set dynamic maxWraps based on slope type
         this.maxWraps = this.slopeInfo.isRational ? 30 : 200;
 
-        // Draw geodesic
-        this.drawGeodesic(point1, this.slope, this.animationProgress);
+        // Draw geodesic starting from origin
+        this.drawGeodesic(this.origin, this.slope, this.animationProgress);
 
         // Update info panel
         this.updateInfo(this.slopeInfo);
+    }
+
+    drawAngleGuide() {
+        // Draw a quarter circle from center with angle markers
+        const originCanvas = this.unitToCanvasCoords(this.origin.x, this.origin.y);
+        const radius = this.width * 0.15; // 15% of canvas width
+
+        // Draw quarter circle arc from 0° (right/east) to 90° (up/north)
+        // In canvas: 0° is right, angles increase clockwise
+        // But we want mathematical convention: 0° right, 90° up (counterclockwise)
+        this.ctx.save();
+        this.ctx.strokeStyle = '#999';
+        this.ctx.lineWidth = 1.5;
+        this.ctx.setLineDash([5, 5]);
+        this.ctx.beginPath();
+        // Start at 0° (right), go counterclockwise to -90° (up in canvas coords)
+        this.ctx.arc(originCanvas.x, originCanvas.y, radius, 0, -Math.PI / 2, true);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
+
+        // Draw angle tick marks and labels
+        const angles = [0, 15, 30, 45, 60, 75, 90];
+        this.ctx.fillStyle = '#666';
+        this.ctx.font = '11px Arial';
+        this.ctx.textAlign = 'center';
+
+        angles.forEach(deg => {
+            // Convert to canvas radians: 0° = right, positive angles go UP (counterclockwise)
+            const rad = -deg * Math.PI / 180; // Negative for counterclockwise
+            const tickRadius = radius;
+            const labelRadius = radius + 15;
+
+            // Tick mark
+            const tickX = originCanvas.x + tickRadius * Math.cos(rad);
+            const tickY = originCanvas.y + tickRadius * Math.sin(rad);
+
+            this.ctx.fillStyle = deg === 45 ? '#FF5722' : '#999'; // Highlight 45°
+            this.ctx.beginPath();
+            this.ctx.arc(tickX, tickY, 3, 0, 2 * Math.PI);
+            this.ctx.fill();
+
+            // Label
+            const labelX = originCanvas.x + labelRadius * Math.cos(rad);
+            const labelY = originCanvas.y + labelRadius * Math.sin(rad);
+
+            this.ctx.fillStyle = '#666';
+            this.ctx.fillText(`${deg}°`, labelX, labelY);
+        });
+
+        this.ctx.restore();
+    }
+
+    drawAnglePreview(mousePoint) {
+        // Draw line from center origin to mouse cursor
+        const originCanvas = this.unitToCanvasCoords(this.origin.x, this.origin.y);
+        const mouseCanvas = this.unitToCanvasCoords(mousePoint.x, mousePoint.y);
+
+        // Calculate angle and slope from center
+        const dx = mousePoint.x - this.origin.x;
+        const dy = mousePoint.y - this.origin.y;
+
+        // atan2 gives angle from positive x-axis, counterclockwise
+        // We want: 0° = right, 90° = up
+        const angleRad = Math.atan2(dy, dx);
+        const angleDeg = angleRad * 180 / Math.PI;
+        const slope = dy / dx;
+
+        // Draw preview line
+        this.ctx.save();
+        this.ctx.strokeStyle = '#2196F3';
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([10, 5]);
+        this.ctx.globalAlpha = 0.6;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(originCanvas.x, originCanvas.y);
+        this.ctx.lineTo(mouseCanvas.x, mouseCanvas.y);
+        this.ctx.stroke();
+
+        // Draw angle arc from 0° to current angle
+        const arcRadius = 40;
+        this.ctx.strokeStyle = '#2196F3';
+        this.ctx.lineWidth = 1.5;
+        this.ctx.setLineDash([]);
+        this.ctx.beginPath();
+        // Arc from 0° (right) counterclockwise to current angle
+        // In canvas: counterclockwise = negative direction, but atan2 gives positive for up
+        // So we need to negate for canvas
+        this.ctx.arc(originCanvas.x, originCanvas.y, arcRadius, 0, -angleRad, angleRad < 0);
+        this.ctx.stroke();
+
+        // Draw info box near mouse
+        this.ctx.setLineDash([]);
+        this.ctx.globalAlpha = 1;
+        this.ctx.fillStyle = 'rgba(33, 150, 243, 0.95)';
+        this.ctx.fillRect(mouseCanvas.x + 15, mouseCanvas.y - 55, 140, 50);
+
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = 'bold 11px Arial';
+        this.ctx.textAlign = 'left';
+        this.ctx.fillText(`Angle: ${angleDeg.toFixed(1)}°`, mouseCanvas.x + 20, mouseCanvas.y - 40);
+
+        this.ctx.font = '10px Arial';
+        this.ctx.fillText(`Radians: ${angleRad.toFixed(3)}`, mouseCanvas.x + 20, mouseCanvas.y - 28);
+        this.ctx.fillText(`Slope: ${Math.abs(slope) < 100 ? slope.toFixed(3) : '∞'}`, mouseCanvas.x + 20, mouseCanvas.y - 14);
+
+        this.ctx.restore();
     }
 
     drawPoints(points, color, radius) {
@@ -289,9 +424,12 @@ class FlatTorusApp {
             this.ctx.fill();
             this.ctx.stroke();
 
-            // Add label only for clicked points (not the endpoint)
-            if (this.clickedPoints.includes(point)) {
-                const pointIndex = this.clickedPoints.indexOf(point) + 1;
+            // Add label for direction point
+            const isDirection = (this.directionPoint && point.x === this.directionPoint.x && point.y === this.directionPoint.y);
+
+            if (isDirection) {
+                // Show preset name if available, otherwise just "Direction"
+                const label = this.currentPreset ? this.getPresetDisplayName(this.currentPreset) : 'Direction';
 
                 // Draw label background
                 this.ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
@@ -307,10 +445,15 @@ class FlatTorusApp {
                 this.ctx.font = 'bold 11px Arial';
                 this.ctx.textAlign = 'left';
                 this.ctx.textBaseline = 'top';
-                this.ctx.fillText(`Point ${pointIndex}`, canvasCoords.x + 16, canvasCoords.y - 22);
+                this.ctx.fillText(label, canvasCoords.x + 16, canvasCoords.y - 22);
 
                 this.ctx.font = '10px Arial';
-                this.ctx.fillText(`(${point.x.toFixed(3)}, ${point.y.toFixed(3)})`,
+                // Display relative coordinates from origin (0.5, 0.5)
+                const relX = point.x - this.origin.x;
+                const relY = point.y - this.origin.y;
+                const relXStr = relX >= 0 ? `+${relX.toFixed(3)}` : relX.toFixed(3);
+                const relYStr = relY >= 0 ? `+${relY.toFixed(3)}` : relY.toFixed(3);
+                this.ctx.fillText(`(${relXStr}, ${relYStr})`,
                                   canvasCoords.x + 16, canvasCoords.y - 10);
 
                 // Reset stroke style
@@ -320,9 +463,15 @@ class FlatTorusApp {
     }
 
     drawGeodesic(startPoint, slope, tMax) {
-        // Generate points
-        const nPoints = Math.max(1000, Math.floor(tMax * 500));
-        const points = MathUtils.generateGeodesic(startPoint, slope, tMax, nPoints);
+        // Safety check: ensure directionPoint exists
+        if (!this.directionPoint) return;
+
+        // Ensure minimum tMax to show initial geodesic
+        const effectiveTMax = Math.max(tMax, 0.1);
+
+        // Generate points using direction vector to ensure line passes through direction point
+        const nPoints = Math.max(1000, Math.floor(effectiveTMax * 500));
+        const points = MathUtils.generateGeodesicFromDirection(startPoint, this.directionPoint, effectiveTMax, nPoints);
 
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
@@ -358,19 +507,40 @@ class FlatTorusApp {
         }
     }
 
-    updateInfo(info) {
+    updateInfo(info, mousePoint = null) {
         const slopeInfoDiv = document.getElementById('slopeInfo');
 
         if (!info) {
-            slopeInfoDiv.innerHTML = '<p class="text-muted">Click two points on the square to get started!</p>';
-            return;
-        }
+            let previewHTML = '';
+            if (mousePoint) {
+                // Calculate preview info from center origin
+                const dx = mousePoint.x - this.origin.x;
+                const dy = mousePoint.y - this.origin.y;
+                const slope = dy / dx;
+                const angleRad = Math.atan2(dy, dx);
+                const angleDeg = angleRad * 180 / Math.PI;
 
-        if (info.status === 'one_point') {
-            const p = info.point;
+                // Classify the slope with lenient tolerance for preview (shows "close enough" matches)
+                const slopeInfo = MathUtils.classifySlope(slope, 1e-4);
+                const icon = slopeInfo.isRational ? '🟢' : '🔴';
+                const colorClass = slopeInfo.isRational ? 'text-success' : 'text-danger';
+
+                previewHTML = `
+                    <div style="background: #f0f0f0; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+                        <p class="small"><strong>📐 Angle Preview:</strong></p>
+                        <p class="small">Angle: <strong>${angleDeg.toFixed(1)}°</strong> (${angleRad.toFixed(3)} rad)</p>
+                        <p class="small">Slope: <strong>${Math.abs(slope) < 100 ? slope.toFixed(3) : '∞'}</strong></p>
+                        <hr class="small-divider">
+                        <p class="small ${colorClass}"><span class="icon">${icon}</span> ${slopeInfo.classification}</p>
+                    </div>
+                `;
+            }
+
             slopeInfoDiv.innerHTML = `
-                <p><strong>Point 1:</strong> (${p.x.toFixed(3)}, ${p.y.toFixed(3)})</p>
-                <p class="text-primary"><strong>Click a second point to draw the line!</strong></p>
+                ${previewHTML}
+                <p class="text-muted">Click anywhere to set the geodesic direction from the origin!</p>
+                <hr class="small-divider">
+                <p class="small"><strong>ℹ️ Note:</strong> Due to translation invariance, all geodesics start from the origin <strong>(0.5, 0.5)</strong> in the center.</p>
             `;
             return;
         }
@@ -433,7 +603,7 @@ class FlatTorusApp {
     }
 
     play() {
-        if (this.clickedPoints.length < 2) return;
+        if (!this.directionPoint) return;
 
         this.isAnimating = true;
         document.getElementById('playBtn').disabled = true;
@@ -449,7 +619,8 @@ class FlatTorusApp {
 
     clear() {
         this.pause();
-        this.clickedPoints = [];
+        this.directionPoint = null;
+        this.currentPreset = null; // Clear preset
         this.slope = null;
         this.slopeInfo = null;
         this.animationProgress = 0;
@@ -479,12 +650,25 @@ class FlatTorusApp {
         requestAnimationFrame(() => this.animate());
     }
 
+    getPresetDisplayName(presetName) {
+        const names = {
+            'half': '1/2',
+            'two-thirds': '2/3',
+            'three-fifths': '3/5',
+            'sqrt2': '√2',
+            'phi': 'φ',
+            'pi-4': 'π/4'
+        };
+        return names[presetName] || presetName;
+    }
+
     applyPreset(presetName) {
         this.pause();
         const slope = MathUtils.getPresetSlope(presetName);
-        const points = MathUtils.getPresetPoints(slope);
+        const directionPoint = MathUtils.getPresetDirectionPoint(slope, this.origin);
 
-        this.clickedPoints = points;
+        this.directionPoint = directionPoint;
+        this.currentPreset = presetName; // Track which preset is active
         this.animationProgress = 0;
         this.updateVisualization();
     }

@@ -314,22 +314,29 @@ class TorusGeometry {
     }
 
     /**
-     * Get preset starting points for a given winding number preset
+     * Get preset starting points for a given winding number preset (DEPRECATED)
      */
     static getPresetPoints(presetName) {
-        // Start from a fixed point
-        const point1 = { theta: 0, phi: 0 };
+        // Legacy function - now all geodesics start from origin
+        const origin = { theta: 0, phi: 0 };
+        const directionPoint = this.getPresetDirectionPoint(presetName);
+        return [origin, directionPoint];
+    }
 
-        // Calculate second point based on winding numbers
+    /**
+     * Get direction point for a given preset (starting from origin)
+     */
+    static getPresetDirectionPoint(presetName) {
+        // All geodesics start from origin (0, 0)
         const { p, q } = this.getPresetWindingNumbers(presetName);
 
-        // Move by a fraction of a full cycle
+        // Move by a fraction of a full cycle to set direction
         const t = 0.3; // 30% of the way
-        const point2 = {
-            theta: this.wrapAngle(point1.theta + p * t * 2 * Math.PI),
-            phi: this.wrapAngle(point1.phi + q * t * 2 * Math.PI)
+        const directionPoint = {
+            theta: this.wrapAngle(p * t * 2 * Math.PI),
+            phi: this.wrapAngle(q * t * 2 * Math.PI)
         };
 
-        return [point1, point2];
+        return directionPoint;
     }
 }

@@ -94,7 +94,7 @@ class MathUtils {
      * @param {number} tolerance
      * @returns {Object} Classification info
      */
-    static classifySlope(slope, tolerance = 1e-10) {
+    static classifySlope(slope, tolerance = 1e-12) {
         if (!isFinite(slope)) {
             return {
                 slope: slope,
@@ -109,24 +109,37 @@ class MathUtils {
         }
 
         // FIRST: Check if slope matches a KNOWN irrational constant (exact match within floating point precision)
+        // Include both positive and negative versions
         const knownIrrationals = [
             { value: Math.SQRT2, symbol: '√2', name: 'square root of 2' },
+            { value: -Math.SQRT2, symbol: '-√2', name: 'negative square root of 2' },
             { value: Math.sqrt(3), symbol: '√3', name: 'square root of 3' },
+            { value: -Math.sqrt(3), symbol: '-√3', name: 'negative square root of 3' },
             { value: Math.sqrt(5), symbol: '√5', name: 'square root of 5' },
+            { value: -Math.sqrt(5), symbol: '-√5', name: 'negative square root of 5' },
             { value: Math.PI, symbol: 'π', name: 'pi' },
+            { value: -Math.PI, symbol: '-π', name: 'negative pi' },
             { value: Math.PI / 2, symbol: 'π/2', name: 'pi over 2' },
+            { value: -Math.PI / 2, symbol: '-π/2', name: 'negative pi over 2' },
             { value: Math.PI / 3, symbol: 'π/3', name: 'pi over 3' },
+            { value: -Math.PI / 3, symbol: '-π/3', name: 'negative pi over 3' },
             { value: Math.PI / 4, symbol: 'π/4', name: 'pi over 4' },
+            { value: -Math.PI / 4, symbol: '-π/4', name: 'negative pi over 4' },
             { value: Math.PI / 6, symbol: 'π/6', name: 'pi over 6' },
+            { value: -Math.PI / 6, symbol: '-π/6', name: 'negative pi over 6' },
             { value: (1 + Math.sqrt(5)) / 2, symbol: 'φ', name: 'golden ratio (phi)' },
+            { value: -(1 + Math.sqrt(5)) / 2, symbol: '-φ', name: 'negative golden ratio' },
             { value: (Math.sqrt(5) - 1) / 2, symbol: 'φ-1', name: 'phi minus 1' },
+            { value: -(Math.sqrt(5) - 1) / 2, symbol: '-(φ-1)', name: 'negative (phi minus 1)' },
             { value: Math.E, symbol: 'e', name: 'Euler\'s number' },
-            { value: 2 * Math.PI, symbol: '2π', name: 'two pi' }
+            { value: -Math.E, symbol: '-e', name: 'negative Euler\'s number' },
+            { value: 2 * Math.PI, symbol: '2π', name: 'two pi' },
+            { value: -2 * Math.PI, symbol: '-2π', name: 'negative two pi' }
         ];
 
-        // Check for exact match (within floating point precision 1e-14)
+        // Check for match with known irrationals (lenient tolerance for user clicks)
         for (const irrational of knownIrrationals) {
-            if (Math.abs(slope - irrational.value) < 1e-14) {
+            if (Math.abs(slope - irrational.value) < 1e-6) {
                 const { p, q } = this.rationalApproximation(slope, 10000);
                 return {
                     slope: slope,
@@ -175,7 +188,7 @@ class MathUtils {
     }
 
     /**
-     * Generate geodesic line with wrapping
+     * Generate geodesic line with wrapping (LEGACY - uses slope)
      * @param {Object} startPoint - {x, y} starting point
      * @param {number} slope - Slope of the line
      * @param {number} tMax - How far to trace the line
@@ -201,6 +214,33 @@ class MathUtils {
                 const y = this.wrap(startPoint.y + slope * t);
                 points.push({ x, y });
             }
+        }
+
+        return points;
+    }
+
+    /**
+     * Generate geodesic line from direction vector (ensures line passes through both points)
+     * @param {Object} startPoint - {x, y} starting point (origin)
+     * @param {Object} directionPoint - {x, y} point that defines the direction
+     * @param {number} tMax - How far to trace the line (in multiples of direction vector)
+     * @param {number} nPoints - Number of points to generate
+     * @returns {Array} Array of {x, y} points with wrapping applied
+     */
+    static generateGeodesicFromDirection(startPoint, directionPoint, tMax, nPoints = 1000) {
+        const points = [];
+
+        // Calculate direction vector from start to direction point
+        const dx = directionPoint.x - startPoint.x;
+        const dy = directionPoint.y - startPoint.y;
+
+        // Parametric form: (x0 + dx*t, y0 + dy*t)
+        // When t=1, we reach the direction point exactly
+        for (let i = 0; i < nPoints; i++) {
+            const t = (i / nPoints) * tMax;
+            const x = this.wrap(startPoint.x + dx * t);
+            const y = this.wrap(startPoint.y + dy * t);
+            points.push({ x, y });
         }
 
         return points;
@@ -273,18 +313,29 @@ class MathUtils {
     }
 
     /**
-     * Calculate preset points for a given slope
+     * Calculate preset points for a given slope (DEPRECATED - use getPresetDirectionPoint)
      */
     static getPresetPoints(slope) {
-        // Choose points that give the desired slope
-        const x1 = 0.1;
-        const y1 = 0.1;
-        const dx = 0.6;
-        const dy = slope * dx;
+        // Legacy function - now all geodesics start from origin
+        const origin = { x: 0, y: 0 };
+        const directionPoint = this.getPresetDirectionPoint(slope);
+        return [origin, directionPoint];
+    }
 
-        return [
-            { x: x1, y: y1 },
-            { x: this.wrap(x1 + dx), y: this.wrap(y1 + dy) }
-        ];
+    /**
+     * Get direction point for a given slope (starting from given origin)
+     * @param {number} slope - The desired slope
+     * @param {Object} origin - Origin point {x, y}, defaults to center (0.5, 0.5)
+     */
+    static getPresetDirectionPoint(slope, origin = {x: 0.5, y: 0.5}) {
+        // Direction point is chosen to give the desired slope from the origin
+        // Use smaller dx to keep point visible and prevent wrapping
+        const dx = 0.25; // Distance to travel in x direction (reduced for better visibility)
+        const dy = slope * dx; // Distance to travel in y direction (maintains slope)
+
+        return {
+            x: this.wrap(origin.x + dx),
+            y: this.wrap(origin.y + dy)
+        };
     }
 }
