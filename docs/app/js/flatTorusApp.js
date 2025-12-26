@@ -293,8 +293,8 @@ class FlatTorusApp {
         this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
         this.slopeInfo = MathUtils.classifySlope(this.slope);
 
-        // Set dynamic maxWraps based on slope type
-        this.maxWraps = this.slopeInfo.isRational ? 30 : 200;
+        // Set dynamic maxWraps based on slope type (increased to 200 for rational to ensure closure is visible)
+        this.maxWraps = 200;
 
         // Draw geodesic starting from origin
         this.drawGeodesic(this.origin, this.slope, this.animationProgress);
@@ -476,11 +476,11 @@ class FlatTorusApp {
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
 
-        // Color based on classification
-        const color = this.slopeInfo && this.slopeInfo.isRational ? '#28a745' : '#dc3545';
+        // Color based on classification - more vibrant colors
+        const color = this.slopeInfo && this.slopeInfo.isRational ? '#00ff00' : '#ff0066';
 
         this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = 3;
+        this.ctx.lineWidth = 4;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
 
