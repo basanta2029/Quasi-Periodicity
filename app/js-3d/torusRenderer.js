@@ -134,11 +134,11 @@ class TorusApp {
         // Torus geometry
         const geometry = new THREE.TorusGeometry(R, r, 64, 128);
 
-        // Semi-transparent material with wireframe overlay
+        // Semi-transparent material with wireframe overlay - more vibrant
         const material = new THREE.MeshPhongMaterial({
-            color: 0x4488ff,
+            color: 0x5599ff,
             transparent: true,
-            opacity: 0.8,
+            opacity: 0.85,
             side: THREE.DoubleSide,
             shininess: 30
         });
@@ -149,10 +149,10 @@ class TorusApp {
         // Add wireframe
         const wireframeGeometry = new THREE.TorusGeometry(R, r, 32, 64);
         const wireframeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x88aaff,
+            color: 0x3366ff,
             wireframe: true,
             transparent: true,
-            opacity: 0.3
+            opacity: 0.4
         });
         const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
         this.scene.add(wireframe);
@@ -231,8 +231,8 @@ class TorusApp {
 
     createPointMarker(position, isOrigin = false) {
         const geometry = new THREE.SphereGeometry(0.15, 16, 16);
-        const color = isOrigin ? 0xFF5722 : 0x2196F3; // Orange for origin, blue for direction
-        const emissive = isOrigin ? 0xFF5722 : 0x2196F3;
+        const color = isOrigin ? 0xFF5722 : 0x00aaff; // Orange for origin, bright blue for direction
+        const emissive = isOrigin ? 0xFF5722 : 0x00aaff;
 
         const material = new THREE.MeshPhongMaterial({
             color: color,
@@ -334,8 +334,8 @@ class TorusApp {
         const tubularSegments = Math.min(1000, points.length);
         const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, 0.05, 6, false);
 
-        // Color based on classification
-        const color = this.windingInfo && this.windingInfo.isRational ? 0x28a745 : 0xdc3545;
+        // Color based on classification - more vibrant colors
+        const color = this.windingInfo && this.windingInfo.isRational ? 0x00ff00 : 0xff0066;
 
         const material = new THREE.MeshPhongMaterial({
             color: color,
@@ -370,8 +370,8 @@ class TorusApp {
         const tubularSegments = 1000; // Increased for smoother curves
         const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, 0.05, 8, false); // Increased radial segments to 8
 
-        // Red color for irrational
-        const color = 0xdc3545;
+        // Vibrant pink color for irrational
+        const color = 0xff0066;
         const material = new THREE.MeshPhongMaterial({
             color: color,
             emissive: color,

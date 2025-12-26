@@ -476,11 +476,11 @@ class FlatTorusApp {
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
 
-        // Color based on classification
-        const color = this.slopeInfo && this.slopeInfo.isRational ? '#28a745' : '#dc3545';
+        // Color based on classification - more vibrant colors
+        const color = this.slopeInfo && this.slopeInfo.isRational ? '#00ff00' : '#ff0066';
 
         this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = 3;
+        this.ctx.lineWidth = 4;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
 
