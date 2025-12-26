@@ -1,0 +1,227 @@
+/* Enhanced styles for the complete interactive paper */
+
+/* Import base styles */
+@import url('style.css');
+
+/* Additional styles for new elements */
+
+/* Story and example boxes */
+.story-box, .example-box, .worked-example, .concept-box, 
+.math-insight, .connection-box, .method-box, .tool-description,
+.technical-note, .function-box, .visualization-explanation,
+.transformation-box, .polyhedra-explanation, .physics-box,
+.lead-explanation, .formula-box, .applications-grid,
+.future-box, .closing-thought {
+    background: #f8f9fa;
+    border-left: 4px solid #3498db;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.story-box {
+    border-left-color: #e74c3c;
+    background: #fef5f5;
+}
+
+.example-box {
+    border-left-color: #2ecc71;
+    background: #f5fef8;
+}
+
+.physics-box {
+    border-left-color: #9b59b6;
+    background: #faf5fe;
+}
+
+.formula-box {
+    border-left-color: #f39c12;
+    background: #fffaf5;
+}
+
+/* Enhanced interactive demos */
+.interactive-demo canvas {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+#quasicrystal-demo {
+    display: block;
+    margin: 20px auto;
+    cursor: crosshair;
+}
+
+#triply-periodic-viz {
+    background: white;
+    border: 1px solid #ddd;
+}
+
+/* Control enhancements */
+.controls select {
+    padding: 5px 10px;
+    margin: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: white;
+    font-size: 14px;
+}
+
+.controls input[type="range"] {
+    width: 200px;
+}
+
+/* Progress indicator */
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    z-index: 1000;
+    transition: width 0.3s ease;
+}
+
+/* Section numbers */
+h2::before {
+    content: "§";
+    color: #3498db;
+    margin-right: 10px;
+    opacity: 0.5;
+}
+
+/* Interactive section highlighting */
+section:target {
+    animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+    0% { background-color: rgba(52, 152, 219, 0.1); }
+    100% { background-color: transparent; }
+}
+
+/* Better equation spacing */
+.MathJax {
+    margin: 10px 0 !important;
+}
+
+/* Inline code */
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #e74c3c;
+}
+
+/* Lists in boxes */
+.example-box ul, .concept-box ul, .physics-box ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+.example-box li, .concept-box li {
+    margin: 5px 0;
+}
+
+/* Print styles enhancement */
+@media print {
+    .interactive-demo::after,
+    .embedded-app::after {
+        content: "🔗 Interactive element: View online at [URL]";
+        display: block;
+        text-align: center;
+        padding: 20px;
+        border: 2px dashed #999;
+        margin: 10px 0;
+        font-style: italic;
+        color: #666;
+    }
+    
+    #reading-progress,
+    .controls {
+        display: none !important;
+    }
+    
+    .print-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 10px auto;
+    }
+    
+    canvas {
+        display: none;
+    }
+}
+
+/* Mobile enhancements */
+@media (max-width: 768px) {
+    .controls input[type="range"] {
+        width: 150px;
+    }
+    
+    .controls {
+        font-size: 14px;
+    }
+    
+    .controls label {
+        display: block;
+        margin: 10px 0;
+    }
+    
+    #quasicrystal-demo {
+        width: 100%;
+        height: auto;
+        max-width: 400px;
+    }
+}
+
+/* Dark mode disabled - always use light theme */
+
+/* Smooth transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Copy section link feedback */
+h2[id]:active, h3[id]:active {
+    transform: scale(0.98);
+}
+
+/* Loading animation for iframes */
+iframe {
+    position: relative;
+    background: #f8f9fa url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="%233498db" stroke-width="3"><animate attributeName="stroke-dasharray" from="0 126" to="126 126" dur="1.5s" repeatCount="indefinite"/></circle></svg>') center no-repeat;
+}
+
+iframe[src] {
+    background: white;
+}
+
+/* Sticky navigation enhancement - handled in base style.css */
+@media (min-width: 1200px) {
+    
+    #toc::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    #toc::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    #toc::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    
+    #toc::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
+/* Highlighted current section in TOC */
+#toc a.active {
+    font-weight: bold;
+    color: #2c3e50;
+}
