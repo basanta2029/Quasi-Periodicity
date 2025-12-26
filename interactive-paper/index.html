@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quasiperiodic Functions in Multiple Variables: Theory, Visualization, and Applications</title>
     <link rel="stylesheet" href="style.css?v=2">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <!-- Removed polyfill.io as it may cause loading issues -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
         window.MathJax = {
@@ -597,7 +597,40 @@
         </section>
     </div>
 
-    <script src="interactive-demos.js"></script>
-    <script src="additional-demos.js"></script>
+    <!-- Load scripts with proper error handling -->
+    <script>
+        // Ensure DOM is loaded before running interactive scripts
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM ready, loading interactive scripts...');
+            
+            // Load interactive-demos.js
+            const script1 = document.createElement('script');
+            script1.src = 'interactive-demos.js';
+            script1.onload = function() {
+                console.log('interactive-demos.js loaded successfully');
+            };
+            script1.onerror = function() {
+                console.error('Failed to load interactive-demos.js');
+            };
+            document.body.appendChild(script1);
+            
+            // Load additional-demos.js
+            const script2 = document.createElement('script');
+            script2.src = 'additional-demos.js';
+            script2.onload = function() {
+                console.log('additional-demos.js loaded successfully');
+            };
+            script2.onerror = function() {
+                console.error('Failed to load additional-demos.js');
+            };
+            document.body.appendChild(script2);
+        });
+        
+        // Global error handler for debugging
+        window.onerror = function(msg, url, line, col, error) {
+            console.error('JavaScript error:', msg, 'at', url + ':' + line);
+            return false;
+        };
+    </script>
 </body>
 </html>
