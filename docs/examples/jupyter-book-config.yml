@@ -1,0 +1,61 @@
+# Jupyter Book configuration for interactive paper
+
+# Book settings
+title: "Quasiperiodic Functions in Multiple Variables"
+author: "[Your Name]"
+email: your.email@institution.edu
+copyright: "2024"
+logo: ""
+
+# Force re-execution of notebooks on each build
+execute:
+  execute_notebooks: force
+  timeout: 100
+  allow_errors: false
+
+# Launch button settings
+launch_buttons:
+  notebook_interface: "classic"
+  binderhub_url: "https://mybinder.org"
+  colab_url: "https://colab.research.google.com"
+  thebe: true
+
+# HTML outputs
+html:
+  favicon: ""
+  use_edit_page_button: true
+  use_repository_button: true
+  use_issues_button: true
+  extra_navbar: ""
+  home_page_in_navbar: true
+  baseurl: ""
+  analytics:
+    google_analytics_id: ""
+
+# LaTeX settings
+latex:
+  latex_engine: pdflatex
+  use_jupyterbook_latex: true
+  latex_documents:
+    targetname: book.tex
+
+# Advanced
+sphinx:
+  extra_extensions:
+    - sphinx_inline_tabs
+    - sphinx_proof
+    - sphinx_examples
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    html_js_files:
+      - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
+
+# Repository settings
+repository:
+  url: https://github.com/yourusername/Quasi-Periodicity
+  path_to_book: interactive-paper
+  branch: main
+
+# Bibliography
+bibtex_bibfiles:
+  - references.bib

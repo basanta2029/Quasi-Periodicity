@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Apps Alternative</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        .app-container {
+            margin: 40px 0;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .app-container h2 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .app-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .app-link:hover {
+            background: #2980b9;
+        }
+        iframe {
+            width: 100%;
+            height: 700px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        .note {
+            background: #fffbeb;
+            border: 1px solid #ffd700;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Quasiperiodic Function Visualizations</h1>
+
+    <div class="note">
+        <strong>Note:</strong> If the embedded apps below don't display, you can open them directly in new tabs using the links provided.
+    </div>
+
+    <div class="app-container">
+        <h2>2D Flat Torus - Geodesic Explorer</h2>
+        <p>Click two points to draw a geodesic. Observe how rational slopes create periodic patterns while irrational slopes fill the torus densely.</p>
+        
+        <a href="../app/js/index.html" target="_blank" class="app-link">
+            Open 2D Torus App in New Tab →
+        </a>
+        
+        <iframe 
+            src="../app/js/index.html" 
+            title="2D Flat Torus Geodesic Explorer"
+            sandbox="allow-scripts allow-same-origin"
+            loading="lazy">
+        </iframe>
+    </div>
+
+    <div class="app-container">
+        <h2>3D Embedded Torus - Geodesic Visualization</h2>
+        <p>Click on the torus surface to launch geodesics. Use your mouse to rotate and zoom the 3D view.</p>
+        
+        <a href="../app/js-3d/index.html" target="_blank" class="app-link">
+            Open 3D Torus App in New Tab →
+        </a>
+        
+        <iframe 
+            src="../app/js-3d/index.html" 
+            title="3D Torus Geodesic Visualization"
+            sandbox="allow-scripts allow-same-origin"
+            loading="lazy">
+        </iframe>
+    </div>
+
+    <div class="app-container">
+        <h2>Alternative: Direct Canvas Embedding</h2>
+        <p>If iframes don't work in your environment, we can embed the visualizations directly:</p>
+        
+        <div id="direct-2d-app" style="width: 100%; height: 600px; border: 1px solid #ddd;">
+            <!-- This is where we could directly embed the 2D app without iframe -->
+            <p style="text-align: center; padding: 50px;">
+                Direct embedding placeholder - would require copying the app code here
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Check if iframes are loading
+        window.addEventListener('load', () => {
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach((iframe, index) => {
+                iframe.addEventListener('load', () => {
+                    console.log(`Iframe ${index + 1} loaded successfully`);
+                });
+                iframe.addEventListener('error', (e) => {
+                    console.error(`Iframe ${index + 1} failed to load:`, e);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

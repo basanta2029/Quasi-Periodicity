@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasiperiodic Functions in Multiple Variables: Theory, Visualization, and Applications</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Title and Abstract -->
+        <header>
+            <h1>Quasiperiodic Functions in Multiple Variables:<br>Theory, Visualization, and Applications</h1>
+            <div class="authors">
+                <p>[Your Name]</p>
+                <p class="advisor">Advisor: Professor Roberto De Leo</p>
+                <p class="institution">[Your Institution]</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav id="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+                <li><a href="#abstract">Abstract</a></li>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#foundations">Mathematical Foundations</a></li>
+                <li><a href="#multiple-vars">Quasiperiodic Functions in Multiple Variables</a></li>
+                <li><a href="#quasicrystals">Connections to Quasicrystals</a></li>
+                <li><a href="#tools">Interactive Visualization Tools</a></li>
+                <li><a href="#special-functions">Special Functions and Examples</a></li>
+                <li><a href="#applications">Physical Applications</a></li>
+                <li><a href="#conclusions">Conclusions</a></li>
+                <li><a href="#references">References</a></li>
+            </ol>
+        </nav>
+
+        <!-- Abstract -->
+        <section id="abstract">
+            <h2>Abstract</h2>
+            <div class="abstract-content">
+                <p>This paper presents a comprehensive introduction to quasiperiodic functions in multiple variables, designed for undergraduate students in mathematics and physics. We begin with the fundamental theory of quasiperiodicity, exploring the connection between irrational frequencies and dense orbits on tori. Through <em>interactive visualizations embedded directly in this document</em>, we demonstrate how geodesics on flat and embedded tori illustrate key concepts in quasiperiodic dynamics. We examine specific examples including smooth triply periodic functions and piecewise linear functions related to polyhedra families. The paper concludes with applications to quasicrystals and condensed matter physics, particularly the magnetoresistance of lead. Our approach emphasizes visual intuition while maintaining mathematical rigor, supported by interactive tools that allow real-time exploration of these fascinating mathematical objects.</p>
+            </div>
+        </section>
+
+        <!-- Introduction -->
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            
+            <h3>1.1 Historical Context</h3>
+            <p>In 1982, materials scientist Dan Shechtman peered through his electron microscope at a rapidly cooled aluminum-manganese alloy and observed something that shouldn't exist: a crystal with five-fold symmetry. This discovery would challenge a fundamental tenet of crystallography—that crystals must have translational symmetry—and eventually earn Shechtman the 2011 Nobel Prize in Chemistry.</p>
+            
+            <p>What Shechtman had discovered was a quasicrystal, a material whose atomic arrangement is ordered but never repeats, embodying in physical form the mathematical concept of quasiperiodicity that had been studied abstractly for decades.</p>
+
+            <div class="figure">
+                <img src="images/diffraction_pattern.png" alt="Quasicrystal diffraction pattern">
+                <p class="caption">Figure 1: Electron diffraction pattern showing forbidden 5-fold symmetry</p>
+            </div>
+
+            <h3>1.2 Motivation</h3>
+            <p>Why should undergraduate students study quasiperiodic functions? Three compelling reasons emerge:</p>
+            
+            <div class="motivation-box">
+                <h4>Mathematical Beauty</h4>
+                <p>Quasiperiodic functions exhibit a fascinating interplay between order and disorder. They provide concrete examples of ergodic theory, Diophantine approximation, and dynamical systems. The appearance of fundamental constants like the golden ratio φ in these patterns connects number theory to geometry in unexpected ways.</p>
+            </div>
+
+            <div class="motivation-box">
+                <h4>Physical Relevance</h4>
+                <p>From quasicrystals to electronic properties of materials, quasiperiodic structures appear throughout physics and materials science. Applications include:</p>
+                <ul>
+                    <li>Non-stick cookware coatings</li>
+                    <li>LED light technology</li>
+                    <li>Surgical instruments</li>
+                    <li>Photonic bandgap materials</li>
+                </ul>
+            </div>
+
+            <div class="motivation-box">
+                <h4>Computational Exploration</h4>
+                <p>Modern computational tools allow us to visualize and explore these functions interactively, making abstract concepts tangible and accessible. Try the interactive demonstration below to see quasiperiodicity in action!</p>
+            </div>
+
+            <!-- Simple Interactive Demo -->
+            <div class="interactive-demo">
+                <h4>Interactive Demo: 1D Quasiperiodic Function</h4>
+                <canvas id="demo1d" width="800" height="300"></canvas>
+                <div class="controls">
+                    <label>ω₁: <input type="range" id="omega1" min="0.5" max="2" step="0.01" value="1"></label>
+                    <span id="omega1-value">1.00</span>
+                    <label>ω₂: <input type="range" id="omega2" min="1" max="3" step="0.01" value="1.414"></label>
+                    <span id="omega2-value">1.414</span>
+                    <button id="preset-golden">Golden Ratio</button>
+                    <button id="preset-sqrt2">√2</button>
+                </div>
+                <p class="caption">Figure 2: Interactive 1D quasiperiodic function $f(x) = \cos(\omega_1 x) + \cos(\omega_2 x)$. Adjust the frequencies to see how rational vs. irrational ratios affect the pattern.</p>
+            </div>
+        </section>
+
+        <!-- Mathematical Foundations -->
+        <section id="foundations">
+            <h2>2. Mathematical Foundations</h2>
+            
+            <h3>2.1 Periodic vs. Quasiperiodic Functions</h3>
+            
+            <div class="definition">
+                <strong>Definition 2.1:</strong> A function $f: \mathbb{R}^n \to \mathbb{R}$ is <em>periodic</em> if there exist linearly independent vectors $\mathbf{p}_1, \ldots, \mathbf{p}_n \in \mathbb{R}^n$ such that
+                $$f(\mathbf{x} + \mathbf{p}_i) = f(\mathbf{x}) \quad \text{for all } \mathbf{x} \in \mathbb{R}^n \text{ and } i = 1, \ldots, n.$$
+            </div>
+
+            <div class="definition">
+                <strong>Definition 2.2:</strong> A function $f: \mathbb{R}^d \to \mathbb{R}$ is <em>quasiperiodic</em> with $n$ frequencies if there exist:
+                <ul>
+                    <li>A continuous function $F: \mathbb{T}^n \to \mathbb{R}$ on the $n$-dimensional torus</li>
+                    <li>Frequency vectors $\omega_1, \ldots, \omega_n \in \mathbb{R}^d$ that are linearly independent over $\mathbb{Q}$</li>
+                </ul>
+                such that
+                $$f(\mathbf{x}) = F(\omega_1 \cdot \mathbf{x}, \omega_2 \cdot \mathbf{x}, \ldots, \omega_n \cdot \mathbf{x})$$
+            </div>
+
+            <h3>2.2 The Torus Representation</h3>
+            
+            <p>The natural setting for understanding quasiperiodic functions is the torus $\mathbb{T}^n = \mathbb{R}^n/\mathbb{Z}^n$. Below, explore geodesics on the flat torus interactively:</p>
+
+            <!-- Embedded 2D Flat Torus App -->
+            <div class="embedded-app">
+                <h4>Interactive Flat Torus Explorer</h4>
+                <iframe src="../app/js/index.html" width="100%" height="600" frameborder="0"></iframe>
+                <p class="caption">Figure 3: Interactive 2D flat torus application. Click to place points and observe how different slopes create periodic (rational) or dense (irrational) geodesics.</p>
+            </div>
+
+            <div class="theorem">
+                <strong>Theorem 2.1 (Weyl's Equidistribution):</strong> Let $\omega = (\omega_1, \ldots, \omega_n) \in \mathbb{R}^n$ with $1, \omega_1, \ldots, \omega_n$ linearly independent over $\mathbb{Q}$. Then the orbit $\{k\omega \bmod 1 : k \in \mathbb{N}\}$ is dense and equidistributed in $\mathbb{T}^n$.
+            </div>
+        </section>
+
+        <!-- Multiple Variables -->
+        <section id="multiple-vars">
+            <h2>3. Quasiperiodic Functions in Multiple Variables</h2>
+            
+            <h3>3.1 General Theory</h3>
+            <p>For functions of multiple variables, the theory becomes richer. The key insight is that quasiperiodic functions can be understood through their "parent" function on a higher-dimensional torus.</p>
+
+            <h3>3.2 Three-Dimensional Visualization</h3>
+            <p>The extension to three dimensions reveals the true complexity of quasiperiodic behavior:</p>
+
+            <!-- Embedded 3D Torus App -->
+            <div class="embedded-app">
+                <h4>Interactive 3D Torus Geodesics</h4>
+                <iframe src="../app/js-3d/index.html" width="100%" height="600" frameborder="0"></iframe>
+                <p class="caption">Figure 4: Interactive 3D torus with geodesics. Click on the torus surface to select different starting directions and observe the resulting trajectories.</p>
+            </div>
+        </section>
+
+        <!-- Continue with other sections... -->
+        
+        <!-- References -->
+        <section id="references">
+            <h2>References</h2>
+            <ol class="references">
+                <li>Shechtman, D., Blech, I., Gratias, D., & Cahn, J. W. (1984). Metallic phase with long-range orientational order and no translational symmetry. <em>Physical Review Letters</em>, 53(20), 1951.</li>
+                <li>Bohr, H. (1925). Zur Theorie der fastperiodischen Funktionen. <em>Acta Mathematica</em>, 45, 29-127.</li>
+                <li>De Leo, R. (2023). NTC: Numerical Tools for Crystals. <a href="https://deleo.website/NTC/">https://deleo.website/NTC/</a></li>
+            </ol>
+        </section>
+    </div>
+
+    <script src="interactive-demos.js"></script>
+</body>
+</html>
