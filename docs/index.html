@@ -316,7 +316,7 @@
             
             <div class="concept-box">
                 <h4>Winding Numbers Explained</h4>
-                <p>On a 3D torus (doughnut shape), a geodesic can wind around in two ways:</p>
+                <p>On a torus (2D surface embedded in 3D), a geodesic can wind around in two ways:</p>
                 <ul>
                     <li><strong>Poloidal winding</strong>: Around the "small circle" (through the doughnut hole)</li>
                     <li><strong>Toroidal winding</strong>: Around the "big circle" (around the doughnut's body)</li>
@@ -357,7 +357,7 @@
             
             <div class="physics-box">
                 <h4>Important Distinction: Diffraction Patterns vs. Quasicrystals</h4>
-                <p>What we're visualizing here are <strong>diffraction patterns</strong>: what you see when X-rays scatter off a quasicrystal. These wave interference patterns have the same forbidden symmetries as quasicrystals, but they're continuous functions, not discrete atomic positions.</p>
+                <p>What we're visualizing here are <strong>diffraction patterns</strong>: what you see when X-rays scatter off a quasicrystal. These wave interference patterns have the same forbidden symmetries as quasicrystals in reciprocal space (Fourier space), but they're continuous functions, not discrete atomic positions.</p>
                 <p><strong>Think of it this way</strong>: If a quasicrystal is like a Penrose tiling (discrete tiles), then what we're showing is like its shadow or Fourier transform, capturing the symmetry but not the actual structure.</p>
             </div>
             
@@ -435,8 +435,9 @@
             <p>Now let's explore a specific function that appears in many physical applications:</p>
 
             <div class="function-box">
-                <h4>The Canonical Triply Periodic Function</h4>
+                <h4>A Triply Periodic Function Example</h4>
                 $$F(x,y,z) = \cos(x)\cos(y) + \cos(y)\cos(z) + \cos(z)\cos(x)$$
+                <p style="margin-top: 10px;"><em>Note: The Schwarz P minimal surface is given by $\cos(x) + \cos(y) + \cos(z) = 0$</em></p>
             </div>
 
             <h3 id="special-level">6.2 Understanding Through Level Sets</h3>
@@ -445,7 +446,7 @@
 
             <div class="visualization-explanation">
                 <h4>What You're Seeing</h4>
-                <p>When $c = 0$, the level set $F(x,y,z) = 0$ creates a beautiful minimal surface called the Schwarz P surface. It divides space into two intertwining labyrinths!</p>
+                <p>When $c = 0$, the level set $F(x,y,z) = 0$ creates a triply periodic minimal surface that divides space into intertwining regions.</p>
             </div>
 
             <canvas id="triply-periodic-viz" width="800" height="400"></canvas>
@@ -492,7 +493,7 @@
 
             <div class="physics-box">
                 <h4>The Quantum Weirdness</h4>
-                <p>In periodic crystals, electrons form "bands" (ranges of allowed energies. In quasiperiodic systems:</p>
+                <p>In periodic crystals, electrons form "bands" (ranges of allowed energies). In quasiperiodic systems:</p>
                 <ul>
                     <li>The spectrum can be a fractal (Cantor set)</li>
                     <li>Electronic states can be "critical": neither extended nor localized</li>
@@ -582,7 +583,7 @@
                 
                 <li>Penrose, R. (1974). The role of aesthetics in pure and applied mathematical research. <em>Bulletin of the Institute of Mathematics and its Applications</em>, 10, 266-271.</li>
                 
-                <li>De Leo, R. (2023). NTC: Numerical Tools for Crystals. Retrieved from <a href="https://deleo.website/NTC/">https://deleo.website/NTC/</a></li>
+                <li>De Leo, R. (2023). NTC: Numerical Tools for Crystals. Software framework for crystallographic computations. [If the link is not working, please contact the advisor for access]</li>
                 
                 <li>Senechal, M. (1995). <em>Quasicrystals and Geometry</em>. Cambridge University Press.</li>
                 

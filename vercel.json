@@ -1,11 +1,14 @@
 {
   "buildCommand": "echo 'No build required'",
-  "outputDirectory": "docs",
+  "outputDirectory": ".",
   "framework": null,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/docs/$1"
+      "src": "/(.*)",
+      "dest": "/docs/$1"
+    },
+    {
+      "handle": "filesystem"
     }
   ]
 }
