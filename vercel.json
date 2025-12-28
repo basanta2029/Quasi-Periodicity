@@ -1,0 +1,11 @@
+{
+  "buildCommand": "echo 'No build required'",
+  "outputDirectory": "docs",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/docs/$1"
+    }
+  ]
+}
