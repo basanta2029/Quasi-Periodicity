@@ -233,63 +233,125 @@ h4 {
 
 /* Interactive Elements */
 .interactive-demo, .embedded-app {
-    background: var(--background);
-    border: 2px solid var(--accent-color);
-    padding: 20px;
+    background: #fafbfc;
+    border: 1px solid #e1e4e8;
+    padding: 25px;
     margin: 30px 0;
-    border-radius: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .interactive-demo h4, .embedded-app h4 {
     margin-top: 0;
-    color: var(--accent-color);
+    margin-bottom: 20px;
+    color: #24292e;
+    font-size: 1.1em;
+    font-weight: 600;
 }
 
 canvas {
     display: block;
     margin: 20px auto;
-    border: 1px solid var(--border-color);
+    border: 1px solid #e1e4e8;
+    border-radius: 4px;
     background: white;
 }
 
 .controls {
-    text-align: center;
-    margin: 15px 0;
+    background: #f6f8fa;
+    padding: 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    border: 1px solid #e1e4e8;
 }
 
 .controls label {
-    display: inline-block;
-    margin: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    margin: 8px 15px;
+    color: #444;
+    font-size: 0.95em;
 }
 
 .controls input[type="range"] {
-    vertical-align: middle;
-    margin: 0 5px;
-    width: 200px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+    margin: 0 10px;
+    width: 120px;
+    cursor: pointer;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #3498db;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb:hover {
+    background: #2980b9;
+}
+
+.controls input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #3498db;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
 }
 
 .controls button {
-    background: var(--accent-color);
+    background: #3498db;
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 10px 18px;
     margin: 5px;
-    border-radius: 3px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .controls button:hover {
     background: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.controls button:active {
+    transform: translateY(0);
 }
 
 .controls select {
-    padding: 5px 10px;
+    padding: 8px 12px;
     margin: 0 10px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
     background: white;
-    font-size: 14px;
+    font-size: 0.9em;
+    color: #24292e;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.controls select:hover {
+    border-color: #3498db;
+}
+
+.controls select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 /* Embedded iframes */
