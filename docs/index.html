@@ -120,35 +120,32 @@
                 <p>Have you ever seen two window screens overlapping, creating shifting patterns as you move? Or noticed strange patterns when taking a photo of a computer screen? These moiré effects are visual examples of quasiperiodicity: two regular patterns combining to create something that looks almost regular but isn't quite.</p>
             </div>
 
-            <h3 id="intro-discovery">1.2 The Discovery That Changed Physics</h3>
-            
-            <p>For centuries, scientists believed crystals could only have certain symmetries. A square tile can cover a floor with 4-fold symmetry, hexagons give 6-fold symmetry, but 5-fold? Impossible, or so we thought.</p>
+            <h3 id="intro-discovery">1.2 The Discovery of Quasicrystals</h3>
 
-            <p>On April 8, 1982, Dan Shechtman looked at an electron diffraction pattern of a rapidly cooled aluminum-manganese alloy and saw something "forbidden": sharp diffraction spots arranged with 5-fold symmetry. His notebook entry that day included the note "10 Fold???" reflecting his disbelief.</p>
+            <p>For centuries, scientists believed crystals could only have certain symmetries. A square tile can cover a floor with 4-fold symmetry, hexagons give 6-fold symmetry, but 5-fold symmetry was considered impossible in crystallography.</p>
 
-            <div class="story-box">
-                <h4>The Cost of Discovery</h4>
-                <p>Shechtman's discovery was so controversial that Linus Pauling declared: "There is no such thing as quasicrystals, only quasi-scientists." Shechtman was even asked to leave his research group. But he persisted, and in 2011, he received the Nobel Prize in Chemistry for discovering these materials with quasiperiodic atomic arrangements.</p>
-            </div>
+            <p>In 1982, Dan Shechtman observed an electron diffraction pattern of an aluminum-manganese alloy showing sharp diffraction spots with 5-fold symmetry. This observation contradicted the established rules of crystallography.</p>
 
-            <h3 id="intro-why-care">1.3 Why Should You Care?</h3>
-            
-            <p>Quasiperiodic functions aren't just mathematical curiosities. They appear in:</p>
-            
+            <p>Despite initial skepticism from the scientific community, Shechtman's findings were eventually validated. In 2011, he received the Nobel Prize in Chemistry for the discovery of quasicrystals.</p>
+
+            <h3 id="intro-why-care">1.3 Applications</h3>
+
+            <p>Quasiperiodic structures have practical applications:</p>
+
             <ul>
-                <li><strong>Your Kitchen</strong>: Some non-stick pans use quasicrystalline coatings because they're incredibly hard and have low friction</li>
-                <li><strong>LED Lights</strong>: Photonic quasicrystals can control light in ways periodic structures cannot</li>
-                <li><strong>Medical Devices</strong>: Quasicrystalline materials in surgical instruments stay sharper longer</li>
-                <li><strong>Future Computing</strong>: Quasiperiodic structures might enable new types of quantum computers</li>
+                <li><strong>Coatings</strong>: Quasicrystalline coatings provide hardness and low friction</li>
+                <li><strong>Photonics</strong>: Photonic quasicrystals control light propagation in ways periodic structures cannot</li>
+                <li><strong>Materials</strong>: Quasicrystalline alloys have unique mechanical properties</li>
+                <li><strong>Research</strong>: Quasiperiodic structures are studied for potential applications in quantum systems</li>
             </ul>
 
-            <h3 id="intro-journey">1.4 Your Journey Through This Paper</h3>
-            
-            <p>We'll start with simple examples you can play with, gradually building your intuition. By the end, you'll understand:</p>
+            <h3 id="intro-journey">1.4 Overview</h3>
+
+            <p>This paper covers:</p>
             <ol>
-                <li>How adding waves with irrational frequency ratios creates never-repeating patterns</li>
-                <li>Why walking on a torus at certain angles creates beautiful, space-filling curves</li>
-                <li>How nature uses quasiperiodicity to create structures we're only beginning to understand</li>
+                <li>How superposition of waves with incommensurate frequencies produces quasiperiodic patterns</li>
+                <li>The relationship between geodesics on tori and quasiperiodic functions</li>
+                <li>Physical systems exhibiting quasiperiodic behavior</li>
             </ol>
 
             <!-- Simple Interactive Demo -->
@@ -215,23 +212,23 @@
             <p>To really understand quasiperiodic functions, we need to talk about the torus. Don't worry, we'll build up to it slowly!</p>
 
             <div class="concept-box">
-                <h4>Building a Torus, Step by Step</h4>
+                <h4>Building a Torus</h4>
                 <ol>
-                    <li><strong>Start with a square</strong>: Imagine a square piece of paper</li>
+                    <li><strong>Start with a square</strong>: Take a square piece of paper</li>
                     <li><strong>Make a cylinder</strong>: Roll it up and glue the top edge to the bottom edge</li>
                     <li><strong>Make a torus</strong>: Bend the cylinder and glue the two circular ends together</li>
                 </ol>
-                <p>But here's the magical part: we can also think of the torus as a square where:</p>
+                <p>Alternatively, we can think of the torus as a square where:</p>
                 <ul>
                     <li>When you walk off the right edge, you appear on the left</li>
                     <li>When you walk off the top edge, you appear on the bottom</li>
                 </ul>
-                <p>This is like the classic video game Pac-Man!</p>
+                <p>This is similar to the wraparound behavior in classic video games.</p>
             </div>
 
             <h3 id="foundations-geodesics">2.4 Geodesics: Straight Lines on a Torus</h3>
-            
-            <p>If you walk "straight" on a torus (never turning left or right), your path is called a geodesic. Here's where it gets interesting:</p>
+
+            <p>If you walk in a straight line on a torus (without turning), your path is called a geodesic. The behavior depends on the slope:</p>
 
             <!-- Embedded 2D Flat Torus App -->
             <div class="embedded-app">
@@ -244,7 +241,7 @@
             </div>
 
             <div class="math-insight">
-                <h4>The Mathematics Behind the Magic</h4>
+                <h4>Mathematical Properties</h4>
                 <p>When you draw a line with slope $m = \Delta y/\Delta x$ on the flat torus:</p>
                 <ul>
                     <li>If $m$ is rational (like $2/3$), the geodesic closes after going around 2 times vertically and 3 times horizontally</li>
@@ -257,14 +254,14 @@
             <p>Here's the beautiful connection: walking along a geodesic on the torus is mathematically equivalent to evaluating a quasiperiodic function!</p>
 
             <div class="connection-box">
-                <h4>The Deep Connection</h4>
-                <p>Consider a function $F(u, v)$ defined on the torus (where $u$ and $v$ are angles from 0 to $2\pi$). If we walk along a straight line with slope $\omega$, our position at time $t$ is:</p>
+                <h4>Connection to Quasiperiodic Functions</h4>
+                <p>Consider a function $F(u, v)$ defined on the torus (where $u$ and $v$ are angles from 0 to $2\pi$). Walking along a straight line with slope $\omega$, the position at time $t$ is:</p>
                 <ul>
                     <li>$u(t) = t \pmod{2\pi}$</li>
                     <li>$v(t) = \omega t \pmod{2\pi}$</li>
                 </ul>
-                <p>The function we trace out is: $f(t) = F(t, \omega t)$</p>
-                <p>This is exactly our definition of a quasiperiodic function when $\omega$ is irrational!</p>
+                <p>The function traced out is: $f(t) = F(t, \omega t)$</p>
+                <p>When $\omega$ is irrational, this produces a quasiperiodic function.</p>
             </div>
         </section>
 
@@ -340,17 +337,17 @@
 
             <h3 id="quasicrystals-cut">4.2 The Cut-and-Project Method</h3>
             
-            <p>Here's a mind-blowing way to create quasicrystals: start in higher dimensions!</p>
+            <p>One method for constructing quasicrystals uses higher-dimensional geometry:</p>
 
             <div class="method-box">
-                <h4>Recipe for a Quasicrystal</h4>
+                <h4>The Cut-and-Project Method</h4>
                 <ol>
-                    <li><strong>Start with a 6D cubic lattice</strong> (impossible to visualize, but mathematically simple)</li>
-                    <li><strong>Choose a 3D "slice"</strong> at an irrational angle</li>
-                    <li><strong>Project nearby points</strong> onto your 3D slice</li>
-                    <li><strong>Result</strong>: A 3D quasicrystal!</li>
+                    <li><strong>Start with a higher-dimensional lattice</strong> (e.g., a 6D cubic lattice)</li>
+                    <li><strong>Choose a lower-dimensional subspace</strong> at an irrational angle</li>
+                    <li><strong>Project nearby lattice points</strong> onto this subspace</li>
+                    <li><strong>Result</strong>: A quasiperiodic structure</li>
                 </ol>
-                <p>It's like taking a diagonal slice through a regular grid. If the angle is irrational, the intersection points never repeat periodically.</p>
+                <p>Taking a slice through a regular grid at an irrational angle produces intersection points that never repeat periodically.</p>
             </div>
 
             <h3 id="quasicrystals-diffraction">4.3 Visualizing Quasicrystalline Diffraction Patterns</h3>
@@ -557,19 +554,19 @@
         <section id="conclusions">
             <h2>8. Conclusions and Future Directions</h2>
             
-            <h3 id="conclusions-learned">8.1 What We've Learned</h3>
-            
-            <p>Through this journey, we've discovered that quasiperiodic functions:</p>
+            <h3 id="conclusions-learned">8.1 Summary</h3>
+
+            <p>Key properties of quasiperiodic functions:</p>
             <ol>
-                <li><strong>Bridge order and disorder</strong>: They're deterministic yet never repeat</li>
-                <li><strong>Connect diverse fields</strong>: From pure mathematics to materials science</li>
-                <li><strong>Challenge intuition</strong>: "Forbidden" symmetries are actually possible</li>
-                <li><strong>Enable new technologies</strong>: From better coatings to quantum devices</li>
+                <li><strong>Deterministic but non-repeating</strong>: They follow precise rules yet never repeat exactly</li>
+                <li><strong>Interdisciplinary</strong>: They connect pure mathematics, crystallography, and materials science</li>
+                <li><strong>Non-standard symmetries</strong>: They can exhibit symmetries forbidden in periodic structures</li>
+                <li><strong>Practical applications</strong>: Used in coatings, photonics, and materials engineering</li>
             </ol>
 
-            <h3 id="conclusions-interactive">8.2 The Power of Interactive Learning</h3>
-            
-            <p>By playing with the visualizations, you've gained intuitions that would take months to develop from equations alone. This represents a new way of learning mathematics where exploration comes before formalization.</p>
+            <h3 id="conclusions-interactive">8.2 Interactive Exploration</h3>
+
+            <p>The visualizations in this paper allow direct manipulation of the mathematical concepts, providing geometric intuition that complements the formal definitions.</p>
 
         </section>
 
@@ -593,7 +590,7 @@
         <!-- Acknowledgments -->
         <section id="acknowledgments">
             <h2>Acknowledgments</h2>
-            <p>This work utilized the NTC (Numerical Tools for Crystals) framework. The interactive visualizations were made possible through open-source tools including Three.js and MathJax. The author gratefully acknowledges the mathematical insights gained through coursework and independent study in this fascinating area of mathematics.</p>
+            <p>The interactive visualizations use Three.js for 3D rendering and MathJax for mathematical notation.</p>
         </section>
     </div>
 

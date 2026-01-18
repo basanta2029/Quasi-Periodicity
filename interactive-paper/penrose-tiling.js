@@ -256,13 +256,13 @@ class PenroseTiling {
 
         // Short radius: approximately 2-4 tile edge lengths from center
         // This indicates local rotational symmetry at the central star vertex only
-        const localRadius = this.config.initialSize * 0.15;
+        const localRadius = this.config.initialSize * 0.25;
 
         ctx.save();
 
-        // Draw 5 short line segments indicating local 5-fold rotational symmetry
-        ctx.strokeStyle = '#d32f2f';
-        ctx.lineWidth = 2.5;
+        // Draw white outline first for visibility
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 5;
         ctx.setLineDash([]);
 
         for (let i = 0; i < 5; i++) {
@@ -276,10 +276,30 @@ class PenroseTiling {
             ctx.stroke();
         }
 
+        // Draw 5 short red line segments indicating local 5-fold rotational symmetry
+        ctx.strokeStyle = '#d32f2f';
+        ctx.lineWidth = 3;
+
+        for (let i = 0; i < 5; i++) {
+            const angle = (2 * Math.PI * i) / 5 - Math.PI / 2;
+            const x = cx + localRadius * Math.cos(angle);
+            const y = cy + localRadius * Math.sin(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
         // Draw center point marking the local symmetry vertex
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 7, 0, 2 * Math.PI);
+        ctx.fill();
+
         ctx.fillStyle = '#d32f2f';
         ctx.beginPath();
-        ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
+        ctx.arc(cx, cy, 5, 0, 2 * Math.PI);
         ctx.fill();
 
         ctx.restore();
