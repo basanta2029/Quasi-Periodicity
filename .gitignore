@@ -52,6 +52,9 @@ ENV/
 # Except app files
 !app/**/*.html
 
+# Except interactive-paper files
+!interactive-paper/**/*.html
+
 # Data
 *.csv
 *.dat

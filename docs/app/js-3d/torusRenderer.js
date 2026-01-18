@@ -279,8 +279,8 @@ class TorusApp {
             this.windingNumbers.q
         );
 
-        // Set max progress based on type
-        this.maxProgress = this.windingInfo.isRational ? 60 : 200;
+        // Set max progress based on type (higher for more complete coverage)
+        this.maxProgress = this.windingInfo.isRational ? 200 : 500;
 
         // For irrational, pre-generate full curve for progressive reveal
         if (!this.windingInfo.isRational) {
@@ -573,11 +573,7 @@ class TorusApp {
                 this.animationProgress += this.animationSpeed * 0.05;
 
                 if (this.windingInfo && this.windingInfo.isRational) {
-                    // Rational: loop back to show periodic closing
-                    if (this.animationProgress > this.maxProgress) {
-                        this.animationProgress = 0;
-                    }
-
+                    // Rational: continue growing (no reset - let the torus fill)
                     // Update geometry
                     this.frameCounter++;
                     if (this.frameCounter >= this.updateInterval) {
@@ -590,11 +586,7 @@ class TorusApp {
                         // Reveal more of the pre-generated curve
                         this.revealIrrationalCurveUpTo(this.animationProgress);
                     }
-
-                    // Loop after showing extended animation (1.5x maxProgress)
-                    if (this.animationProgress > this.maxProgress * 1.5) {
-                        this.animationProgress = this.maxProgress;
-                    }
+                    // Continue forever - no reset (let the torus surface fill completely)
                 }
 
                 // Update progress counter

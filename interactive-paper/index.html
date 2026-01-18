@@ -153,18 +153,18 @@
 
             <!-- Simple Interactive Demo -->
             <div class="interactive-demo">
-                <h4>Try It Yourself: Creating Quasiperiodicity</h4>
+                <h4>Try It Yourself: Exploring Quasiperiodicity</h4>
                 <canvas id="demo1d" width="800" height="300"></canvas>
                 <div class="controls">
-                    <label>Frequency 1: <input type="range" id="omega1" min="0.5" max="2" step="0.01" value="1"></label>
-                    <span id="omega1-value">1.00</span><br>
-                    <label>Frequency 2: <input type="range" id="omega2" min="1" max="3" step="0.01" value="1.414"></label>
-                    <span id="omega2-value">1.414</span><br>
-                    <button id="preset-golden">Try Golden Ratio</button>
+                    <label>ω (frequency ratio): <input type="range" id="omega" min="1" max="3" step="0.001" value="1.414"></label>
+                    <span id="omega-value">1.414</span><br>
+                    <label>x range: <input type="range" id="xrange" min="20" max="200" step="10" value="50"></label>
+                    <span id="xrange-value">50</span><br>
+                    <button id="preset-golden">Try Golden Ratio (φ)</button>
                     <button id="preset-sqrt2">Try √2</button>
                     <button id="preset-rational">Try 3/2 (Periodic)</button>
                 </div>
-                <p class="caption"><strong>Interactive Figure 1</strong>: Add two cosine waves: $f(x) = \cos(\omega_1 x) + \cos(\omega_2 x)$. When the frequency ratio is irrational (like √2 or φ), the pattern never repeats. When it's rational (like 3/2), you get a repeating pattern. Try it!</p>
+                <p class="caption"><strong>Interactive Figure 1</strong>: Add two cosine waves: $f(x) = \cos(x) + \cos(\omega x)$. When ω is irrational (like √2 or φ), the pattern never repeats. When ω is rational (like 3/2), you get a repeating pattern. Try it!</p>
             </div>
         </section>
 
@@ -237,7 +237,7 @@
             <div class="embedded-app">
                 <h4>Interactive Torus Explorer</h4>
                 <p style="margin-bottom: 10px;"><a href="../app/js/index.html" target="_blank" style="color: #3498db;">→ Open 2D Torus App in new tab if it doesn't load below</a></p>
-                <iframe src="../app/js/index.html" width="100%" height="600" frameborder="0" style="background: white; border: 1px solid #ddd;" sandbox="allow-scripts allow-same-origin"></iframe>
+                <iframe src="../app/js/index.html" width="100%" height="950" frameborder="0" style="background: white; border: 1px solid #ddd;" sandbox="allow-scripts allow-same-origin"></iframe>
                 <p class="caption"><strong>Interactive Figure 2</strong>: Click two points to create a geodesic. The slope determines everything:
                 <br>• <strong>Rational slope</strong> (like 1/2, 2/3): The line eventually returns to its starting point: it's periodic!
                 <br>• <strong>Irrational slope</strong> (like √2, π): The line never closes, eventually filling the entire torus: it's quasiperiodic!</p>
@@ -308,7 +308,7 @@
             <div class="embedded-app">
                 <h4>Interactive 3D Torus Geodesics</h4>
                 <p style="margin-bottom: 10px;"><a href="../app/js-3d/index.html" target="_blank" style="color: #3498db;">→ Open 3D Torus App in new tab if it doesn't load below</a></p>
-                <iframe src="../app/js-3d/index.html" width="100%" height="600" frameborder="0" style="background: white; border: 1px solid #ddd;" sandbox="allow-scripts allow-same-origin"></iframe>
+                <iframe src="../app/js-3d/index.html" width="100%" height="950" frameborder="0" style="background: white; border: 1px solid #ddd;" sandbox="allow-scripts allow-same-origin"></iframe>
                 <p class="caption"><strong>Interactive Figure 3</strong>: Click on the torus to launch a geodesic. Watch how it winds around both the "small circle" and "big circle" of the torus. The winding numbers determine whether it's periodic or dense!</p>
             </div>
 

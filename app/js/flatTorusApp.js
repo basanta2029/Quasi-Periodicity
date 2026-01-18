@@ -286,8 +286,8 @@ class FlatTorusApp {
             return;
         }
 
-        // Draw direction point (larger and more prominent)
-        this.drawPoints([this.directionPoint], '#2196F3', 12); // Blue for direction, larger: 12px
+        // Draw direction point (smaller and less intrusive)
+        this.drawPoints([this.directionPoint], '#2196F3', 6); // Blue for direction, smaller: 6px
 
         // Calculate slope and classify (from origin to direction point)
         this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
@@ -476,11 +476,11 @@ class FlatTorusApp {
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
 
-        // Color based on classification - more vibrant colors
-        const color = this.slopeInfo && this.slopeInfo.isRational ? '#00ff00' : '#ff0066';
+        // Use blue color for the geodesic line
+        const color = '#2196F3';
 
         this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = 4;
+        this.ctx.lineWidth = 2;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
 
@@ -634,10 +634,8 @@ class FlatTorusApp {
         // Increment progress based on speed
         this.animationProgress += this.animationSpeed * 0.02;
 
-        // Loop animation at max wraps
-        if (this.animationProgress > this.maxWraps) {
-            this.animationProgress = 0;
-        }
+        // Continue forever - no reset (let the square fill completely)
+        // Animation continues indefinitely to show dense filling
 
         this.updateVisualization();
 

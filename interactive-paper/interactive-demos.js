@@ -6,26 +6,27 @@ if (canvas) {
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
-    
+
     // Get controls
-    const omega1Input = document.getElementById('omega1');
-    const omega2Input = document.getElementById('omega2');
-    const omega1Value = document.getElementById('omega1-value');
-    const omega2Value = document.getElementById('omega2-value');
+    const omegaInput = document.getElementById('omega');
+    const omegaValue = document.getElementById('omega-value');
+    const xrangeInput = document.getElementById('xrange');
+    const xrangeValue = document.getElementById('xrange-value');
     const goldenButton = document.getElementById('preset-golden');
     const sqrt2Button = document.getElementById('preset-sqrt2');
-    
+    const rationalButton = document.getElementById('preset-rational');
+
     function drawFunction() {
         ctx.clearRect(0, 0, width, height);
-        
-        // Get frequency values
-        const omega1 = parseFloat(omega1Input.value);
-        const omega2 = parseFloat(omega2Input.value);
-        
+
+        // Get frequency value (omega1 is fixed to 1)
+        const omega = parseFloat(omegaInput.value);
+        const xRange = parseFloat(xrangeInput.value);
+
         // Update display
-        omega1Value.textContent = omega1.toFixed(2);
-        omega2Value.textContent = omega2.toFixed(3);
-        
+        omegaValue.textContent = omega.toFixed(3);
+        xrangeValue.textContent = xRange;
+
         // Draw axes
         ctx.strokeStyle = '#ddd';
         ctx.lineWidth = 1;
@@ -33,70 +34,84 @@ if (canvas) {
         ctx.moveTo(0, height/2);
         ctx.lineTo(width, height/2);
         ctx.stroke();
-        
-        // Draw function
+
+        // Draw function f(x) = cos(x) + cos(omega * x)
         ctx.strokeStyle = '#3498db';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        
+
         const scale = 50;
-        const xRange = 50;
-        
+
         for (let i = 0; i < width; i++) {
             const x = (i / width) * xRange;
-            const y = Math.cos(omega1 * x) + Math.cos(omega2 * x);
+            const y = Math.cos(x) + Math.cos(omega * x);
             const canvasY = height/2 - y * scale;
-            
+
             if (i === 0) {
                 ctx.moveTo(i, canvasY);
             } else {
                 ctx.lineTo(i, canvasY);
             }
         }
-        
+
         ctx.stroke();
-        
+
         // Add period info
         ctx.fillStyle = '#333';
         ctx.font = '14px Arial';
-        const ratio = omega2 / omega1;
         let periodInfo = '';
-        
-        // Check if ratio is close to a simple fraction
+
+        // Check if omega is close to special values
         const tolerance = 0.001;
         const phi = (1 + Math.sqrt(5)) / 2;
-        
-        if (Math.abs(ratio - 1) < tolerance) {
-            periodInfo = 'Period: 2π (commensurate)';
-        } else if (Math.abs(ratio - Math.sqrt(2)) < tolerance) {
-            periodInfo = 'Ratio: √2 (quasiperiodic)';
-        } else if (Math.abs(ratio - phi) < tolerance) {
-            periodInfo = 'Ratio: φ (golden ratio, quasiperiodic)';
-        } else if (Math.abs(ratio - Math.round(ratio)) < tolerance) {
-            periodInfo = `Ratio: ${Math.round(ratio)} (periodic)`;
+
+        if (Math.abs(omega - 1) < tolerance) {
+            periodInfo = 'ω = 1: Period 2π (commensurate)';
+        } else if (Math.abs(omega - Math.sqrt(2)) < tolerance) {
+            periodInfo = 'ω = √2 ≈ 1.414 (irrational → quasiperiodic)';
+        } else if (Math.abs(omega - phi) < tolerance) {
+            periodInfo = 'ω = φ ≈ 1.618 (golden ratio → quasiperiodic)';
+        } else if (Math.abs(omega - 1.5) < tolerance) {
+            periodInfo = 'ω = 3/2: Period 4π (periodic)';
         } else {
-            periodInfo = `Ratio: ${ratio.toFixed(3)} (quasiperiodic)`;
+            // Check if it's close to a simple fraction
+            const fractions = [[3,2], [4,3], [5,3], [5,4], [7,4], [2,1], [5,2]];
+            let foundRational = false;
+            for (const [p, q] of fractions) {
+                if (Math.abs(omega - p/q) < tolerance) {
+                    periodInfo = `ω = ${p}/${q} (rational → periodic)`;
+                    foundRational = true;
+                    break;
+                }
+            }
+            if (!foundRational) {
+                periodInfo = `ω = ${omega.toFixed(3)} (likely irrational → quasiperiodic)`;
+            }
         }
-        
+
         ctx.fillText(periodInfo, 10, 20);
+        ctx.fillText(`x range: [0, ${xRange}]`, 10, height - 10);
     }
-    
+
     // Event listeners
-    omega1Input.addEventListener('input', drawFunction);
-    omega2Input.addEventListener('input', drawFunction);
-    
+    omegaInput.addEventListener('input', drawFunction);
+    xrangeInput.addEventListener('input', drawFunction);
+
     goldenButton.addEventListener('click', () => {
-        omega1Input.value = 1;
-        omega2Input.value = 1.618;
+        omegaInput.value = (1 + Math.sqrt(5)) / 2; // Exact golden ratio
         drawFunction();
     });
-    
+
     sqrt2Button.addEventListener('click', () => {
-        omega1Input.value = 1;
-        omega2Input.value = 1.414;
+        omegaInput.value = Math.sqrt(2); // Exact sqrt(2)
         drawFunction();
     });
-    
+
+    rationalButton.addEventListener('click', () => {
+        omegaInput.value = 1.5; // 3/2
+        drawFunction();
+    });
+
     // Initial draw
     drawFunction();
 }
