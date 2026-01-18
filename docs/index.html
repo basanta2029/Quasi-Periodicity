@@ -362,14 +362,32 @@
                 <h4>Interactive Diffraction Pattern Generator</h4>
                 <canvas id="quasicrystal-demo" width="600" height="600"></canvas>
                 <div class="controls">
-                    <label>Symmetry: 
+                    <label>Symmetry:
                         <select id="symmetry">
                             <option value="5">5-fold (Penrose-like)</option>
                             <option value="8">8-fold</option>
                             <option value="12">12-fold</option>
                         </select>
                     </label>
+                    <label style="margin-left: 20px;">Color:
+                        <select id="color-scheme">
+                            <option value="vibrant">Vibrant</option>
+                            <option value="classic">Classic</option>
+                            <option value="grayscale">Grayscale</option>
+                        </select>
+                    </label>
                     <button id="generate-qc">Generate Pattern</button>
+                    <div style="margin-top: 10px;">
+                        <label>Zoom: <input type="range" id="scale-slider" min="20" max="100" value="50" style="width: 120px;">
+                        <span id="scale-value">50</span></label>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label>Pan X: <input type="range" id="pan-x-slider" min="-20" max="20" step="0.5" value="0" style="width: 100px;">
+                        <span id="pan-x-value">0</span></label>
+                        <label style="margin-left: 15px;">Pan Y: <input type="range" id="pan-y-slider" min="-20" max="20" step="0.5" value="0" style="width: 100px;">
+                        <span id="pan-y-value">0</span></label>
+                        <button id="reset-pan" style="margin-left: 15px;">Reset View</button>
+                    </div>
                 </div>
                 <p class="caption"><strong>Interactive Figure 4</strong>: Generate diffraction-like patterns by superimposing waves with different symmetries. These show what you'd see when shining X-rays through a quasicrystal, revealing the forbidden symmetries in reciprocal space. Note: This shows the diffraction pattern, not the actual atomic positions!</p>
                 <p style="margin-top: 15px; text-align: center;">
