@@ -287,7 +287,7 @@ class FlatTorusApp {
         }
 
         // Draw direction point (smaller and less intrusive)
-        this.drawPoints([this.directionPoint], '#2196F3', 6); // Blue for direction, smaller: 6px
+        this.drawPoints([this.directionPoint], '#0D47A1', 6); // Blue for direction, smaller: 6px
 
         // Calculate slope and classify (from origin to direction point)
         this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
@@ -370,7 +370,7 @@ class FlatTorusApp {
 
         // Draw preview line
         this.ctx.save();
-        this.ctx.strokeStyle = '#2196F3';
+        this.ctx.strokeStyle = '#0D47A1';
         this.ctx.lineWidth = 2;
         this.ctx.setLineDash([10, 5]);
         this.ctx.globalAlpha = 0.6;
@@ -382,7 +382,7 @@ class FlatTorusApp {
 
         // Draw angle arc from 0° to current angle
         const arcRadius = 40;
-        this.ctx.strokeStyle = '#2196F3';
+        this.ctx.strokeStyle = '#0D47A1';
         this.ctx.lineWidth = 1.5;
         this.ctx.setLineDash([]);
         this.ctx.beginPath();
@@ -476,11 +476,11 @@ class FlatTorusApp {
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
 
-        // Use blue color for the geodesic line
-        const color = '#2196F3';
+        // Use vibrant blue color for the geodesic line
+        const color = '#0D47A1';
 
         this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = 2;
+        this.ctx.lineWidth = 2.5;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
 
