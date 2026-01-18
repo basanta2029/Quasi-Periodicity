@@ -138,9 +138,6 @@ class WaveQuasicrystal {
         if (this.config.showContours) {
             this.drawContoursMarching(this.densityField, minDensity, maxDensity);
         }
-
-        // Draw info
-        this.drawInfo();
     }
 
     // Smooth color interpolation
@@ -286,23 +283,6 @@ class WaveQuasicrystal {
         }
 
         ctx.stroke();
-    }
-
-    // Draw information overlay
-    drawInfo() {
-        const ctx = this.ctx;
-        ctx.save();
-
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.font = '14px Arial';
-        ctx.fillText(`${this.config.symmetry}-fold Wave Quasicrystal`, 10, this.canvas.height - 40);
-        ctx.fillText(`Method: ${this.config.method}`, 10, this.canvas.height - 20);
-
-        ctx.font = '12px Arial';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillText('True quasicrystal: incommensurate wave interference', 10, 20);
-
-        ctx.restore();
     }
 
     // Verify quasicrystalline properties

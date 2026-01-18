@@ -3,76 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>True Quasicrystal Generators</title>
+    <title>Quasicrystal Generators</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             background: white;
             margin: 0;
             padding: 20px;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #333;
         }
-        
+
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
-        
+
         h1 {
             color: #2c3e50;
             text-align: center;
             margin-bottom: 10px;
+            font-weight: normal;
         }
-        
+
         .subtitle {
             text-align: center;
-            color: #7f8c8d;
+            color: #666;
             margin-bottom: 30px;
-            font-style: italic;
         }
-        
+
         .intro {
-            background: #ecf0f1;
+            background: #f9f9f9;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 4px;
             margin-bottom: 30px;
+            border: 1px solid #eee;
         }
-        
+
+        .intro h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-weight: normal;
+        }
+
         .generator-section {
             margin: 40px 0;
             background: white;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            padding: 25px;
         }
-        
+
         h2 {
-            color: #3498db;
-            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
+            font-weight: normal;
         }
-        
+
         .canvas-container {
             text-align: center;
             margin: 20px 0;
         }
-        
+
         canvas {
-            border: 2px solid #3498db;
-            border-radius: 4px;
+            border: 1px solid #ccc;
             background: white;
             max-width: 100%;
             height: auto;
         }
-        
+
         .controls {
-            background: #f8f9fa;
+            background: #f9f9f9;
             padding: 15px;
             border-radius: 4px;
             margin: 15px 0;
         }
-        
+
         .control-group {
             margin: 10px 0;
             display: flex;
@@ -82,19 +89,18 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .control-group label {
-            font-weight: bold;
-            color: #2c3e50;
+            color: #444;
             min-width: 150px;
         }
-        
+
         .control-group select,
         .control-group input[type="range"] {
             flex: 1;
             margin: 0 10px;
         }
-        
+
         button {
             background: #3498db;
             color: white;
@@ -103,150 +109,166 @@
             border-radius: 4px;
             cursor: pointer;
             margin: 5px;
-            font-size: 16px;
+            font-size: 14px;
         }
-        
+
         button:hover {
             background: #2980b9;
         }
-        
+
         .info-box {
-            background: #e8f6f3;
-            border-left: 4px solid #16a085;
+            background: #f5f9fc;
+            border-left: 3px solid #3498db;
             padding: 15px;
             margin: 20px 0;
         }
-        
+
+        .info-box p {
+            margin: 0;
+        }
+
+        .properties {
+            background: #f9f9f9;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .properties h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-weight: normal;
+        }
+
+        .properties ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .properties li {
+            margin: 5px 0;
+            color: #555;
+        }
+
         .comparison {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin: 20px 0;
         }
-        
+
         .comparison-box {
-            background: #f4f4f4;
+            background: #f9f9f9;
             padding: 15px;
             border-radius: 4px;
         }
-        
+
         .comparison-box h3 {
             margin-top: 0;
             color: #2c3e50;
+            font-size: 1.1em;
+            font-weight: normal;
         }
-        
-        .verification {
-            background: #d5f4e6;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 20px 0;
-        }
-        
-        .verification h3 {
-            margin-top: 0;
-            color: #27ae60;
-        }
-        
-        code {
-            background: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .math {
+
+        .math-note {
+            font-family: 'Times New Roman', serif;
             font-style: italic;
-            color: #8e44ad;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>True Quasicrystal Generators</h1>
-        <p class="subtitle">Creating genuine aperiodic structures with long-range order</p>
-        
+        <h1>Quasicrystal Generators</h1>
+        <p class="subtitle">Interactive tools for generating aperiodic structures with long-range order</p>
+
         <div class="intro">
-            <h3>What Makes a True Quasicrystal?</h3>
-            <p>Unlike the diffraction patterns we showed earlier, these generators create actual quasicrystal structures:</p>
+            <h3>About Quasicrystals</h3>
+            <p>Quasicrystals are ordered structures that lack translational periodicity. Unlike regular crystals, they never repeat exactly, yet they exhibit long-range order and produce sharp diffraction peaks. The generators below create two types of quasicrystalline patterns:</p>
             <ul>
-                <li><strong>Aperiodic</strong>: Never repeats exactly (no translational symmetry)</li>
-                <li><strong>Long-range order</strong>: Produces sharp diffraction peaks</li>
-                <li><strong>Forbidden symmetry</strong>: 5-fold, 7-fold, or other non-crystallographic symmetries</li>
-                <li><strong>Discrete or continuous</strong>: Can be point sets (atoms) or density fields</li>
+                <li><strong>Penrose tilings</strong> produce discrete aperiodic arrangements of tiles</li>
+                <li><strong>Wave interference patterns</strong> create continuous density fields with quasiperiodic structure</li>
             </ul>
         </div>
 
         <!-- Penrose Tiling Generator -->
         <div class="generator-section">
-            <h2>Method A: Penrose Tiling</h2>
-            
+            <h2>Method A: Penrose Tiling (P3 Rhombus Tiling)</h2>
+
             <div class="info-box">
-                <p><strong>How it works:</strong> Uses inflation/deflation rules on Robinson triangles. Each generation splits triangles according to precise rules involving the golden ratio φ = (1+√5)/2. This creates a discrete aperiodic tiling—a true 2D quasicrystal.</p>
+                <p>The Penrose tiling uses an inflation algorithm on Robinson triangles. Each generation subdivides triangles according to rules involving the golden ratio. The resulting pattern has 5-fold rotational symmetry but no translational symmetry.</p>
             </div>
-            
+
             <div class="canvas-container">
                 <canvas id="penrose-canvas" width="600" height="600"></canvas>
             </div>
-            
+
             <div class="controls">
                 <div class="control-group">
                     <label>Generations:</label>
                     <input type="range" id="penrose-generations" min="0" max="7" value="5">
                     <span id="penrose-gen-value">5</span>
                 </div>
-                
+
                 <div class="control-group">
                     <label>Color Scheme:</label>
                     <select id="penrose-colors">
                         <option value="classic">Classic (Blue/Red)</option>
                         <option value="rhombus">By Rhombus Type</option>
                         <option value="generation">By Generation</option>
-                        <option value="matching">Show Matching Rules</option>
+                        <option value="matching">Matching Rules</option>
                     </select>
                 </div>
-                
+
                 <div class="control-group">
                     <button onclick="regeneratePenrose()">Generate Tiling</button>
-                    <button onclick="showPenroseSymmetry()">Toggle 5-fold Symmetry Lines</button>
+                    <button onclick="showPenroseSymmetry()">Toggle Symmetry Axes</button>
                 </div>
             </div>
-            
-            <div class="verification">
-                <h3>✓ This is a True Quasicrystal</h3>
+
+            <div class="properties">
+                <h4>Properties of Penrose Tilings</h4>
                 <ul>
-                    <li>Aperiodic: Proven mathematically—no translational symmetry exists</li>
-                    <li>5-fold rotational symmetry at multiple scales</li>
-                    <li>Discrete structure: Each tile has definite position</li>
-                    <li>Self-similar with scaling factor φ</li>
+                    <li>Aperiodic: no translational symmetry exists</li>
+                    <li>5-fold rotational symmetry at the center</li>
+                    <li>Self-similar under scaling by the golden ratio</li>
+                    <li>Composed of two rhombus types (thick and thin)</li>
                 </ul>
             </div>
         </div>
 
         <!-- Wave Interference Quasicrystal -->
         <div class="generator-section">
-            <h2>Method B: Wave Interference with Incommensurable Frequencies</h2>
-            
+            <h2>Method B: Wave Interference with Incommensurate Frequencies</h2>
+
             <div class="info-box">
-                <p><strong>How it works:</strong> Superimposes plane waves with carefully chosen wave vectors. Uses two sets of waves with wavelengths in the golden ratio (incommensurable). This creates a continuous density field ρ(x,y) with quasicrystalline properties.</p>
-                <p class="math">ρ(x,y) = Σ cos(q⃗ᵢ·r⃗ + φᵢ) where |q⃗₂|/|q⃗₁| = φ (golden ratio)</p>
+                <p>This method superimposes plane waves with carefully chosen wave vectors. Using two sets of waves whose wavelengths are in the golden ratio ensures incommensurability, producing a continuous density field with quasicrystalline order.</p>
+                <p class="math-note">The density field is given by the sum of cosine waves with incommensurate frequencies.</p>
             </div>
-            
+
             <div class="canvas-container">
                 <canvas id="wave-canvas" width="600" height="600"></canvas>
             </div>
-            
+
             <div class="controls">
                 <div class="control-group">
                     <label>Symmetry:</label>
                     <select id="wave-symmetry">
-                        <option value="5">5-fold (Penrose-like)</option>
+                        <option value="5">5-fold</option>
                         <option value="7">7-fold</option>
                         <option value="8">8-fold</option>
                         <option value="10">10-fold (Decagonal)</option>
                         <option value="12">12-fold</option>
                     </select>
                 </div>
-                
+
                 <div class="control-group">
                     <label>Method:</label>
                     <select id="wave-method">
@@ -254,69 +276,57 @@
                         <option value="dualWave">Dual Wavelength</option>
                     </select>
                 </div>
-                
+
                 <div class="control-group">
                     <label>Visualization:</label>
                     <select id="wave-color">
-                        <option value="quasicrystal">Quasicrystal Colors</option>
-                        <option value="physics">Physics Density Plot</option>
+                        <option value="quasicrystal">Standard Colors</option>
+                        <option value="physics">Density Plot</option>
                         <option value="binary">Binary Threshold</option>
                     </select>
                 </div>
-                
+
                 <div class="control-group">
                     <button onclick="regenerateWave()">Generate Pattern</button>
                     <button onclick="toggleContours()">Toggle Contours</button>
                 </div>
             </div>
-            
-            <div class="verification">
-                <h3>✓ This is a True Quasicrystal</h3>
+
+            <div class="properties">
+                <h4>Properties of Wave Quasicrystals</h4>
                 <ul>
-                    <li>Aperiodic: Incommensurable wavelengths prevent periodicity</li>
-                    <li>Long-range order: Would produce sharp Bragg peaks in FFT</li>
-                    <li>Continuous density field (not discrete tiles)</li>
-                    <li>Models physical quasicrystals in soft matter</li>
+                    <li>Aperiodic due to incommensurate wavelengths</li>
+                    <li>Produces sharp Bragg peaks in the Fourier transform</li>
+                    <li>Continuous density field rather than discrete tiles</li>
+                    <li>Models soft matter quasicrystals</li>
                 </ul>
             </div>
         </div>
 
         <!-- Comparison Section -->
         <div class="generator-section">
-            <h2>Comparison: True Quasicrystals vs. Simple Patterns</h2>
-            
+            <h2>Comparison of Methods</h2>
+
             <div class="comparison">
                 <div class="comparison-box">
-                    <h3>What We Show Here (True Quasicrystals)</h3>
+                    <h3>Penrose Tiling</h3>
                     <ul>
-                        <li><strong>Penrose Tiling:</strong> Discrete aperiodic structure</li>
-                        <li><strong>Wave QC:</strong> Incommensurable frequencies</li>
-                        <li>Never repeats exactly</li>
-                        <li>Mathematically proven aperiodicity</li>
-                        <li>Models real atomic arrangements</li>
+                        <li>Discrete tile arrangement</li>
+                        <li>Based on subdivision rules</li>
+                        <li>Fixed 5-fold symmetry</li>
+                        <li>Models atomic quasicrystals</li>
                     </ul>
                 </div>
-                
+
                 <div class="comparison-box">
-                    <h3>Simple Interference Patterns</h3>
+                    <h3>Wave Interference</h3>
                     <ul>
-                        <li>Just sum of cosines with equal spacing</li>
-                        <li>Shows symmetry but may be periodic</li>
-                        <li>Pretty patterns but not true QC</li>
-                        <li>Like diffraction pattern, not structure</li>
-                        <li>Educational but not rigorous</li>
+                        <li>Continuous density field</li>
+                        <li>Based on wave superposition</li>
+                        <li>Adjustable n-fold symmetry</li>
+                        <li>Models soft matter systems</li>
                     </ul>
                 </div>
-            </div>
-            
-            <div class="info-box">
-                <h3>How to Verify a True Quasicrystal</h3>
-                <ol>
-                    <li><strong>Translation Test:</strong> Shift pattern by any vector → never matches exactly</li>
-                    <li><strong>Fourier Transform:</strong> Sharp peaks (not broad) with forbidden symmetry</li>
-                    <li><strong>Inflation Test:</strong> For Penrose, inflating preserves structure with φ scaling</li>
-                    <li><strong>Density Analysis:</strong> For waves, check incommensurability of frequencies</li>
-                </ol>
             </div>
         </div>
     </div>
@@ -326,10 +336,9 @@
     <script src="wave-quasicrystal.js"></script>
 
     <script>
-        // Initialize Penrose tiling
         let penroseTiling = null;
         let waveQC = null;
-        let showContours = false;  // Start with contours off so toggle shows visible change
+        let showContours = false;
         let showSymmetryGuides = false;
 
         function initializePenrose() {
@@ -339,9 +348,7 @@
                     colorScheme: document.getElementById('penrose-colors').value,
                     showGrid: showSymmetryGuides
                 };
-
                 penroseTiling = createPenroseTiling('penrose-canvas', config);
-                console.log('Penrose tiling initialized:', penroseTiling ? 'success' : 'failed');
             } catch (e) {
                 console.error('Error initializing Penrose tiling:', e);
             }
@@ -355,21 +362,12 @@
             showSymmetryGuides = !showSymmetryGuides;
             if (penroseTiling) {
                 penroseTiling.config.showGrid = showSymmetryGuides;
-                // Need to redraw - clear and regenerate with new config
-                const ctx = penroseTiling.ctx;
-                const canvas = penroseTiling.canvas;
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
                 penroseTiling.draw();
-                console.log('5-fold symmetry toggled:', showSymmetryGuides);
             } else {
-                console.error('Penrose tiling not initialized');
-                // Try to reinitialize
                 initializePenrose();
             }
         }
 
-        // Initialize wave quasicrystal
         function initializeWave() {
             try {
                 const config = {
@@ -379,9 +377,7 @@
                     showContours: showContours,
                     scale: 40
                 };
-
                 waveQC = createWaveQuasicrystal('wave-canvas', config);
-                console.log('Wave quasicrystal initialized:', waveQC ? 'success' : 'failed');
             } catch (e) {
                 console.error('Error initializing wave quasicrystal:', e);
             }
@@ -396,29 +392,18 @@
             if (waveQC) {
                 waveQC.config.showContours = showContours;
                 waveQC.generate();
-                console.log('Contours toggled:', showContours);
             } else {
-                console.error('Wave QC not initialized');
-                // Try to reinitialize
                 initializeWave();
             }
         }
 
-        // Update generation display
         document.getElementById('penrose-generations').addEventListener('input', (e) => {
             document.getElementById('penrose-gen-value').textContent = e.target.value;
         });
 
-        // Initialize both on load
         window.addEventListener('load', () => {
-            console.log('Page loaded, initializing generators...');
             initializePenrose();
             initializeWave();
-        });
-
-        // Also try DOMContentLoaded as fallback
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM ready');
         });
     </script>
 </body>

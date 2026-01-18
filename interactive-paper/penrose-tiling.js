@@ -247,87 +247,45 @@ class PenroseTiling {
         this.drawInfo();
     }
 
-    // Draw prominent 5-fold symmetry guides
+    // Draw 5-fold symmetry axes
     drawSymmetryGuides() {
         const ctx = this.ctx;
         const cx = this.canvas.width / 2;
         const cy = this.canvas.height / 2;
-        const radius = Math.min(this.canvas.width, this.canvas.height) * 0.45;
+        const radius = Math.min(this.canvas.width, this.canvas.height) * 0.48;
 
         ctx.save();
 
-        // Draw 5 radial lines (axes of symmetry)
-        ctx.strokeStyle = 'rgba(255, 50, 50, 0.7)';
+        // Draw 5 radial axes of symmetry (solid lines, clearly visible)
+        ctx.strokeStyle = '#d32f2f';
         ctx.lineWidth = 2;
-        ctx.setLineDash([8, 4]);
+        ctx.setLineDash([]);
 
         for (let i = 0; i < 5; i++) {
             const angle = (2 * Math.PI * i) / 5 - Math.PI / 2;
-            const x = cx + radius * Math.cos(angle);
-            const y = cy + radius * Math.sin(angle);
+            const x1 = cx - radius * Math.cos(angle);
+            const y1 = cy - radius * Math.sin(angle);
+            const x2 = cx + radius * Math.cos(angle);
+            const y2 = cy + radius * Math.sin(angle);
 
             ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(x, y);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
             ctx.stroke();
         }
 
-        // Draw concentric pentagons
-        ctx.strokeStyle = 'rgba(50, 50, 255, 0.5)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
-
-        for (let r = 50; r <= radius; r += 60) {
-            ctx.beginPath();
-            for (let i = 0; i <= 5; i++) {
-                const angle = (2 * Math.PI * i) / 5 - Math.PI / 2;
-                const x = cx + r * Math.cos(angle);
-                const y = cy + r * Math.sin(angle);
-                if (i === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            }
-            ctx.stroke();
-        }
-
-        // Draw center marker
-        ctx.setLineDash([]);
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+        // Draw center point
+        ctx.fillStyle = '#d32f2f';
         ctx.beginPath();
-        ctx.arc(cx, cy, 5, 0, 2 * Math.PI);
+        ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
         ctx.fill();
-
-        // Label the symmetry
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.font = 'bold 14px Arial';
-        ctx.fillText('5-fold rotational symmetry', cx - 80, cy - radius - 10);
 
         ctx.restore();
     }
 
-    // Draw information overlay
+    // No text overlay on canvas - keep it clean
     drawInfo() {
-        const ctx = this.ctx;
-        ctx.save();
-
-        // Background for text
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(5, this.canvas.height - 65, 250, 60);
-
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-        ctx.font = 'bold 14px Arial';
-        ctx.fillText(`Penrose P3 Tiling - Generation ${this.config.generations}`, 10, this.canvas.height - 45);
-
-        ctx.font = '13px Arial';
-        ctx.fillText(`${this.triangles.length} triangles (${Math.floor(this.triangles.length/2)} rhombi)`, 10, this.canvas.height - 25);
-
-        ctx.font = '12px Arial';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-        ctx.fillText('Aperiodic tiling with 5-fold symmetry', 10, this.canvas.height - 8);
-
-        ctx.restore();
+        // Intentionally empty - information is shown in HTML below the canvas
     }
 
     // Count rhombi by type

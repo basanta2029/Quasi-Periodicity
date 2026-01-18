@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+    <style>
+        body { 
+            background-color: #f0f0f0; 
+            padding: 20px; 
+            font-family: Arial, sans-serif;
+        }
+        .status { 
+            background: white; 
+            padding: 20px; 
+            margin: 10px 0; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Debug Test Page</h1>
+    
+    <div class="status" id="html-status">
+        HTML: <span class="success">✓ Loaded</span>
+    </div>
+    
+    <div class="status" id="css-status">
+        CSS: <span class="success">✓ Loaded</span>
+    </div>
+    
+    <div class="status" id="js-status">
+        JavaScript: <span id="js-result">Testing...</span>
+    </div>
+    
+    <div class="status" id="external-status">
+        External Resources: <span id="external-result">Testing...</span>
+    </div>
+
+    <script>
+        // Test basic JavaScript
+        document.getElementById('js-result').innerHTML = '<span class="success">✓ Working</span>';
+        
+        // Test external resource loading
+        const testScript = document.createElement('script');
+        testScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+        testScript.onload = function() {
+            document.getElementById('external-result').innerHTML = '<span class="success">✓ Can load external scripts</span>';
+        };
+        testScript.onerror = function() {
+            document.getElementById('external-result').innerHTML = '<span class="error">✗ Cannot load external scripts</span>';
+        };
+        document.head.appendChild(testScript);
+        
+        // Log any errors
+        window.onerror = function(msg, url, line) {
+            console.error('Error: ' + msg + ' at ' + url + ':' + line);
+            return false;
+        };
+    </script>
+</body>
+</html>

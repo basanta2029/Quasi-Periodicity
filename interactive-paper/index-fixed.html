@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasiperiodic Functions in Multiple Variables: Theory, Visualization, and Applications</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <!-- Removed polyfill.io as it may cause issues -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Title and Abstract -->
+        <header>
+            <h1>Quasiperiodic Functions in Multiple Variables:<br>Theory, Visualization, and Applications</h1>
+            <div class="authors">
+                <p>Basanta Baral</p>
+                <p class="advisor">Advisor: Dr. Roberto De Leo</p>
+                <p class="institution">Howard University</p>
+                <p class="date">2025</p>
+            </div>
+        </header>
+
+        <p style="padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
+            <strong>Debug Mode:</strong> If you can see this message, the HTML is loading correctly.
+        </p>
+    </div>
+
+    <!-- Scripts at the end with error handling -->
+    <script>
+        console.log('Page loaded successfully');
+        
+        // Defer loading of interactive scripts until DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded');
+            
+            // Load scripts with error handling
+            function loadScript(src, callback) {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = callback;
+                script.onerror = function() {
+                    console.error('Failed to load script: ' + src);
+                };
+                document.body.appendChild(script);
+            }
+            
+            // Load scripts sequentially
+            loadScript('interactive-demos.js', function() {
+                console.log('interactive-demos.js loaded');
+                loadScript('additional-demos.js', function() {
+                    console.log('additional-demos.js loaded');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
