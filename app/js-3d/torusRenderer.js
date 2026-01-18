@@ -316,8 +316,8 @@ class TorusApp {
         const startPoint = this.originPoint;
         const { p, q } = this.windingNumbers;
 
-        // Generate geodesic points (capped at 1000 for performance)
-        const nPoints = Math.min(1000, Math.max(300, Math.floor(tMax * 10)));
+        // Generate geodesic points with more points for smoothness
+        const nPoints = Math.min(2000, Math.max(500, Math.floor(tMax * 20)));
         this.geodesicPoints = TorusGeometry.generateGeodesic(
             startPoint,
             p,
@@ -328,11 +328,12 @@ class TorusApp {
 
         if (this.geodesicPoints.length < 2) return;
 
-        // Create curve geometry (optimized for performance)
+        // Create curve geometry with smooth interpolation
         const points = this.geodesicPoints.map(pt => new THREE.Vector3(pt.x, pt.y, pt.z));
         const curve = new THREE.CatmullRomCurve3(points);
-        const tubularSegments = Math.min(1000, points.length);
-        const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, 0.05, 6, false);
+        curve.tension = 0.5; // Smoother curve
+        const tubularSegments = Math.min(2000, points.length * 2);
+        const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, 0.04, 12, false);
 
         // Color based on classification - more vibrant colors
         const color = this.windingInfo && this.windingInfo.isRational ? 0x00ff00 : 0xff0066;
@@ -354,8 +355,8 @@ class TorusApp {
         const startPoint = this.originPoint;
         const { p, q } = this.windingNumbers;
 
-        // Generate complete geodesic at maxProgress (200)
-        const nPoints = 1000;
+        // Generate complete geodesic at maxProgress with more points for smoothness
+        const nPoints = 2000;
         this.fullGeodesicPoints = TorusGeometry.generateGeodesic(
             startPoint,
             p,
@@ -364,11 +365,12 @@ class TorusApp {
             nPoints
         );
 
-        // Create full tube geometry ONCE
+        // Create full tube geometry ONCE with smooth interpolation
         const points = this.fullGeodesicPoints.map(pt => new THREE.Vector3(pt.x, pt.y, pt.z));
         const curve = new THREE.CatmullRomCurve3(points);
-        const tubularSegments = 1000; // Increased for smoother curves
-        const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, 0.05, 8, false); // Increased radial segments to 8
+        curve.tension = 0.5; // Smoother curve interpolation
+        const tubularSegments = Math.min(2000, points.length * 2);
+        const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, 0.04, 12, false); // Thinner tube, more radial segments
 
         // Vibrant pink color for irrational
         const color = 0xff0066;
