@@ -1,28 +1,29 @@
-// True Penrose Tiling Generator using Robinson Triangles
-// This creates actual quasicrystal structure, not just diffraction patterns
+// True Penrose P3 (Rhombus) Tiling Generator
+// Uses Robinson triangle decomposition with proper inflation rules
+// Reference: https://en.wikipedia.org/wiki/Penrose_tiling
 
 const PHI = (1 + Math.sqrt(5)) / 2;  // Golden ratio ≈ 1.618
 const PSI = 1 / PHI;  // Inverse golden ratio ≈ 0.618
 
-// Complex number class for easier geometric calculations
+// Complex number class for geometric calculations
 class Complex {
     constructor(real, imag) {
         this.real = real;
         this.imag = imag;
     }
-    
+
     add(other) {
         return new Complex(this.real + other.real, this.imag + other.imag);
     }
-    
+
     subtract(other) {
         return new Complex(this.real - other.real, this.imag - other.imag);
     }
-    
+
     scale(factor) {
         return new Complex(this.real * factor, this.imag * factor);
     }
-    
+
     rotate(angle) {
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
@@ -31,64 +32,53 @@ class Complex {
             this.real * sin + this.imag * cos
         );
     }
-    
+
     magnitude() {
         return Math.sqrt(this.real * this.real + this.imag * this.imag);
     }
 }
 
-// Robinson Triangle - basis for Penrose rhombi
+// Robinson Triangle - the building block of Penrose P3 rhombi
+// Two triangles of the same type make a rhombus
 class RobinsonTriangle {
     constructor(A, B, C, type, generation = 0) {
-        this.A = A;  // Complex number vertices
-        this.B = B;
-        this.C = C;
-        this.type = type;  // 'BL' (big left), 'BR' (big right), 'SL' (small left), 'SR' (small right)
+        this.A = A;  // Apex vertex
+        this.B = B;  // Base vertex 1
+        this.C = C;  // Base vertex 2
+        this.type = type;  // 0 = thin (36° apex), 1 = thick (72° apex)
         this.generation = generation;
     }
-    
-    // Inflate the triangle according to Penrose rules
-    inflate() {
+
+    // Subdivide using the proper Penrose inflation rules
+    subdivide() {
         const nextGen = this.generation + 1;
-        
-        if (this.type === 'BL') {
-            // Big left triangle splits into 1 BL + 1 SL + 1 BR
-            const P = this.A.add(this.B.subtract(this.A).scale(PSI));
+
+        if (this.type === 0) {
+            // Thin triangle (36° apex) -> 1 thin + 1 thick
+            // P divides AB in golden ratio
+            const P = this.A.add(this.B.subtract(this.A).scale(PHI / (1 + PHI)));
             return [
-                new RobinsonTriangle(this.C, P, this.B, 'BL', nextGen),
-                new RobinsonTriangle(P, this.C, this.A, 'SL', nextGen),
-                new RobinsonTriangle(P, this.A, this.B, 'BR', nextGen)
+                new RobinsonTriangle(this.C, P, this.B, 0, nextGen),
+                new RobinsonTriangle(P, this.C, this.A, 1, nextGen)
             ];
-        } else if (this.type === 'BR') {
-            // Big right triangle splits into 1 BR + 1 SR + 1 BL
-            const P = this.B.add(this.A.subtract(this.B).scale(PSI));
+        } else {
+            // Thick triangle (72° apex) -> 2 thick + 1 thin
+            // Q divides AC in golden ratio, R divides AB in golden ratio
+            const Q = this.B.add(this.A.subtract(this.B).scale(PHI / (1 + PHI)));
+            const R = this.B.add(this.C.subtract(this.B).scale(PHI / (1 + PHI)));
             return [
-                new RobinsonTriangle(P, this.C, this.A, 'BR', nextGen),
-                new RobinsonTriangle(this.C, P, this.B, 'SR', nextGen),
-                new RobinsonTriangle(this.A, P, this.B, 'BL', nextGen)
-            ];
-        } else if (this.type === 'SL') {
-            // Small left triangle splits into 1 SL + 1 BL
-            const Q = this.B.add(this.A.subtract(this.B).scale(PSI));
-            return [
-                new RobinsonTriangle(Q, this.C, this.A, 'SL', nextGen),
-                new RobinsonTriangle(this.C, Q, this.B, 'BL', nextGen)
-            ];
-        } else { // 'SR'
-            // Small right triangle splits into 1 SR + 1 BR
-            const Q = this.A.add(this.B.subtract(this.A).scale(PSI));
-            return [
-                new RobinsonTriangle(this.C, Q, this.B, 'SR', nextGen),
-                new RobinsonTriangle(Q, this.C, this.A, 'BR', nextGen)
+                new RobinsonTriangle(R, this.C, this.A, 1, nextGen),
+                new RobinsonTriangle(Q, R, this.B, 1, nextGen),
+                new RobinsonTriangle(R, Q, this.A, 0, nextGen)
             ];
         }
     }
-    
-    // Get the rhombus this triangle is part of
+
+    // Get rhombus type this triangle belongs to
     getRhombusType() {
-        return (this.type === 'BL' || this.type === 'BR') ? 'thick' : 'thin';
+        return this.type === 0 ? 'thin' : 'thick';
     }
-    
+
     // Draw the triangle
     draw(ctx, colorScheme) {
         ctx.beginPath();
@@ -96,109 +86,113 @@ class RobinsonTriangle {
         ctx.lineTo(this.B.real, this.B.imag);
         ctx.lineTo(this.C.real, this.C.imag);
         ctx.closePath();
-        
-        // Color based on type and generation
+
         const color = colorScheme(this.type, this.generation);
         ctx.fillStyle = color.fill;
         ctx.fill();
-        ctx.strokeStyle = color.stroke;
-        ctx.lineWidth = color.lineWidth || 0.5;
-        ctx.stroke();
+
+        if (color.stroke) {
+            ctx.strokeStyle = color.stroke;
+            ctx.lineWidth = color.lineWidth || 0.5;
+            ctx.stroke();
+        }
     }
 }
 
-// Penrose Tiling Generator
+// Penrose P3 Tiling Generator
 class PenroseTiling {
     constructor(canvas, config = {}) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.config = {
-            generations: config.generations || 5,
-            initialSize: config.initialSize || 200,
+            generations: config.generations !== undefined ? config.generations : 5,
+            initialSize: config.initialSize !== undefined ? config.initialSize : 300,
             colorScheme: config.colorScheme || 'classic',
-            showGrid: config.showGrid || false,
-            ...config
+            showGrid: config.showGrid !== undefined ? config.showGrid : false,
+            showRhombi: config.showRhombi !== undefined ? config.showRhombi : true
         };
         this.triangles = [];
     }
-    
-    // Initialize with a ring of 10 triangles (5-fold symmetry)
+
+    // Initialize with a "sun" pattern - 10 triangles forming 5-fold symmetric start
     initializeSunConfiguration() {
         const center = new Complex(this.canvas.width / 2, this.canvas.height / 2);
         const radius = this.config.initialSize;
         this.triangles = [];
-        
-        // Create 10 triangles in a ring
+
+        // Create 10 thick triangles arranged around center (sun pattern)
         for (let i = 0; i < 10; i++) {
-            const angle = (2 * Math.PI * i) / 10;
-            const nextAngle = (2 * Math.PI * (i + 1)) / 10;
-            
-            const A = center;
+            const angle1 = (2 * Math.PI * i) / 10 - Math.PI / 2;
+            const angle2 = (2 * Math.PI * (i + 1)) / 10 - Math.PI / 2;
+
             const B = center.add(new Complex(
-                radius * Math.cos(angle),
-                radius * Math.sin(angle)
+                radius * Math.cos(angle1),
+                radius * Math.sin(angle1)
             ));
             const C = center.add(new Complex(
-                radius * Math.cos(nextAngle),
-                radius * Math.sin(nextAngle)
+                radius * Math.cos(angle2),
+                radius * Math.sin(angle2)
             ));
-            
-            // Alternate between BL and BR triangles
-            const type = (i % 2 === 0) ? 'BL' : 'BR';
-            this.triangles.push(new RobinsonTriangle(A, B, C, type, 0));
+
+            // Alternate orientation to create proper sun pattern
+            if (i % 2 === 0) {
+                this.triangles.push(new RobinsonTriangle(center, B, C, 1, 0));
+            } else {
+                this.triangles.push(new RobinsonTriangle(center, C, B, 1, 0));
+            }
         }
     }
-    
-    // Generate the tiling by inflating triangles
+
+    // Generate the tiling through subdivision
     generate() {
         this.initializeSunConfiguration();
-        
-        // Apply inflation rules for specified generations
+
+        // Apply subdivision rules for specified generations
         for (let gen = 0; gen < this.config.generations; gen++) {
             const newTriangles = [];
-            
             for (const triangle of this.triangles) {
-                newTriangles.push(...triangle.inflate());
+                newTriangles.push(...triangle.subdivide());
             }
-            
             this.triangles = newTriangles;
         }
     }
-    
-    // Color schemes for visualization
+
+    // Color schemes
     getColorScheme(name) {
         const schemes = {
+            // Classic blue/red rhombus coloring
             classic: (type, generation) => {
-                if (type === 'BL' || type === 'BR') {
+                if (type === 1) {  // Thick rhombus
                     return {
-                        fill: '#4a90e2',
-                        stroke: '#2c5aa0',
+                        fill: '#4a90d9',
+                        stroke: '#2a5a99',
                         lineWidth: 0.5
                     };
-                } else {
+                } else {  // Thin rhombus
                     return {
-                        fill: '#e74c3c',
-                        stroke: '#c0392b',
+                        fill: '#e85a4f',
+                        stroke: '#b84a3f',
                         lineWidth: 0.5
                     };
                 }
             },
-            
+
+            // Color by generation depth
             generation: (type, generation) => {
-                const hue = (generation * 60) % 360;
-                const lightness = type.startsWith('B') ? 60 : 40;
+                const hue = (generation * 40 + (type === 1 ? 200 : 30)) % 360;
                 return {
-                    fill: `hsl(${hue}, 70%, ${lightness}%)`,
-                    stroke: `hsl(${hue}, 70%, 30%)`,
+                    fill: `hsl(${hue}, 65%, 55%)`,
+                    stroke: `hsl(${hue}, 65%, 35%)`,
                     lineWidth: 0.5
                 };
             },
-            
+
+            // High contrast rhombus view
             rhombus: (type, generation) => {
-                if (type === 'BL' || type === 'BR') {
+                if (type === 1) {
                     return {
-                        fill: '#3498db',
-                        stroke: '#2980b9',
+                        fill: '#2ecc71',
+                        stroke: '#27ae60',
                         lineWidth: 1
                     };
                 } else {
@@ -209,120 +203,156 @@ class PenroseTiling {
                     };
                 }
             },
-            
+
+            // Show matching rules with 4 distinct colors
             matching: (type, generation) => {
-                // Color to show matching rules
-                const colors = {
-                    'BL': '#e74c3c',
-                    'BR': '#3498db',
-                    'SL': '#2ecc71',
-                    'SR': '#f39c12'
-                };
+                const colors = [
+                    { fill: '#e74c3c', stroke: '#c0392b' },  // Thin
+                    { fill: '#3498db', stroke: '#2980b9' }   // Thick
+                ];
                 return {
-                    fill: colors[type],
-                    stroke: '#2c3e50',
+                    ...colors[type],
                     lineWidth: 1
                 };
             }
         };
-        
+
         return schemes[name] || schemes.classic;
     }
-    
+
     // Draw the complete tiling
     draw() {
         const ctx = this.ctx;
         const width = this.canvas.width;
         const height = this.canvas.height;
-        
+
         // Clear canvas
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = '#fafafa';
         ctx.fillRect(0, 0, width, height);
-        
+
         // Get color scheme function
         const colorScheme = this.getColorScheme(this.config.colorScheme);
-        
+
         // Draw all triangles
         for (const triangle of this.triangles) {
             triangle.draw(ctx, colorScheme);
         }
-        
-        // Draw 5-fold symmetry indicators if requested
+
+        // Draw 5-fold symmetry guides if enabled
         if (this.config.showGrid) {
             this.drawSymmetryGuides();
         }
-        
-        // Add info text
+
+        // Draw info
         this.drawInfo();
     }
-    
-    // Draw symmetry guide lines
+
+    // Draw prominent 5-fold symmetry guides
     drawSymmetryGuides() {
         const ctx = this.ctx;
-        const center = new Complex(this.canvas.width / 2, this.canvas.height / 2);
-        
+        const cx = this.canvas.width / 2;
+        const cy = this.canvas.height / 2;
+        const radius = Math.min(this.canvas.width, this.canvas.height) * 0.45;
+
         ctx.save();
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([5, 5]);
-        
-        // Draw 5 radial lines
+
+        // Draw 5 radial lines (axes of symmetry)
+        ctx.strokeStyle = 'rgba(255, 50, 50, 0.7)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 4]);
+
         for (let i = 0; i < 5; i++) {
             const angle = (2 * Math.PI * i) / 5 - Math.PI / 2;
-            const end = center.add(new Complex(
-                300 * Math.cos(angle),
-                300 * Math.sin(angle)
-            ));
-            
+            const x = cx + radius * Math.cos(angle);
+            const y = cy + radius * Math.sin(angle);
+
             ctx.beginPath();
-            ctx.moveTo(center.real, center.imag);
-            ctx.lineTo(end.real, end.imag);
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x, y);
             ctx.stroke();
         }
-        
+
+        // Draw concentric pentagons
+        ctx.strokeStyle = 'rgba(50, 50, 255, 0.5)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+
+        for (let r = 50; r <= radius; r += 60) {
+            ctx.beginPath();
+            for (let i = 0; i <= 5; i++) {
+                const angle = (2 * Math.PI * i) / 5 - Math.PI / 2;
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle);
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+        }
+
+        // Draw center marker
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 5, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Label the symmetry
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.font = 'bold 14px Arial';
+        ctx.fillText('5-fold rotational symmetry', cx - 80, cy - radius - 10);
+
         ctx.restore();
     }
-    
-    // Draw information about the tiling
+
+    // Draw information overlay
     drawInfo() {
         const ctx = this.ctx;
         ctx.save();
-        
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.font = '14px Arial';
-        ctx.fillText(`Penrose Tiling (P3) - Generation ${this.config.generations}`, 10, this.canvas.height - 40);
-        ctx.fillText(`${this.triangles.length} triangles`, 10, this.canvas.height - 20);
-        
-        // Show that this is a true quasicrystal
+
+        // Background for text
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillRect(5, this.canvas.height - 65, 250, 60);
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.font = 'bold 14px Arial';
+        ctx.fillText(`Penrose P3 Tiling - Generation ${this.config.generations}`, 10, this.canvas.height - 45);
+
+        ctx.font = '13px Arial';
+        ctx.fillText(`${this.triangles.length} triangles (${Math.floor(this.triangles.length/2)} rhombi)`, 10, this.canvas.height - 25);
+
         ctx.font = '12px Arial';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillText('True quasicrystal: aperiodic with 5-fold symmetry', 10, 20);
-        
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.fillText('Aperiodic tiling with 5-fold symmetry', 10, this.canvas.height - 8);
+
         ctx.restore();
     }
-    
-    // Check if pattern is truly aperiodic (for verification)
-    verifyAperiodicity() {
-        // This would implement checks for:
-        // 1. No translational symmetry
-        // 2. Presence of 5-fold rotational symmetry
-        // 3. Long-range order (sharp diffraction peaks)
-        console.log('Penrose tiling is mathematically guaranteed to be aperiodic');
-        return true;
+
+    // Count rhombi by type
+    countRhombi() {
+        let thick = 0, thin = 0;
+        for (const t of this.triangles) {
+            if (t.type === 1) thick++;
+            else thin++;
+        }
+        // Each rhombus is made of 2 triangles
+        return { thick: Math.floor(thick/2), thin: Math.floor(thin/2) };
     }
 }
 
-// Helper function to create and initialize a Penrose tiling
+// Helper function to create Penrose tiling
 function createPenroseTiling(canvasId, config = {}) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) {
         console.error(`Canvas with id '${canvasId}' not found`);
         return null;
     }
-    
+
     const tiling = new PenroseTiling(canvas, config);
     tiling.generate();
     tiling.draw();
-    
+
     return tiling;
 }
