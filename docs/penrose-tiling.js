@@ -247,34 +247,36 @@ class PenroseTiling {
         this.drawInfo();
     }
 
-    // Draw 5-fold symmetry axes
+    // Draw local 5-fold rotational symmetry indicator at the central sun vertex
+    // Note: Penrose tilings have local rotational symmetry, not global mirror symmetry
     drawSymmetryGuides() {
         const ctx = this.ctx;
         const cx = this.canvas.width / 2;
         const cy = this.canvas.height / 2;
-        const radius = Math.min(this.canvas.width, this.canvas.height) * 0.48;
+
+        // Short radius: approximately 2-4 tile edge lengths from center
+        // This indicates local rotational symmetry at the central star vertex only
+        const localRadius = this.config.initialSize * 0.15;
 
         ctx.save();
 
-        // Draw 5 radial axes of symmetry (solid lines, clearly visible)
+        // Draw 5 short line segments indicating local 5-fold rotational symmetry
         ctx.strokeStyle = '#d32f2f';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.setLineDash([]);
 
         for (let i = 0; i < 5; i++) {
             const angle = (2 * Math.PI * i) / 5 - Math.PI / 2;
-            const x1 = cx - radius * Math.cos(angle);
-            const y1 = cy - radius * Math.sin(angle);
-            const x2 = cx + radius * Math.cos(angle);
-            const y2 = cy + radius * Math.sin(angle);
+            const x = cx + localRadius * Math.cos(angle);
+            const y = cy + localRadius * Math.sin(angle);
 
             ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x, y);
             ctx.stroke();
         }
 
-        // Draw center point
+        // Draw center point marking the local symmetry vertex
         ctx.fillStyle = '#d32f2f';
         ctx.beginPath();
         ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
