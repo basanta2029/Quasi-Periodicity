@@ -286,8 +286,8 @@ class FlatTorusApp {
             return;
         }
 
-        // Draw direction point (larger and more prominent)
-        this.drawPoints([this.directionPoint], '#2196F3', 12); // Blue for direction, larger: 12px
+        // Draw direction point (smaller and less intrusive)
+        this.drawPoints([this.directionPoint], '#0D47A1', 4); // Blue for direction point
 
         // Calculate slope and classify (from origin to direction point)
         this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
@@ -370,7 +370,7 @@ class FlatTorusApp {
 
         // Draw preview line
         this.ctx.save();
-        this.ctx.strokeStyle = '#2196F3';
+        this.ctx.strokeStyle = '#0D47A1';
         this.ctx.lineWidth = 2;
         this.ctx.setLineDash([10, 5]);
         this.ctx.globalAlpha = 0.6;
@@ -382,7 +382,7 @@ class FlatTorusApp {
 
         // Draw angle arc from 0° to current angle
         const arcRadius = 40;
-        this.ctx.strokeStyle = '#2196F3';
+        this.ctx.strokeStyle = '#0D47A1';
         this.ctx.lineWidth = 1.5;
         this.ctx.setLineDash([]);
         this.ctx.beginPath();
@@ -476,11 +476,11 @@ class FlatTorusApp {
         // Split into segments at wraps
         const segments = MathUtils.splitAtWraps(points);
 
-        // Color based on classification
-        const color = this.slopeInfo && this.slopeInfo.isRational ? '#28a745' : '#dc3545';
+        // Use vibrant blue color for the geodesic line
+        const color = '#0D47A1';
 
         this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = 3;
+        this.ctx.lineWidth = 2.5;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
 
@@ -503,7 +503,7 @@ class FlatTorusApp {
         // Draw current endpoint
         if (points.length > 0) {
             const lastPoint = points[points.length - 1];
-            this.drawPoints([lastPoint], color, 5);
+            this.drawPoints([lastPoint], color, 3);
         }
     }
 
@@ -634,10 +634,8 @@ class FlatTorusApp {
         // Increment progress based on speed
         this.animationProgress += this.animationSpeed * 0.02;
 
-        // Loop animation at max wraps
-        if (this.animationProgress > this.maxWraps) {
-            this.animationProgress = 0;
-        }
+        // Continue forever - no reset (let the square fill completely)
+        // Animation continues indefinitely to show dense filling
 
         this.updateVisualization();
 

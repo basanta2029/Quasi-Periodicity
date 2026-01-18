@@ -3,18 +3,20 @@
 function createEnhancedQuasicrystal() {
     const canvas = document.getElementById('quasicrystal-demo');
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
-    
+
     // Configuration
     const config = {
         scale: 50,           // Increased scale for better visibility
         amplitude: 1.2,      // Wave amplitude
         colorScheme: 'vibrant', // 'vibrant', 'classic', 'grayscale'
         antialiasing: true,
-        showGrid: false
+        showGrid: false,
+        offsetX: 0,          // Pan offset X
+        offsetY: 0           // Pan offset Y
     };
     
     function generateQuasicrystal() {
@@ -37,9 +39,9 @@ function createEnhancedQuasicrystal() {
         // Calculate pattern with enhanced algorithm
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
-                // Convert to centered coordinates
-                const cx = (x - width/2) / config.scale;
-                const cy = (y - height/2) / config.scale;
+                // Convert to centered coordinates with pan offset
+                const cx = (x - width/2) / config.scale + config.offsetX;
+                const cy = (y - height/2) / config.scale + config.offsetY;
                 
                 // Calculate quasicrystal pattern
                 let sum = 0;
@@ -159,49 +161,63 @@ function createEnhancedQuasicrystal() {
         ctx.setLineDash([]);
     }
     
-    // Add controls for enhanced features
-    function addEnhancedControls() {
-        const controlsDiv = document.querySelector('#quasicrystal-demo').nextElementSibling;
-        if (!controlsDiv) return;
-        
-        // Add color scheme selector
-        const colorControl = document.createElement('label');
-        colorControl.style.marginLeft = '20px';
-        colorControl.innerHTML = `
-            Color Scheme: 
-            <select id="color-scheme">
-                <option value="vibrant">Vibrant</option>
-                <option value="classic">Classic</option>
-                <option value="grayscale">Grayscale</option>
-            </select>
-        `;
-        controlsDiv.appendChild(colorControl);
-        
-        // Add scale slider
-        const scaleControl = document.createElement('label');
-        scaleControl.style.display = 'block';
-        scaleControl.style.marginTop = '10px';
-        scaleControl.innerHTML = `
-            Zoom: <input type="range" id="scale-slider" min="20" max="100" value="50">
-            <span id="scale-value">50</span>
-        `;
-        controlsDiv.appendChild(scaleControl);
-        
-        // Event listeners
-        document.getElementById('color-scheme').addEventListener('change', generateQuasicrystal);
-        
+    // Set up event listeners for enhanced controls (controls are in HTML)
+    function setupEnhancedControls() {
+        // Color scheme selector
+        const colorSchemeSelect = document.getElementById('color-scheme');
+        if (colorSchemeSelect) {
+            colorSchemeSelect.addEventListener('change', (e) => {
+                config.colorScheme = e.target.value;
+                generateQuasicrystal();
+            });
+        }
+
+        // Scale/Zoom slider
         const scaleSlider = document.getElementById('scale-slider');
-        scaleSlider.addEventListener('input', (e) => {
-            config.scale = parseInt(e.target.value);
-            document.getElementById('scale-value').textContent = config.scale;
-            generateQuasicrystal();
-        });
-        
-        // Update color scheme when changed
-        document.getElementById('color-scheme').addEventListener('change', (e) => {
-            config.colorScheme = e.target.value;
-            generateQuasicrystal();
-        });
+        if (scaleSlider) {
+            scaleSlider.addEventListener('input', (e) => {
+                config.scale = parseInt(e.target.value);
+                document.getElementById('scale-value').textContent = config.scale;
+                generateQuasicrystal();
+            });
+        }
+
+        // Pan X slider
+        const panXSlider = document.getElementById('pan-x-slider');
+        if (panXSlider) {
+            panXSlider.addEventListener('input', (e) => {
+                config.offsetX = parseFloat(e.target.value);
+                document.getElementById('pan-x-value').textContent = config.offsetX.toFixed(1);
+                generateQuasicrystal();
+            });
+        }
+
+        // Pan Y slider
+        const panYSlider = document.getElementById('pan-y-slider');
+        if (panYSlider) {
+            panYSlider.addEventListener('input', (e) => {
+                config.offsetY = parseFloat(e.target.value);
+                document.getElementById('pan-y-value').textContent = config.offsetY.toFixed(1);
+                generateQuasicrystal();
+            });
+        }
+
+        // Reset view button
+        const resetBtn = document.getElementById('reset-pan');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                config.offsetX = 0;
+                config.offsetY = 0;
+                config.scale = 50;
+                if (document.getElementById('pan-x-slider')) document.getElementById('pan-x-slider').value = 0;
+                if (document.getElementById('pan-y-slider')) document.getElementById('pan-y-slider').value = 0;
+                if (document.getElementById('scale-slider')) document.getElementById('scale-slider').value = 50;
+                if (document.getElementById('pan-x-value')) document.getElementById('pan-x-value').textContent = '0';
+                if (document.getElementById('pan-y-value')) document.getElementById('pan-y-value').textContent = '0';
+                if (document.getElementById('scale-value')) document.getElementById('scale-value').textContent = '50';
+                generateQuasicrystal();
+            });
+        }
     }
     
     // Set up event listeners
@@ -215,9 +231,9 @@ function createEnhancedQuasicrystal() {
         symmetrySelect.addEventListener('change', generateQuasicrystal);
     }
     
-    // Add enhanced controls and generate initial pattern
+    // Set up enhanced controls and generate initial pattern
     setTimeout(() => {
-        addEnhancedControls();
+        setupEnhancedControls();
         generateQuasicrystal();
     }, 100);
 }

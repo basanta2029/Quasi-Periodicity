@@ -12,9 +12,9 @@ if (rationalButton) {
     });
 }
 
-// Load enhanced quasicrystal generator
+// Load enhanced quasicrystal generator with cache busting
 const script = document.createElement('script');
-script.src = 'quasicrystal-enhanced.js';
+script.src = 'quasicrystal-enhanced.js?v=' + Date.now();
 document.head.appendChild(script);
 
 // Triply periodic function visualization
