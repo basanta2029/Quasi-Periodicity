@@ -287,7 +287,7 @@ class FlatTorusApp {
         }
 
         // Draw direction point (smaller and less intrusive)
-        this.drawPoints([this.directionPoint], '#0D47A1', 6); // Blue for direction, smaller: 6px
+        this.drawPoints([this.directionPoint], '#0D47A1', 4); // Blue for direction point
 
         // Calculate slope and classify (from origin to direction point)
         this.slope = MathUtils.calculateSlope(this.origin, this.directionPoint);
@@ -503,7 +503,7 @@ class FlatTorusApp {
         // Draw current endpoint
         if (points.length > 0) {
             const lastPoint = points[points.length - 1];
-            this.drawPoints([lastPoint], color, 5);
+            this.drawPoints([lastPoint], color, 3);
         }
     }
 
