@@ -53,18 +53,18 @@ class LevelSetMath {
         return Math.cos(tp * x) + Math.cos(tp * y) + Math.cos(tp * alpha * x);
     }
 
-    // Sample f on an (N+1)×(N+1) grid covering [0,1]².
-    // Grid index (i,j) → position (i/N, j/N). Returns flat Float64Array.
-    static sampleGrid(alpha, N) {
+    // Sample f on an (N+1)×(N+1) grid covering the viewport [ox, ox+1]×[oy, oy+1].
+    // Grid index (i,j) → position (ox + i/N, oy + j/N). Returns flat Float64Array.
+    static sampleGrid(alpha, N, ox = 0, oy = 0) {
         const grid = new Float64Array((N + 1) * (N + 1));
         const tp = LevelSetMath.TWO_PI;
         const tpa = tp * alpha;
         for (let i = 0; i <= N; i++) {
-            const x = i / N;
+            const x = ox + i / N;
             const cxSum = Math.cos(tp * x) + Math.cos(tpa * x);
             const base = i * (N + 1);
             for (let j = 0; j <= N; j++) {
-                grid[base + j] = cxSum + Math.cos(tp * (j / N));
+                grid[base + j] = cxSum + Math.cos(tp * (oy + j / N));
             }
         }
         return grid;
@@ -216,8 +216,9 @@ class LevelSetMath {
 
     // Full pipeline: sample → marching squares → chains → classification.
     // Pass cachedGrid to skip resampling when only c has changed.
-    static computeLevelSet(alpha, c, N, cachedGrid = null) {
-        const grid = cachedGrid || LevelSetMath.sampleGrid(alpha, N);
+    // ox, oy: viewport origin — f is sampled on [ox, ox+1]×[oy, oy+1].
+    static computeLevelSet(alpha, c, N, cachedGrid = null, ox = 0, oy = 0) {
+        const grid = cachedGrid || LevelSetMath.sampleGrid(alpha, N, ox, oy);
         const segments = LevelSetMath.runMarchingSquares(grid, N, c);
         const chains   = LevelSetMath.assembleChains(segments);
         chains.forEach(ch => { ch.type = LevelSetMath.classifyChain(ch); });
