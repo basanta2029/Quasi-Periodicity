@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draw Your Own Geodesic - Interactive Flat Torus</title>
+    <title>Flat Torus Geodesic Explorer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Draw Your Own Geodesic on the Flat Torus</h1>
+            <h1>Flat Torus Geodesic Explorer</h1>
             <p class="subtitle">
-                Click <strong>anywhere</strong> to set the geodesic direction from the origin.
-                Watch it wrap around the edges! Will it close (rational slope) or fill the square (irrational slope)?
+                Click in the square to choose a direction from the origin.
+                The line wraps across opposite edges, just like motion on a flat torus.
             </p>
         </header>
 
@@ -59,7 +59,7 @@
                 <div class="info-card">
                     <h3>Your Geodesic</h3>
                     <div id="slopeInfo">
-                        <p class="text-muted">Click two points on the square to get started!</p>
+                        <p class="text-muted">Click in the square to choose a direction.</p>
                     </div>
                 </div>
 
@@ -68,12 +68,12 @@
                     <p>
                         <strong>Rational Slope (e.g., 1/2, 2/3):</strong><br>
                         The line <span class="periodic">closes</span> after a finite number of wraps.
-                        It traces a periodic orbit.
+                        This creates a repeating path.
                     </p>
                     <p>
                         <strong>Irrational Slope (e.g., √2, φ, π):</strong><br>
-                        The line <span class="dense">never closes</span> and becomes
-                        <span class="dense">dense</span> - it eventually passes arbitrarily close to every point!
+                        The line <span class="dense">does not close</span>. Over time, it passes
+                        close to every region of the square.
                     </p>
                     <hr>
                     <p class="small text-muted">
@@ -86,7 +86,7 @@
         </div>
 
         <footer>
-            <p>Quasiperiodic Functions Visualization Tool</p>
+            <p>Flat torus visualization tool</p>
         </footer>
     </div>
 

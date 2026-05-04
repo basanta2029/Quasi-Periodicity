@@ -150,7 +150,7 @@ class MathUtils {
                     symbolName: irrational.symbol,
                     fullName: irrational.name,
                     classification: 'Dense',
-                    description: `Irrational slope ${irrational.symbol} - Never closes! Fills square densely.`,
+                    description: `Irrational slope ${irrational.symbol} - does not close and passes close to every region.`,
                     expectedSegments: null
                 };
             }
@@ -168,7 +168,7 @@ class MathUtils {
                 q: q,
                 approxStr: `${p}/${q}`,
                 classification: 'Periodic',
-                description: `Rational slope ${p}/${q} - Returns to start after ${Math.abs(q)} complete cycles!`,
+                description: `Rational slope ${p}/${q} - returns to the start after ${Math.abs(q)} complete cycles.`,
                 expectedSegments: Math.abs(p) + Math.abs(q),
                 symbolName: null
             };
@@ -180,7 +180,7 @@ class MathUtils {
                 q: q,
                 approxStr: `≈ ${p}/${q}`,
                 classification: 'Dense',
-                description: `Irrational slope ≈ ${slope.toFixed(6)} - Never closes! Fills square densely.`,
+                description: `Irrational slope ≈ ${slope.toFixed(6)} - does not close and passes close to every region.`,
                 expectedSegments: null,
                 symbolName: null
             };

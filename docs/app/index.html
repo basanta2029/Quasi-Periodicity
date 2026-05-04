@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quasiperiodic Functions - 2D & 3D Torus Geodesics</title>
+    <title>Quasiperiodic Function Visualizations</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: white;
+            background: #f3f4f6;
+            color: #374151;
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,21 +26,23 @@
 
         header {
             background: white;
-            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 6px rgba(15, 23, 42, 0.06);
             text-align: center;
         }
 
         header h1 {
-            color: #333;
-            font-size: 2.5em;
+            color: #1f2937;
+            font-size: 2.2em;
             margin-bottom: 10px;
+            letter-spacing: -0.02em;
         }
 
         header .subtitle {
-            color: #666;
+            color: #6b7280;
             font-size: 1.2em;
         }
 
@@ -52,18 +55,19 @@
 
         .viz-card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 1px 6px rgba(15, 23, 42, 0.06);
             width: 100%;
             max-width: 1400px;
         }
 
         .viz-card h2 {
-            color: #333;
+            color: #1f2937;
             margin-bottom: 15px;
-            font-size: 1.8em;
-            border-bottom: 3px solid #667eea;
+            font-size: 1.55em;
+            border-bottom: 1px solid #e5e7eb;
             padding-bottom: 10px;
         }
 
@@ -76,11 +80,12 @@
 
         footer {
             background: white;
-            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
             padding: 20px;
             text-align: center;
-            color: #666;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            color: #6b7280;
+            box-shadow: 0 1px 6px rgba(15, 23, 42, 0.06);
         }
 
         footer a {
@@ -98,8 +103,8 @@
 <body>
     <div class="main-container">
         <header>
-            <h1>Quasiperiodic Functions & Torus Geodesics</h1>
-            <p class="subtitle">Interactive Visualizations of Geodesic Curves on the Flat and Embedded Torus</p>
+            <h1>Quasiperiodic Function Visualizations</h1>
+            <p class="subtitle">Interactive tools for exploring torus geodesics and level curves</p>
         </header>
 
         <div class="visualization-container">
@@ -107,10 +112,10 @@
             <div class="viz-card">
                 <h2>Flat Torus Geodesics (2D)</h2>
                 <p style="color: #666; margin-bottom: 15px;">
-                    Click anywhere to set the geodesic direction from the origin (bottom-left).
-                    The visualization features an <strong>interactive angle guide</strong> showing the angle and slope
-                    in real-time before you click. Watch how geodesics wrap on the flat torus, revealing
-                    periodic behavior for rational slopes and dense trajectories for irrational slopes.
+                    Click in the square to choose a direction from the origin. The line wraps
+                    around the opposite edges, just like motion on a flat torus. Rational slopes
+                    close after a finite number of wraps, while irrational slopes keep spreading
+                    through the square.
                 </p>
                 <iframe src="js/index.html" title="2D Flat Torus Geodesics"></iframe>
             </div>
@@ -119,10 +124,9 @@
             <div class="viz-card">
                 <h2>Embedded Torus Geodesics (3D)</h2>
                 <p style="color: #666; margin-bottom: 15px;">
-                    Click anywhere on the torus to set the geodesic direction from the origin (orange marker).
-                    The visualization shows how geodesics behave on the standard torus embedded in
-                    three-dimensional space, with <strong>synchronized curve and marker animation</strong> for
-                    both rational and irrational winding numbers.
+                    Click on the torus to choose a direction from the orange starting point.
+                    The animation shows how the path winds around the surface. Some paths close,
+                    while others keep covering more of the torus.
                 </p>
                 <iframe src="js-3d/index.html" title="3D Torus Geodesics"></iframe>
             </div>
@@ -146,7 +150,7 @@
 
         <footer>
             <p>
-                Interactive Educational Platform for Quasiperiodic Functions and Torus Dynamics
+                Interactive tools for quasiperiodic functions and torus dynamics
             </p>
         </footer>
     </div>

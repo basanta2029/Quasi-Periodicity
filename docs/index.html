@@ -37,9 +37,9 @@
                 <li><a href="#introduction">Introduction</a>
                     <ul>
                         <li><a href="#intro-what-are">1.1 What Are Quasiperiodic Functions?</a></li>
-                        <li><a href="#intro-discovery">1.2 The Discovery That Changed Physics</a></li>
-                        <li><a href="#intro-why-care">1.3 Why Should You Care?</a></li>
-                        <li><a href="#intro-journey">1.4 Your Journey Through This Paper</a></li>
+                        <li><a href="#intro-discovery">1.2 The Discovery of Quasicrystals</a></li>
+                        <li><a href="#intro-why-care">1.3 Why Quasiperiodicity Matters</a></li>
+                        <li><a href="#intro-journey">1.4 What This Page Covers</a></li>
                     </ul>
                 </li>
                 <li><a href="#foundations">Mathematical Foundations</a>
@@ -104,7 +104,7 @@
         <section id="abstract">
             <h2>Abstract</h2>
             <div class="abstract-content">
-                <p>This paper presents a comprehensive introduction to quasiperiodic functions in multiple variables, designed specifically for undergraduate students with minimal prerequisites. We begin with the intuitive concept of patterns that maintain structure without repetition, exemplified by Penrose tilings. Through interactive visualizations embedded directly in this document, readers can explore how simple mathematical rules create infinitely complex patterns. We carefully build from one-dimensional examples to the beautiful geometry of geodesics on tori. The paper culminates in understanding how these mathematical concepts explain real-world phenomena, from the atomic structure of quasicrystals to the electronic properties of materials. Our approach emphasizes hands-on exploration: every concept can be manipulated and visualized in real-time.</p>
+                <p>This page introduces quasiperiodic functions in a visual and accessible way. A quasiperiodic pattern follows a clear rule, but it does not repeat exactly like a normal periodic pattern. The examples below start with simple waves, then move to geodesics on tori, quasicrystal patterns, and level curves connected to Novikov's problem. The interactive tools are included so readers can change parameters and see how the mathematics behaves.</p>
             </div>
         </section>
 
@@ -114,20 +114,20 @@
             
             <h3 id="intro-what-are">1.1 What Are Quasiperiodic Functions?</h3>
             
-            <p>Imagine listening to two musical notes played together. When the frequencies form a simple ratio like 2:1 (an octave), the combined sound repeats regularly: it's periodic. But what happens when the ratio is irrational, like π:1? The pattern maintains clear structure without ever repeating exactly. This is quasiperiodicity.</p>
+            <p>A periodic pattern repeats after a fixed distance or time. A quasiperiodic pattern is different: it has structure, but it does not repeat exactly. One simple way to create this behavior is to combine two waves whose frequencies do not fit into a simple ratio.</p>
 
             <div class="example-box">
                 <h4>Everyday Example: Moiré Patterns</h4>
-                <p>Have you ever seen two window screens overlapping, creating shifting patterns as you move? Or noticed strange patterns when taking a photo of a computer screen? These moiré effects are visual examples of quasiperiodicity: two regular patterns combining to create something that looks almost regular but isn't quite.</p>
+                <p>When two regular grids overlap at slightly different angles, they create a larger pattern called a moire pattern. The result can look organized without repeating in a simple way. This is a helpful first picture of quasiperiodicity.</p>
             </div>
 
             <h3 id="intro-discovery">1.2 The Discovery of Quasicrystals</h3>
 
-            <p>For centuries, scientists believed crystals could only have certain symmetries. A square tile can cover a floor with 4-fold symmetry, hexagons give 6-fold symmetry, but 5-fold symmetry was considered impossible in crystallography.</p>
+            <p>For a long time, crystallography allowed only certain rotational symmetries. Four-fold and six-fold symmetries were common, but five-fold symmetry was considered incompatible with periodic crystals.</p>
 
-            <p>In 1982, Dan Shechtman observed an electron diffraction pattern of an aluminum-manganese alloy showing sharp diffraction spots with 5-fold symmetry. This observation contradicted the established rules of crystallography.</p>
+            <p>In 1982, Dan Shechtman observed an aluminum-manganese alloy with sharp diffraction spots and five-fold symmetry. The pattern was ordered, but it was not periodic in the usual crystal sense.</p>
 
-            <p>Despite initial skepticism from the scientific community, Shechtman's findings were eventually validated. In 2011, he received the Nobel Prize in Chemistry for the discovery of quasicrystals.</p>
+            <p>The discovery was controversial at first, but it was later confirmed. Shechtman received the 2011 Nobel Prize in Chemistry for discovering quasicrystals.</p>
 
             <h3 id="intro-why-care">1.3 Applications</h3>
 
@@ -142,16 +142,16 @@
 
             <h3 id="intro-journey">1.4 Overview</h3>
 
-            <p>This paper covers:</p>
+            <p>This page covers:</p>
             <ol>
-                <li>How superposition of waves with incommensurate frequencies produces quasiperiodic patterns</li>
-                <li>The relationship between geodesics on tori and quasiperiodic functions</li>
-                <li>Physical systems exhibiting quasiperiodic behavior</li>
+                <li>How combining waves can create non-repeating patterns</li>
+                <li>How straight-line motion on a torus helps explain quasiperiodicity</li>
+                <li>How these ideas appear in quasicrystals, level sets, and materials</li>
             </ol>
 
             <!-- Simple Interactive Demo -->
             <div class="interactive-demo">
-                <h4>Try It Yourself: Exploring Quasiperiodicity</h4>
+                <h4>Interactive example: combining two waves</h4>
                 <canvas id="demo1d" width="800" height="300"></canvas>
                 <div class="controls">
                     <label>ω (frequency ratio): <input type="range" id="omega" min="1" max="3" step="0.001" value="1.414"></label>
@@ -162,7 +162,7 @@
                     <button id="preset-sqrt2">Try √2</button>
                     <button id="preset-rational">Try 3/2 (Periodic)</button>
                 </div>
-                <p class="caption"><strong>Interactive Figure 1</strong>: Add two cosine waves: $f(x) = \cos(x) + \cos(\omega x)$. When ω is irrational (like √2 or φ), the pattern never repeats. When ω is rational (like 3/2), you get a repeating pattern. Try it!</p>
+                <p class="caption"><strong>Interactive Figure 1</strong>: This graph shows $f(x) = \cos(x) + \cos(\omega x)$. Rational values of ω create repeating patterns. Irrational values such as √2 or φ create patterns that keep changing without exact repetition.</p>
             </div>
         </section>
 
@@ -172,7 +172,7 @@
             
             <h3 id="foundations-periodic">2.1 Starting Simple: What Does "Periodic" Mean?</h3>
             
-            <p>Let's begin with something familiar. A function is periodic if it repeats exactly after some fixed interval.</p>
+            <p>A function is periodic if it repeats exactly after some fixed interval.</p>
 
             <div class="definition">
                 <strong>Definition (Periodic Function - Simple Version)</strong><br>
@@ -197,7 +197,7 @@
 
             <div class="worked-example">
                 <h4>Worked Example: Building a Quasiperiodic Function</h4>
-                <p>Let's add two cosine waves:</p>
+                <p>Consider two cosine waves:</p>
                 <ul>
                     <li>Wave 1: $\cos(x)$ with period $2\pi$</li>
                     <li>Wave 2: $\cos(\sqrt{2}x)$ with period $2\pi/\sqrt{2}$</li>
@@ -205,12 +205,12 @@
                 <p>The combined function is: $f(x) = \cos(x) + \cos(\sqrt{2}x)$</p>
                 
                 <p><strong>Question</strong>: Does this combined function repeat?</p>
-                <p><strong>Answer</strong>: No! Because $\sqrt{2}$ is irrational, there's no common period. The pattern goes on forever without exact repetition.</p>
+                <p><strong>Answer</strong>: No. Because $\sqrt{2}$ is irrational, the two waves do not share a common period. The combined pattern keeps changing without repeating exactly.</p>
             </div>
 
             <h3 id="foundations-torus">2.3 The Torus: A Perfect Home for Quasiperiodicity</h3>
             
-            <p>To really understand quasiperiodic functions, we need to talk about the torus. Don't worry, we'll build up to it slowly!</p>
+            <p>The torus is a useful way to understand repeating and non-repeating motion. It can be pictured either as a doughnut-shaped surface or as a square whose opposite edges are connected.</p>
 
             <div class="concept-box">
                 <h4>Building a Torus</h4>
@@ -234,11 +234,9 @@
             <!-- Embedded 2D Flat Torus App -->
             <div class="embedded-app">
                 <h4>Interactive Torus Explorer</h4>
-                <p style="margin-bottom: 10px;"><a href="../app/js/index.html" target="_blank" style="color: #3498db;">→ Open 2D Torus App in new tab if it doesn't load below</a></p>
+                <p style="margin-bottom: 10px;"><a href="../app/js/index.html" target="_blank" style="color: #3498db;">Open the 2D Torus App in a new tab</a></p>
                 <iframe src="../app/js/index.html" width="100%" height="1100" frameborder="0" style="background: white; border: 1px solid #ddd;" sandbox="allow-scripts allow-same-origin"></iframe>
-                <p class="caption"><strong>Interactive Figure 2</strong>: Click two points to create a geodesic. The slope determines everything:
-                <br>• <strong>Rational slope</strong> (like 1/2, 2/3): The line eventually returns to its starting point: it's periodic!
-                <br>• <strong>Irrational slope</strong> (like √2, π): The line never closes, eventually filling the entire torus: it's quasiperiodic!</p>
+                <p class="caption"><strong>Interactive Figure 2</strong>: Click two points to create a geodesic. A rational slope, such as 1/2 or 2/3, eventually closes. An irrational slope, such as √2 or π, does not close and passes close to every region of the torus.</p>
             </div>
 
             <div class="math-insight">
@@ -252,7 +250,7 @@
 
             <h3 id="foundations-connecting">2.5 Connecting Geodesics to Quasiperiodic Functions</h3>
             
-            <p>Here's the beautiful connection: walking along a geodesic on the torus is mathematically equivalent to evaluating a quasiperiodic function!</p>
+            <p>The connection is direct: following a straight path on a torus can produce the same kind of non-repeating signal as a quasiperiodic function.</p>
 
             <div class="connection-box">
                 <h4>Connection to Quasiperiodic Functions</h4>
@@ -272,7 +270,7 @@
             
             <h3 id="multiple-lines-surfaces">3.1 From Lines to Surfaces</h3>
             
-            <p>So far, we've looked at functions of one variable, like $f(x) = \cos(x) + \cos(\sqrt{2}x)$. But the real world is three-dimensional! Let's extend our ideas.</p>
+            <p>So far, the examples used one input variable. The same ideas also work for functions of two or more variables, where patterns can spread across a plane or through space.</p>
 
             <div class="definition">
                 <strong>Definition (Quasiperiodic Function in Multiple Variables)</strong><br>
@@ -285,7 +283,7 @@
             
             <div class="worked-example">
                 <h4>Example: 2D Quasiperiodic Pattern</h4>
-                <p>Let's create a "quasiperiodic wallpaper" pattern:</p>
+                <p>For example, this function creates a quasiperiodic pattern in the plane:</p>
                 $$f(x, y) = \cos(x + y) + \cos(\sqrt{2}x - y) + \cos(x + \phi y)$$
                 <p>where $\phi = (1 + \sqrt{5})/2$ is the golden ratio.</p>
                 
@@ -295,7 +293,7 @@
                     <li>One at an irrational angle involving $\sqrt{2}$</li>
                     <li>One at an angle involving the golden ratio</li>
                 </ol>
-                <p>The result? A pattern that looks almost regular but never exactly repeats!</p>
+                <p>The result is a pattern with visible structure but no exact repeating tile.</p>
             </div>
 
             <h3 id="multiple-3d">3.3 Three Dimensions and Beyond</h3>
@@ -305,9 +303,9 @@
             <!-- Embedded 3D Torus App -->
             <div class="embedded-app">
                 <h4>Interactive 3D Torus Geodesics</h4>
-                <p style="margin-bottom: 10px;"><a href="../app/js-3d/index.html" target="_blank" style="color: #3498db;">→ Open 3D Torus App in new tab if it doesn't load below</a></p>
+                <p style="margin-bottom: 10px;"><a href="../app/js-3d/index.html" target="_blank" style="color: #3498db;">Open the 3D Torus App in a new tab</a></p>
                 <iframe src="../app/js-3d/index.html" width="100%" height="1100" frameborder="0" style="background: white; border: 1px solid #ddd;" sandbox="allow-scripts allow-same-origin"></iframe>
-                <p class="caption"><strong>Interactive Figure 3</strong>: Click on the torus to launch a geodesic. Watch how it winds around both the "small circle" and "big circle" of the torus. The winding numbers determine whether it's periodic or dense!</p>
+                <p class="caption"><strong>Interactive Figure 3</strong>: Click on the torus to start a geodesic. The path winds around both directions of the torus. Its winding numbers determine whether it closes or keeps spreading across the surface.</p>
             </div>
 
             <h3 id="multiple-winding">3.4 Understanding Winding Numbers</h3>
@@ -319,7 +317,7 @@
                     <li><strong>Poloidal winding</strong>: Around the "small circle" (through the doughnut hole)</li>
                     <li><strong>Toroidal winding</strong>: Around the "big circle" (around the doughnut's body)</li>
                 </ul>
-                <p>If these winding numbers form a rational ratio, the geodesic closes. If not, it fills the surface densely!</p>
+                <p>If the winding numbers form a rational ratio, the geodesic closes. If the ratio is irrational, the path does not close and becomes dense on the surface.</p>
             </div>
         </section>
 
@@ -329,11 +327,11 @@
             
             <h3 id="quasicrystals-matter">4.1 From Mathematics to Matter</h3>
             
-            <p>Remember Shechtman's "impossible" discovery? Let's understand how our mathematical framework explains real quasicrystals.</p>
+            <p>Quasicrystals show how this mathematics appears in real materials. They are ordered like crystals, but their order is not periodic.</p>
 
             <div class="physical-connection">
                 <h4>The Atomic Jigsaw Puzzle</h4>
-                <p>Traditional crystals are like tiling a floor with square tiles: perfectly periodic. Quasicrystals are like Penrose tilings that fill space completely without gaps or overlaps, but never repeat!</p>
+                <p>A traditional crystal repeats like a regular floor tile pattern. A quasicrystal is ordered, but it does not repeat by simple translation. Penrose tilings give a useful two-dimensional model of this idea.</p>
             </div>
 
             <h3 id="quasicrystals-cut">4.2 The Cut-and-Project Method</h3>
@@ -354,9 +352,9 @@
             <h3 id="quasicrystals-diffraction">4.3 Visualizing Quasicrystalline Diffraction Patterns</h3>
             
             <div class="physics-box">
-                <h4>Important Distinction: Diffraction Patterns vs. Quasicrystals</h4>
-                <p>What we're visualizing here are <strong>diffraction patterns</strong>: what you see when X-rays scatter off a quasicrystal. These wave interference patterns have the same forbidden symmetries as quasicrystals, but they're continuous functions, not discrete atomic positions.</p>
-                <p><strong>Think of it this way</strong>: If a quasicrystal is like a Penrose tiling (discrete tiles), then what we're showing is like its shadow or Fourier transform, capturing the symmetry but not the actual structure.</p>
+                <h4>Diffraction patterns and quasicrystals</h4>
+                <p>The visualization below shows diffraction-like patterns. These are related to what appears when waves scatter from a quasicrystal. They reveal symmetry, but they are not pictures of individual atoms.</p>
+                <p>A helpful analogy is a shadow: it can show important structure without showing the full object itself.</p>
             </div>
             
             <div class="interactive-demo">
@@ -390,10 +388,10 @@
                         <button id="reset-pan" style="margin-left: 15px;">Reset View</button>
                     </div>
                 </div>
-                <p class="caption"><strong>Interactive Figure 4</strong>: Generate diffraction-like patterns by superimposing waves with different symmetries. These show what you'd see when shining X-rays through a quasicrystal, revealing the forbidden symmetries in reciprocal space. Note: This shows the diffraction pattern, not the actual atomic positions!</p>
+                <p class="caption"><strong>Interactive Figure 4</strong>: Generate diffraction-like patterns by combining waves with different symmetries. These images represent reciprocal-space patterns, not the actual atomic positions.</p>
                 <p style="margin-top: 15px; text-align: center;">
                     <a href="true-quasicrystals.html" target="_blank" style="color: #3498db; font-weight: bold;">
-                        → See TRUE quasicrystal generators (Penrose tilings and proper wave interference)
+                        Open quasicrystal pattern generators
                     </a>
                 </p>
             </div>
@@ -405,7 +403,7 @@
             
             <h3 id="tools-why">5.1 Why Visualization Matters</h3>
             
-            <p>Quasiperiodicity is inherently visual. Our brains evolved to recognize patterns, and these tools let you see mathematical concepts come alive.</p>
+            <p>Quasiperiodic behavior is easier to understand when it can be seen. The tools below let you change the parameters and watch the pattern respond.</p>
 
             <div class="tool-description">
                 <h4>Tool 1: Flat Torus Explorer</h4>
@@ -415,7 +413,7 @@
                     <li>The difference between rational and irrational slopes</li>
                     <li>Why irrational slopes create dense orbits</li>
                 </ul>
-                <p><strong>Pro tip</strong>: Try slopes like 1/7, 3/7, 5/7 and compare with √2/2!</p>
+                <p>Suggested experiment: compare slopes such as 1/7, 3/7, and 5/7 with an irrational slope such as √2/2.</p>
             </div>
 
             <div class="tool-description">
@@ -432,39 +430,31 @@
 
             <div class="tool-description">
                 <h4>Tool 3: Quasiperiodic Level Set Explorer</h4>
-                <p>This interactive tool visualizes the level sets of the quasiperiodic function:</p>
+                <p>This tool draws level curves of the function:</p>
                 <p>$$f(x,y) = \cos(2\pi x) + \cos(2\pi y) + \cos(2\pi\alpha x)$$</p>
-                <p>where $\alpha$ is the quasiperiod. The level set at value $c$ is the set
-                $\{(x,y) \in \mathbb{T}^2 : f(x,y) = c\}$, drawn on the flat torus using the
-                <strong>marching squares algorithm</strong>. Each connected component of the level set
-                is classified as either a <span style="color:#1565C0;font-weight:700">closed curve</span>
-                (topological circle, zero winding number) or an
-                <span style="color:#BF360C;font-weight:700">open trajectory</span>
-                (wraps around the torus — nonzero winding).</p>
+                <p>The level value $c$ selects the points where $f(x,y)=c$. The app shows a finite,
+                movable window in the plane. <span style="color:#1565C0;font-weight:700">Blue curves</span>
+                close inside the current view. <span style="color:#BF360C;font-weight:700">Orange curves</span>
+                touch the edge, which means the visible piece continues outside the window.</p>
 
                 <div class="novikov-box">
-                    <h5>Novikov's Problem &amp; Physical Application</h5>
-                    <p>S.P. Novikov (1982) asked: for a quasiperiodic function $f$ on the torus,
-                    are the components of its level sets <em>open trajectories</em> (winding around
-                    the torus) or <em>closed loops</em>? This is not merely abstract — electrons in a
-                    metal move along level sets of the Fermi surface (a quasiperiodic function on
-                    the 3-torus). <strong>Open trajectories cause anomalous linear growth of
-                    magnetoresistance</strong> under strong magnetic fields, an effect observed
-                    experimentally in metals such as lead.</p>
-                    <p>Dr.&nbsp;Roberto De&nbsp;Leo's NSF-funded project <em>"Numerical Analysis of
-                    Quasiperiodic Topology"</em> at Howard University centers on classifying these
-                    trajectories and understanding the fractal structure of the phase diagram in
-                    $(\alpha, c)$ space.</p>
+                    <h5>Novikov's problem and physical motivation</h5>
+                    <p>Novikov's problem studies whether level curves of quasiperiodic functions close
+                    into loops or continue through the plane. Related questions appear in solid-state
+                    physics, where electron paths in metals can follow level sets of a Fermi surface
+                    under a magnetic field.</p>
+                    <p>This page gives a visual introduction to that question. It does not prove global
+                    behavior from one finite window; it helps users explore the local shapes of the
+                    curves.</p>
                 </div>
 
-                <p><strong>How to use:</strong> Adjust $\alpha$ (rational presets → all closed curves;
-                irrational presets → open trajectories appear) and drag the level $c$ slider to
-                watch the topology transition in real time.</p>
+                <p><strong>How to use:</strong> Adjust $\alpha$ to change the pattern, then move the
+                level value $c$ to see how the curves split, merge, close, or leave the view.</p>
             </div>
 
             <div class="embedded-app" style="margin: 20px 0;">
                 <p style="margin-bottom:10px;">
-                    <a href="../app/level-sets/index.html" target="_blank">→ Open Level Set Explorer in new tab</a>
+                    <a href="../app/level-sets/index.html" target="_blank">Open the Level Set Explorer in a new tab</a>
                 </p>
                 <iframe src="../app/level-sets/index.html" width="100%" height="1000"
                     frameborder="0"
@@ -473,22 +463,22 @@
                 <p style="font-size:0.88rem; color:#586069; margin-top:8px; font-style:italic;">
                     <strong>Interactive Figure:</strong>
                     Level sets of $f(x,y)=\cos(2\pi x)+\cos(2\pi y)+\cos(2\pi\alpha x)$.
-                    Blue = closed curves. Orange = open trajectories (Novikov).
-                    Try $\alpha=\sqrt{2}$ vs $\alpha=1/2$ and vary $c$.
+                    Blue curves close inside the visible window. Orange curves touch the edge and
+                    continue outside the current view. Try $\alpha=\sqrt{2}$ and $\alpha=1/2$, then vary $c$.
                 </p>
             </div>
 
             <h3 id="tools-precision">5.2 Numerical Precision and Challenges</h3>
             
             <div class="technical-note">
-                <h4>Behind the Scenes: Computational Challenges</h4>
+                <h4>Computational limits</h4>
                 <p>Computers can't store irrational numbers exactly, so we use approximations. This means:</p>
                 <ul>
                     <li>A "quasiperiodic" geodesic might eventually close due to rounding</li>
                     <li>We limit animations to prevent infinite loops</li>
                     <li>Real quasiperiodicity is a mathematical idealization</li>
                 </ul>
-                <p>Despite these limitations, the visualizations capture the essential behavior!</p>
+                <p>Even with these limits, the visualizations show the main behavior clearly.</p>
             </div>
         </section>
 
@@ -511,7 +501,7 @@
 
             <div class="visualization-explanation">
                 <h4>What You're Seeing</h4>
-                <p>When $c = 0$, the level set $F(x,y,z) = 0$ creates a beautiful minimal surface called the Schwarz P surface. It divides space into two intertwining labyrinths!</p>
+                <p>When $c = 0$, the level set $F(x,y,z) = 0$ creates the Schwarz P surface. This surface separates space into two interwoven regions.</p>
             </div>
 
             <canvas id="triply-periodic-viz" width="800" height="400"></canvas>
@@ -525,7 +515,7 @@
                 <h4>Creating Quasiperiodicity</h4>
                 <p>Instead of $F(x,y,z)$, consider:</p>
                 $$f(t) = F(t, \sqrt{2}t, \phi t)$$
-                <p>where $\phi$ is the golden ratio. Now we're tracing a path through the 3D periodic structure at irrational angles, creating a 1D quasiperiodic function!</p>
+                <p>where $\phi$ is the golden ratio. This traces the 3D periodic structure along irrational directions, producing a one-dimensional quasiperiodic function.</p>
             </div>
 
             <h3 id="special-piecewise">6.4 Piecewise Linear Examples: μG4 and μG7</h3>
@@ -554,11 +544,11 @@
             
             <h3 id="applications-electronic">7.1 Electronic Properties of Quasiperiodic Systems</h3>
             
-            <p>When electrons move through a quasiperiodic potential (like in a quasicrystal), strange things happen:</p>
+            <p>When electrons move through a quasiperiodic potential, as in a quasicrystal, their behavior can differ from what happens in ordinary periodic crystals.</p>
 
             <div class="physics-box">
-                <h4>The Quantum Weirdness</h4>
-                <p>In periodic crystals, electrons form "bands" (ranges of allowed energies. In quasiperiodic systems:</p>
+                <h4>Electronic behavior</h4>
+                <p>In periodic crystals, electrons form energy bands. In quasiperiodic systems:</p>
                 <ul>
                     <li>The spectrum can be a fractal (Cantor set)</li>
                     <li>Electronic states can be "critical": neither extended nor localized</li>
@@ -576,7 +566,7 @@
                 
                 <p><strong>The quasiperiodic connection</strong>: The Fermi surface of lead has a complex shape. When electron orbits sample this surface at different magnetic fields, they create quasiperiodic oscillations in resistance.</p>
                 
-                <p><strong>Why it matters</strong>: These oscillations reveal the shape of the Fermi surface, like using sound waves to map the ocean floor!</p>
+                <p><strong>Why it matters</strong>: These oscillations help reveal the shape of the Fermi surface, which is important for understanding how electrons move in the material.</p>
             </div>
 
             <div class="formula-box">
@@ -587,14 +577,14 @@
                 <ul>
                     <li>$B$ is the magnetic field strength</li>
                     <li>$F_i$ are characteristic frequencies related to extremal orbits on the Fermi surface</li>
-                    <li>When ratios $F_i/F_j$ are irrational, the pattern is quasiperiodic!</li>
+                    <li>When ratios $F_i/F_j$ are irrational, the pattern is quasiperiodic.</li>
                 </ul>
             </div>
 
             <h3 id="applications-modern">7.3 Modern Applications</h3>
             
             <div class="applications-grid">
-                <h4>Where Quasiperiodicity Shines</h4>
+                <h4>Where quasiperiodicity appears</h4>
                 
                 <p><strong>Photonic Quasicrystals</strong></p>
                 <ul>
@@ -621,7 +611,7 @@
 
         <!-- Conclusions -->
         <section id="conclusions">
-            <h2>8. Conclusions and Future Directions</h2>
+            <h2>8. Summary and Future Directions</h2>
             
             <h3 id="conclusions-learned">8.1 Summary</h3>
 
@@ -635,7 +625,7 @@
 
             <h3 id="conclusions-interactive">8.2 Interactive Exploration</h3>
 
-            <p>The visualizations in this paper allow direct manipulation of the mathematical concepts, providing geometric intuition that complements the formal definitions.</p>
+            <p>The visualizations on this page make the main ideas easier to test directly. They are meant to support the formal definitions with clear geometric intuition.</p>
 
         </section>
 

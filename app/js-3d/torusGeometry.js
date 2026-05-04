@@ -222,7 +222,7 @@ class TorusGeometry {
                     symbolName: irrational.symbol,
                     fullName: irrational.name,
                     classification: 'Dense',
-                    description: `Irrational winding ratio ${irrational.symbol} - Never closes!`,
+                    description: `Irrational winding ratio ${irrational.symbol} - does not close.`,
                     expectedPeriod: null,
                     approximation: `≈ (${approxP}, ${approxQ})`
                 };
@@ -246,7 +246,7 @@ class TorusGeometry {
                 ratio: ratio,
                 approxStr: `(${simpleP}, ${simpleQ})`,
                 classification: 'Periodic',
-                description: `Rational winding (${simpleP}, ${simpleQ}) - Closes after ${Math.abs(simpleP) + Math.abs(simpleQ)} cycles!`,
+                description: `Rational winding (${simpleP}, ${simpleQ}) - closes after ${Math.abs(simpleP) + Math.abs(simpleQ)} cycles.`,
                 expectedPeriod: Math.abs(simpleQ) * 2 * Math.PI
             };
         } else {
@@ -257,7 +257,7 @@ class TorusGeometry {
                 ratio: ratio,
                 approxStr: `≈ (${approxP}, ${approxQ})`,
                 classification: 'Dense',
-                description: `Irrational winding ratio ${ratio.toFixed(6)} - Never closes!`,
+                description: `Irrational winding ratio ${ratio.toFixed(6)} - does not close.`,
                 expectedPeriod: null,
                 approximation: `≈ (${approxP}, ${approxQ})`
             };

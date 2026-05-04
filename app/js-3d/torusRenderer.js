@@ -316,7 +316,7 @@ class TorusApp {
         const startPoint = this.originPoint;
         const { p, q } = this.windingNumbers;
 
-        // Generate geodesic points with more points for smoothness
+        // Generate geodesic points (capped at 1000 for performance)
         const nPoints = Math.min(2000, Math.max(500, Math.floor(tMax * 20)));
         this.geodesicPoints = TorusGeometry.generateGeodesic(
             startPoint,
@@ -406,36 +406,35 @@ class TorusApp {
 
         if (!info) {
             infoDiv.innerHTML = `
-                <p class="text-muted">Click anywhere on the torus to set the geodesic direction!</p>
+                <p class="text-muted">Click the torus to choose a geodesic direction.</p>
                 <hr>
-                <p class="small"><strong>💡 How to interact:</strong></p>
+                <p class="small"><strong>How to interact:</strong></p>
                 <ul class="small">
                     <li>The <strong style="color: #FF5722;">orange marker</strong> shows the origin</li>
                     <li>Click to set the direction (creates a <strong style="color: #2196F3;">blue marker</strong>)</li>
                     <li>Drag to rotate the view</li>
                     <li>Scroll to zoom in/out</li>
-                    <li>Watch the geodesic curve grow along the surface</li>
+                    <li>Watch the path grow along the surface</li>
                 </ul>
                 <hr>
-                <p class="small"><strong>ℹ️ Note:</strong> Due to translation invariance, all geodesics start from the origin.</p>
+                <p class="small"><strong>Note:</strong> All paths start from the same origin point.</p>
             `;
             return;
         }
 
         // Full info display
-        const icon = info.isRational ? '🟢' : '🔴';
         const colorClass = info.isRational ? 'text-success' : 'text-danger';
 
         let clarification = '';
         if (info.isRational) {
             clarification = `
                 <div class="classification-badge rational-badge">
-                    ✓ RATIONAL WINDING NUMBERS
+                    Rational winding numbers
                 </div>
                 <p class="explanation">This geodesic has rational winding numbers (${info.p}, ${info.q}).</p>
                 <hr class="small-divider">
                 <div class="educational-note">
-                    <p class="small"><strong>📚 What this means:</strong></p>
+                    <p class="small"><strong>What this means:</strong></p>
                     <ul class="small">
                         <li>The curve <strong>closes after finite time</strong></li>
                         <li>Forms a <strong>periodic pattern</strong> on the torus</li>
@@ -453,16 +452,16 @@ class TorusApp {
 
             clarification = `
                 <div class="classification-badge irrational-badge">
-                    ✗ IRRATIONAL WINDING NUMBERS
+                    Irrational winding numbers
                 </div>
                 ${symbolInfo}
                 <p><strong>Approximation:</strong> ${info.approximation || info.approxStr}</p>
                 <hr class="small-divider">
                 <div class="educational-note">
-                    <p class="small"><strong>📚 What this means:</strong></p>
+                    <p class="small"><strong>What this means:</strong></p>
                     <ul class="small">
-                        <li>The curve <strong>never closes</strong></li>
-                        <li>Densely fills the torus surface over time</li>
+                        <li>The curve <strong>does not close</strong></li>
+                        <li>Over time, it passes close to every region of the surface</li>
                         <li>Creates a <strong>quasiperiodic pattern</strong></li>
                     </ul>
                 </div>
@@ -473,13 +472,12 @@ class TorusApp {
         const pt1 = this.originPoint;
         const pt2 = this.directionPoint;
         const coordsInfo = `
-            <p class="small"><strong>📍 Origin:</strong> (θ: ${pt1.theta.toFixed(3)}, φ: ${pt1.phi.toFixed(3)})</p>
-            <p class="small"><strong>📍 Direction:</strong> (θ: ${pt2.theta.toFixed(3)}, φ: ${pt2.phi.toFixed(3)})</p>
+            <p class="small"><strong>Origin:</strong> (θ: ${pt1.theta.toFixed(3)}, φ: ${pt1.phi.toFixed(3)})</p>
+            <p class="small"><strong>Direction:</strong> (θ: ${pt2.theta.toFixed(3)}, φ: ${pt2.phi.toFixed(3)})</p>
         `;
 
         infoDiv.innerHTML = `
             <h4 class="${colorClass}">
-                <span class="icon">${icon}</span>
                 ${info.classification}
             </h4>
             <hr>
@@ -491,7 +489,7 @@ class TorusApp {
             ${coordsInfo}
             <hr>
             <p><strong>Animation Progress:</strong> <span id="progressCounter">${this.animationProgress.toFixed(1)}</span> / ${this.maxProgress}</p>
-            <p class="small text-muted">Click <strong>Play</strong> to watch the geodesic grow!</p>
+            <p class="small text-muted">Click <strong>Play</strong> to animate the path.</p>
         `;
     }
 

@@ -1,11 +1,12 @@
 /* Interactive Research Paper Styles */
 
 :root {
-    --primary-color: #2c3e50;
-    --accent-color: #3498db;
-    --background: #f5f5f5;
-    --text-color: #333;
-    --border-color: #dee2e6;
+    --primary-color: #1f2937;
+    --accent-color: #2563eb;
+    --background: #f8fafc;
+    --text-color: #374151;
+    --muted-color: #6b7280;
+    --border-color: #e5e7eb;
     --code-bg: #f4f4f4;
 }
 
@@ -14,21 +15,22 @@
 }
 
 body {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    line-height: 1.8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.7;
     color: var(--text-color);
-    background-color: white;
+    background-color: #f3f4f6;
     margin: 0;
     padding: 0;
 }
 
 /* Navigation */
 #toc {
-    background: var(--background);
+    background: #ffffff;
     border: 1px solid var(--border-color);
-    padding: 40px;
-    margin: 40px 0;
-    border-radius: 5px;
+    padding: 28px;
+    margin: 36px 0;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     position: static !important;
     float: none !important;
     width: auto !important;
@@ -92,26 +94,27 @@ body {
 
 /* Container */
 .container {
-    max-width: 900px;
+    max-width: 980px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 32px;
     background: white;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
 }
 
 /* Header */
 header {
     text-align: center;
-    padding: 40px 0;
-    border-bottom: 2px solid var(--border-color);
+    padding: 44px 0 36px;
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 40px;
 }
 
 h1 {
-    font-size: 2.5em;
+    font-size: 2.35em;
     color: var(--primary-color);
     margin-bottom: 20px;
     line-height: 1.3;
+    letter-spacing: -0.02em;
 }
 
 .authors {
@@ -119,8 +122,7 @@ h1 {
 }
 
 .advisor, .institution {
-    color: #666;
-    font-style: italic;
+    color: var(--muted-color);
 }
 
 .date {
@@ -160,18 +162,19 @@ h4 {
 
 /* Abstract */
 .abstract-content {
-    background: var(--background);
-    padding: 20px;
+    background: #f8fafc;
+    padding: 22px;
     border-left: 4px solid var(--accent-color);
-    font-style: italic;
+    border-radius: 8px;
 }
 
 /* Definitions and Theorems */
 .definition, .theorem, .example {
-    background: var(--background);
+    background: #f8fafc;
     border-left: 4px solid var(--accent-color);
     padding: 15px 20px;
     margin: 20px 0;
+    border-radius: 8px;
 }
 
 .definition strong, .theorem strong {
@@ -185,11 +188,13 @@ h4 {
 .transformation-box, .polyhedra-explanation, .physics-box,
 .lead-explanation, .formula-box, .applications-grid,
 .future-box, .closing-thought, .physical-connection {
-    background: #f8f9fa;
-    border-left: 4px solid #3498db;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-color);
     padding: 20px;
     margin: 20px 0;
-    border-radius: 0 5px 5px 0;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
 }
 
 .story-box {
@@ -213,8 +218,8 @@ h4 {
 }
 
 .novikov-box {
-    border-left-color: #E65100;
-    background: #fff8e1;
+    border-left-color: #64748b;
+    background: #f8fafc;
 }
 
 /* Figures */
@@ -230,20 +235,19 @@ h4 {
 }
 
 .caption {
-    font-style: italic;
-    color: #666;
+    color: var(--muted-color);
     margin-top: 10px;
     font-size: 0.95em;
 }
 
 /* Interactive Elements */
 .interactive-demo, .embedded-app {
-    background: #fafbfc;
-    border: 1px solid #e1e4e8;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
     padding: 25px;
     margin: 30px 0;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    border-radius: 12px;
+    box-shadow: 0 1px 5px rgba(15, 23, 42, 0.06);
 }
 
 .interactive-demo h4, .embedded-app h4 {
@@ -263,11 +267,11 @@ canvas {
 }
 
 .controls {
-    background: #f6f8fa;
+    background: #f8fafc;
     padding: 20px;
-    border-radius: 6px;
+    border-radius: 10px;
     margin: 20px 0;
-    border: 1px solid #e1e4e8;
+    border: 1px solid var(--border-color);
 }
 
 .controls label {

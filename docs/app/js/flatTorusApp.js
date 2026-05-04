@@ -522,47 +522,45 @@ class FlatTorusApp {
 
                 // Classify the slope with lenient tolerance for preview (shows "close enough" matches)
                 const slopeInfo = MathUtils.classifySlope(slope, 1e-4);
-                const icon = slopeInfo.isRational ? '🟢' : '🔴';
                 const colorClass = slopeInfo.isRational ? 'text-success' : 'text-danger';
 
                 previewHTML = `
                     <div style="background: #f0f0f0; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-                        <p class="small"><strong>📐 Angle Preview:</strong></p>
+                        <p class="small"><strong>Angle preview:</strong></p>
                         <p class="small">Angle: <strong>${angleDeg.toFixed(1)}°</strong> (${angleRad.toFixed(3)} rad)</p>
                         <p class="small">Slope: <strong>${Math.abs(slope) < 100 ? slope.toFixed(3) : '∞'}</strong></p>
                         <hr class="small-divider">
-                        <p class="small ${colorClass}"><span class="icon">${icon}</span> ${slopeInfo.classification}</p>
+                        <p class="small ${colorClass}">${slopeInfo.classification}</p>
                     </div>
                 `;
             }
 
             slopeInfoDiv.innerHTML = `
                 ${previewHTML}
-                <p class="text-muted">Click anywhere to set the geodesic direction from the origin!</p>
+                <p class="text-muted">Click in the square to choose a direction from the origin.</p>
                 <hr class="small-divider">
-                <p class="small"><strong>ℹ️ Note:</strong> Due to translation invariance, all geodesics start from the origin <strong>(0.5, 0.5)</strong> in the center.</p>
+                <p class="small"><strong>Note:</strong> All paths start from the origin <strong>(0.5, 0.5)</strong> in the center.</p>
             `;
             return;
         }
 
         // Full slope info with CRYSTAL CLEAR classification
-        const icon = info.isRational ? '🟢' : '🔴';
         const colorClass = info.isRational ? 'text-success' : 'text-danger';
 
         let clarification = '';
         if (info.isRational) {
             clarification = `
                 <div class="classification-badge rational-badge">
-                    ✓ RATIONAL NUMBER
+                    Rational slope
                 </div>
-                <p class="explanation">This <strong>IS</strong> a rational number (fraction).</p>
+                <p class="explanation">This slope can be written as a fraction.</p>
                 <p><strong>Exact Value:</strong> ${info.approxStr}</p>
                 <hr class="small-divider">
                 <div class="educational-note">
-                    <p class="small"><strong>📚 What this means:</strong></p>
+                    <p class="small"><strong>What this means:</strong></p>
                     <ul class="small">
                         <li>The line returns to the starting point after <strong>${Math.abs(info.q)} complete cycles</strong></li>
-                        <li>You'll see approximately <strong>${info.expectedSegments} line segments</strong> when it closes</li>
+                        <li>The drawing uses about <strong>${info.expectedSegments} line segments</strong> before it closes</li>
                         <li>This creates a <strong>periodic (repeating) pattern</strong></li>
                     </ul>
                 </div>
@@ -573,12 +571,12 @@ class FlatTorusApp {
             if (info.symbolName) {
                 symbolInfo = `<p class="explanation">This is the <strong>irrational constant ${info.symbolName}</strong> (${info.fullName}).</p>`;
             } else {
-                symbolInfo = `<p class="explanation">This slope value <strong>CANNOT</strong> be written as an exact fraction.</p>`;
+                symbolInfo = `<p class="explanation">This slope is not represented by a simple exact fraction.</p>`;
             }
 
             clarification = `
                 <div class="classification-badge irrational-badge">
-                    ✗ IRRATIONAL NUMBER
+                    Irrational slope
                 </div>
                 ${symbolInfo}
                 <p><strong>Best Approximation:</strong> ${info.approxStr}</p>
@@ -588,7 +586,6 @@ class FlatTorusApp {
 
         slopeInfoDiv.innerHTML = `
             <h4 class="${colorClass}">
-                <span class="icon">${icon}</span>
                 ${info.classification}
             </h4>
             <hr>
@@ -598,7 +595,7 @@ class FlatTorusApp {
             <p class="${colorClass}"><strong>${info.description}</strong></p>
             <hr>
             <p><strong>Animation Progress:</strong> <span id="wrapCounter">${this.animationProgress.toFixed(1)}</span> / ${this.maxWraps} wraps</p>
-            <p class="small text-muted">Click <strong>Play</strong> to watch the line wrap!</p>
+            <p class="small text-muted">Click <strong>Play</strong> to animate the line.</p>
         `;
     }
 
