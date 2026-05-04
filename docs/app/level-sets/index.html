@@ -18,9 +18,9 @@
     <header>
         <h1>Quasiperiodic Level Set Explorer</h1>
         <p class="subtitle">
-            Visualizing level sets of
+            Explore the curves where
             $f(x,y) = \cos(2\pi x) + \cos(2\pi y) + \cos(2\pi\alpha x)$
-            on the flat torus — and Novikov's open trajectory problem
+            has the same value.
         </p>
     </header>
 
@@ -41,14 +41,14 @@
 
                 <!-- Alpha (quasiperiod) -->
                 <div class="control-row">
-                    <label for="alphaSlider">α (quasiperiod)</label>
+                    <label for="alphaSlider">Pattern α</label>
                     <input type="range" id="alphaSlider" min="0.01" max="3" step="0.001" value="1.4142">
                     <input type="number" id="alphaInput" min="0.001" max="20" step="0.001" value="1.4142">
                 </div>
 
                 <!-- Alpha presets -->
                 <div>
-                    <div class="preset-label">α presets — rational (blue) / irrational (orange):</div>
+                    <div class="preset-label">Try a preset value:</div>
                     <div class="button-group">
                         <button class="btn btn-rational"   data-alpha-preset="half">1/2</button>
                         <button class="btn btn-rational"   data-alpha-preset="two-thirds">2/3</button>
@@ -61,23 +61,19 @@
 
                 <!-- Level value c -->
                 <div class="control-row">
-                    <label for="cSlider">Level c</label>
+                    <label for="cSlider">Level value c</label>
                     <input type="range" id="cSlider" min="-3" max="3" step="0.01" value="-1.5">
                     <span class="val-display" id="cValue">-1.50</span>
                 </div>
-
-                <!-- Resolution -->
-                <div class="control-row">
-                    <label for="resSlider">Resolution</label>
-                    <input type="range" id="resSlider" min="100" max="700" step="50" value="400">
-                    <span class="val-display" id="resValue">400</span>
-                </div>
+                <p class="control-help">
+                    c is the value being traced: the plot shows all points where f(x,y) = c.
+                </p>
 
             </div><!-- .controls -->
 
             <!-- Pan display -->
             <div class="pan-bar">
-                <span id="panDisplay"></span>
+                <span id="panDisplay">Showing x [0.00, 1.00], y [0.00, 1.00] - drag the plot to move around</span>
                 <button id="resetPanBtn" style="display:none;">Reset view</button>
             </div>
 
@@ -85,7 +81,7 @@
             <div class="status-bar">
                 <span class="count-closed" id="closedCount">— closed curves</span>
                 <span class="status-sep">|</span>
-                <span class="count-open"   id="openCount">— open trajectories</span>
+                <span class="count-open"   id="openCount">— edge-touching pieces</span>
                 <span class="status-sep">|</span>
                 <span class="count-total"  id="totalCount">—</span>
             </div>
@@ -97,86 +93,74 @@
 
             <!-- Classification legend -->
             <div class="info-card">
-                <h3>Curve Classification</h3>
+                <h3>How to read the plot</h3>
                 <div class="legend-item">
                     <div class="legend-dot closed"></div>
-                    <span><strong>Closed curves</strong> — topological circles with zero winding number.
-                    They stay bounded in a region of the torus.</span>
+                    <span><strong>Blue loops</strong> close inside the current view.</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot open"></div>
-                    <span><strong>Open trajectories</strong> — curves that wrap around the torus
-                    (nonzero winding). These are the <em>Novikov open trajectories</em>.</span>
+                    <span><strong>Orange curves</strong> reach the edge, so the curve continues
+                    outside the part you are seeing.</span>
                 </div>
                 <hr>
                 <div id="alphaTypeInfo" style="font-size:0.88rem; color:#586069;">
-                    Set α to see classification
+                    Choose a value of α to change the pattern.
                 </div>
             </div>
 
             <!-- About the function -->
             <div class="info-card">
-                <h3>About This Function</h3>
+                <h3>What the plot shows</h3>
                 <div class="function-display">
                     f(x,y) = cos(2πx) + cos(2πy) + cos(2παx)
                 </div>
-                <p>This function has <strong>3 independent frequencies</strong>: $(1,0)$, $(0,1)$, and $(\alpha,0)$.
-                When $\alpha$ is irrational, these are incommensurate and $f$ is truly quasiperiodic.</p>
-                <p>The function range is $[-3, 3]$. Slide <strong>c</strong> across this range
-                to watch the level set topology change.</p>
-                <p>This is precisely the function studied in Dr.&nbsp;Roberto De&nbsp;Leo's
-                NSF-funded research <em>"Numerical Analysis of Quasiperiodic Topology"</em>
-                at Howard University.</p>
+                <p>The plot draws all points where the function equals the selected value
+                <strong>c</strong>. Moving <strong>c</strong> changes the height being sliced,
+                so the curves can split, merge, close, or run out of view.</p>
+                <p>The parameter <strong>α</strong> controls how the x-direction repeats.
+                Rational values create repeating patterns. Irrational values create
+                quasiperiodic patterns that do not line up exactly.</p>
+                <p>This example is connected to Dr.&nbsp;Roberto De&nbsp;Leo's work on
+                quasiperiodic topology at Howard University.</p>
             </div>
 
             <!-- Novikov's problem -->
             <div class="info-card">
-                <h3>Novikov's Problem (1982)</h3>
-                <p>S.P. Novikov asked: for a quasiperiodic function on the torus,
-                are the connected components of its level sets
-                <strong>open trajectories</strong> (curves winding around the torus) or
-                <strong>closed loops</strong> (bounded circles)?</p>
+                <h3>Why this matters</h3>
+                <p>Novikov's problem asks what happens to these level curves over the whole
+                plane: do they close into loops, or do some keep traveling without closing?</p>
 
                 <div class="novikov-box">
-                    <h4>Physical Meaning</h4>
-                    <p>In a metal under a strong magnetic field, electrons move along
-                    level sets of the Fermi surface (a quasiperiodic function on the
-                    3-torus). <strong>Open trajectories</strong> cause the electrical
-                    resistance to grow <em>linearly</em> with field strength — a
-                    measurable signature observed in experiments on metals like lead.</p>
+                    <h4>Physical connection</h4>
+                    <p>In solid-state physics, related curves describe how electrons move in
+                    certain metals under a strong magnetic field. Whether those paths close
+                    or stay open can affect measurable electrical behavior.</p>
                 </div>
 
-                <p><strong>Key result:</strong> When $\alpha$ is rational, all level sets
-                are closed (periodic). When $\alpha$ is irrational, the level set topology
-                can change dramatically — some components become open trajectories that
-                densely fill strips of the torus.</p>
+                <p>This page only shows one finite window at a time. An orange curve means it
+                leaves the current view; it does not, by itself, prove what the full curve
+                does far away.</p>
             </div>
 
             <!-- Tips -->
             <div class="info-card">
-                <h3>Guided Tour</h3>
+                <h3>Suggested steps</h3>
                 <ol style="padding-left:18px; font-size:0.92rem;">
                     <li style="margin:6px 0">
-                        <strong>Start here</strong> (α = √2, c = −1.5): one
-                        <span style="color:#1976D2;font-weight:700">blue closed loop</span>
-                        in the interior — a bounded level-set component.
+                        Start with <strong>α = √2</strong> and <strong>c = −1.5</strong>.
+                        Look for blue loops that close inside the view.
                     </li>
                     <li style="margin:6px 0">
-                        <strong>Drag c up toward 0</strong>: the loop expands. Near c ≈ −0.73,
-                        it hits the boundary and <span style="color:#E65100;font-weight:700">turns orange</span>
-                        — the level set has opened into an infinite trajectory.
+                        Move <strong>c</strong> toward 0. The curves will change shape as
+                        the level value changes.
                     </li>
                     <li style="margin:6px 0">
-                        <strong>Drag c further to 0 or +1</strong>: multiple orange open
-                        trajectories — these extend across all of R² in the Novikov sense.
+                        If an orange curve reaches the edge, drag the plot to follow it.
                     </li>
                     <li style="margin:6px 0">
-                        <strong>Try α = φ (golden ratio)</strong> — the "most irrational" number,
-                        hardest for level sets to close.
-                    </li>
-                    <li style="margin:6px 0">
-                        <strong>Increase resolution</strong> to 600–700 for sharper curves
-                        (takes ~0.5s longer to compute).
+                        Try <strong>φ</strong> for a strongly irrational example and compare
+                        it with rational values like <strong>1/2</strong> or <strong>2/3</strong>.
                     </li>
                 </ol>
             </div>

@@ -1,9 +1,10 @@
 'use strict';
 
-// Visualization approach: draw the level set of f on [0,1]² as an open domain
-// (no torus identification). Level-set components that close within [0,1]² are
-// "closed curves"; those that hit the boundary are "open trajectories" — pieces
-// of infinite curves that extend across R² in the Novikov sense.
+// Visualization approach: draw the level set of f on a finite window in R^2.
+// Components that close inside the window are "closed"; components that touch
+// the window edge are "boundary" pieces. A boundary hit is useful visual
+// evidence that the curve continues outside the current view, but it is not by
+// itself a proof of a global Novikov open trajectory.
 
 class LevelSetMath {
 
@@ -206,12 +207,11 @@ class LevelSetMath {
         return chains;
     }
 
-    // Classify a chain.
-    // 'closed': the chain forms a complete loop within [0,1]² (bounded component).
-    // 'open':   the chain hits the domain boundary — part of an infinite open
-    //           trajectory that extends across R² in the Novikov sense.
+    // Classify a chain within the finite sampled window.
+    // 'closed':   the chain forms a complete loop inside the view.
+    // 'boundary': the chain touches the view boundary and continues outside it.
     static classifyChain(chain) {
-        return chain.isClosed ? 'closed' : 'open';
+        return chain.isClosed ? 'closed' : 'boundary';
     }
 
     // Full pipeline: sample → marching squares → chains → classification.
@@ -222,8 +222,8 @@ class LevelSetMath {
         const segments = LevelSetMath.runMarchingSquares(grid, N, c);
         const chains   = LevelSetMath.assembleChains(segments);
         chains.forEach(ch => { ch.type = LevelSetMath.classifyChain(ch); });
-        const nClosed = chains.filter(ch => ch.type === 'closed').length;
-        const nOpen   = chains.filter(ch => ch.type === 'open').length;
-        return { grid, chains, nClosed, nOpen };
+        const nClosed   = chains.filter(ch => ch.type === 'closed').length;
+        const nBoundary = chains.filter(ch => ch.type === 'boundary').length;
+        return { grid, chains, nClosed, nBoundary };
     }
 }
