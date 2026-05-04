@@ -1,0 +1,348 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    background: #f8f9fa;
+    color: #24292e;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 25px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background: #f6f8fa;
+    color: #24292e;
+    padding: 30px;
+    text-align: center;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #586069;
+}
+
+/* Main Content Layout */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 30px;
+    padding: 30px;
+}
+
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Canvas Section */
+.canvas-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+#levelSetCanvas {
+    border: 1px solid #d1d5da;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    background: #f8f9fa;
+    display: block;
+}
+
+#levelSetCanvas:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+/* Canvas wrapper — needed for overlay positioning */
+.canvas-wrapper {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+}
+
+/* Computing overlay */
+.computing-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(248, 249, 250, 0.82);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #667eea;
+    letter-spacing: 0.3px;
+    pointer-events: none;
+}
+
+/* Controls */
+.controls {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-row label {
+    font-weight: 600;
+    min-width: 110px;
+    font-size: 0.95rem;
+}
+
+.control-row input[type="range"] {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.control-row input[type="number"] {
+    width: 80px;
+    padding: 4px 8px;
+    border: 1px solid #d1d5da;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.control-row .val-display {
+    font-weight: 700;
+    color: #667eea;
+    min-width: 42px;
+    text-align: right;
+    font-size: 0.95rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.2px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-rational {
+    background: #1976D2;
+    color: white;
+}
+
+.btn-rational:hover {
+    background: #1565C0;
+}
+
+.btn-irrational {
+    background: #E65100;
+    color: white;
+}
+
+.btn-irrational:hover {
+    background: #BF360C;
+}
+
+.preset-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #586069;
+    margin-bottom: 4px;
+}
+
+/* Status bar */
+.status-bar {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 16px;
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.status-sep {
+    color: #ccc;
+}
+
+.count-closed {
+    color: #1565C0;
+    font-weight: 700;
+}
+
+.count-open {
+    color: #BF360C;
+    font-weight: 700;
+}
+
+.count-total {
+    color: #586069;
+    font-size: 0.85rem;
+}
+
+/* Info Section */
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.info-card h3 {
+    margin-bottom: 12px;
+    color: #667eea;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.info-card p {
+    margin-bottom: 8px;
+    font-size: 0.93rem;
+}
+
+.info-card hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 12px 0;
+}
+
+/* Legend */
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    font-size: 0.93rem;
+}
+
+.legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-dot.closed { background: #1976D2; }
+.legend-dot.open   { background: #E65100; }
+
+/* Novikov box */
+.novikov-box {
+    background: #fff8e1;
+    border-left: 4px solid #FF8F00;
+    padding: 12px 14px;
+    border-radius: 0 5px 5px 0;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.novikov-box h4 {
+    color: #E65100;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+/* Alpha type indicator */
+.alpha-rational   { color: #1565C0; font-size: 0.88rem; }
+.alpha-irrational { color: #BF360C; font-size: 0.88rem; }
+
+/* Function display */
+.function-display {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88rem;
+    margin: 8px 0;
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    background: #f8f9fa;
+    padding: 18px;
+    text-align: center;
+    border-top: 1px solid #e1e4e8;
+    font-size: 0.9rem;
+    color: #586069;
+}
+
+footer a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

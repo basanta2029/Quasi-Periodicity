@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasiperiodic Level Set Explorer — Novikov's Problem</title>
+    <link rel="stylesheet" href="style.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$']] }
+        };
+    </script>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>Quasiperiodic Level Set Explorer</h1>
+        <p class="subtitle">
+            Visualizing level sets of
+            $f(x,y) = \cos(2\pi x) + \cos(2\pi y) + \cos(2\pi\alpha x)$
+            on the flat torus — and Novikov's open trajectory problem
+        </p>
+    </header>
+
+    <div class="main-content">
+
+        <!-- Left: canvas + controls -->
+        <div class="canvas-section">
+            <div class="canvas-wrapper">
+                <canvas id="levelSetCanvas" width="600" height="600"></canvas>
+                <!-- Computing overlay (shown during heavy computation) -->
+                <div id="computingOverlay" class="computing-overlay">
+                    Computing level set…
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+
+                <!-- Alpha (quasiperiod) -->
+                <div class="control-row">
+                    <label for="alphaSlider">α (quasiperiod)</label>
+                    <input type="range" id="alphaSlider" min="0.01" max="3" step="0.001" value="1.4142">
+                    <input type="number" id="alphaInput" min="0.001" max="20" step="0.001" value="1.4142">
+                </div>
+
+                <!-- Alpha presets -->
+                <div>
+                    <div class="preset-label">α presets — rational (blue) / irrational (orange):</div>
+                    <div class="button-group">
+                        <button class="btn btn-rational"   data-alpha-preset="half">1/2</button>
+                        <button class="btn btn-rational"   data-alpha-preset="two-thirds">2/3</button>
+                        <button class="btn btn-rational"   data-alpha-preset="three-fifths">3/5</button>
+                        <button class="btn btn-irrational" data-alpha-preset="sqrt2">√2</button>
+                        <button class="btn btn-irrational" data-alpha-preset="phi">φ (golden ratio)</button>
+                        <button class="btn btn-irrational" data-alpha-preset="pi-4">π/4</button>
+                    </div>
+                </div>
+
+                <!-- Level value c -->
+                <div class="control-row">
+                    <label for="cSlider">Level c</label>
+                    <input type="range" id="cSlider" min="-3" max="3" step="0.01" value="-1.5">
+                    <span class="val-display" id="cValue">-1.50</span>
+                </div>
+
+                <!-- Resolution -->
+                <div class="control-row">
+                    <label for="resSlider">Resolution</label>
+                    <input type="range" id="resSlider" min="100" max="700" step="50" value="400">
+                    <span class="val-display" id="resValue">400</span>
+                </div>
+
+            </div><!-- .controls -->
+
+            <!-- Status bar -->
+            <div class="status-bar">
+                <span class="count-closed" id="closedCount">— closed curves</span>
+                <span class="status-sep">|</span>
+                <span class="count-open"   id="openCount">— open trajectories</span>
+                <span class="status-sep">|</span>
+                <span class="count-total"  id="totalCount">—</span>
+            </div>
+
+        </div><!-- .canvas-section -->
+
+        <!-- Right: info panel -->
+        <div class="info-section">
+
+            <!-- Classification legend -->
+            <div class="info-card">
+                <h3>Curve Classification</h3>
+                <div class="legend-item">
+                    <div class="legend-dot closed"></div>
+                    <span><strong>Closed curves</strong> — topological circles with zero winding number.
+                    They stay bounded in a region of the torus.</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot open"></div>
+                    <span><strong>Open trajectories</strong> — curves that wrap around the torus
+                    (nonzero winding). These are the <em>Novikov open trajectories</em>.</span>
+                </div>
+                <hr>
+                <div id="alphaTypeInfo" style="font-size:0.88rem; color:#586069;">
+                    Set α to see classification
+                </div>
+            </div>
+
+            <!-- About the function -->
+            <div class="info-card">
+                <h3>About This Function</h3>
+                <div class="function-display">
+                    f(x,y) = cos(2πx) + cos(2πy) + cos(2παx)
+                </div>
+                <p>This function has <strong>3 independent frequencies</strong>: $(1,0)$, $(0,1)$, and $(\alpha,0)$.
+                When $\alpha$ is irrational, these are incommensurate and $f$ is truly quasiperiodic.</p>
+                <p>The function range is $[-3, 3]$. Slide <strong>c</strong> across this range
+                to watch the level set topology change.</p>
+                <p>This is precisely the function studied in Dr.&nbsp;Roberto De&nbsp;Leo's
+                NSF-funded research <em>"Numerical Analysis of Quasiperiodic Topology"</em>
+                at Howard University.</p>
+            </div>
+
+            <!-- Novikov's problem -->
+            <div class="info-card">
+                <h3>Novikov's Problem (1982)</h3>
+                <p>S.P. Novikov asked: for a quasiperiodic function on the torus,
+                are the connected components of its level sets
+                <strong>open trajectories</strong> (curves winding around the torus) or
+                <strong>closed loops</strong> (bounded circles)?</p>
+
+                <div class="novikov-box">
+                    <h4>Physical Meaning</h4>
+                    <p>In a metal under a strong magnetic field, electrons move along
+                    level sets of the Fermi surface (a quasiperiodic function on the
+                    3-torus). <strong>Open trajectories</strong> cause the electrical
+                    resistance to grow <em>linearly</em> with field strength — a
+                    measurable signature observed in experiments on metals like lead.</p>
+                </div>
+
+                <p><strong>Key result:</strong> When $\alpha$ is rational, all level sets
+                are closed (periodic). When $\alpha$ is irrational, the level set topology
+                can change dramatically — some components become open trajectories that
+                densely fill strips of the torus.</p>
+            </div>
+
+            <!-- Tips -->
+            <div class="info-card">
+                <h3>Guided Tour</h3>
+                <ol style="padding-left:18px; font-size:0.92rem;">
+                    <li style="margin:6px 0">
+                        <strong>Start here</strong> (α = √2, c = −1.5): one
+                        <span style="color:#1976D2;font-weight:700">blue closed loop</span>
+                        in the interior — a bounded level-set component.
+                    </li>
+                    <li style="margin:6px 0">
+                        <strong>Drag c up toward 0</strong>: the loop expands. Near c ≈ −0.73,
+                        it hits the boundary and <span style="color:#E65100;font-weight:700">turns orange</span>
+                        — the level set has opened into an infinite trajectory.
+                    </li>
+                    <li style="margin:6px 0">
+                        <strong>Drag c further to 0 or +1</strong>: multiple orange open
+                        trajectories — these extend across all of R² in the Novikov sense.
+                    </li>
+                    <li style="margin:6px 0">
+                        <strong>Try α = φ (golden ratio)</strong> — the "most irrational" number,
+                        hardest for level sets to close.
+                    </li>
+                    <li style="margin:6px 0">
+                        <strong>Increase resolution</strong> to 600–700 for sharper curves
+                        (takes ~0.5s longer to compute).
+                    </li>
+                </ol>
+            </div>
+
+        </div><!-- .info-section -->
+
+    </div><!-- .main-content -->
+
+    <footer>
+        <p>
+            Part of the
+            <a href="../../docs/index.html">Quasiperiodic Functions</a>
+            interactive educational platform &mdash;
+            Howard University, 2025.
+            Based on research by
+            <a href="https://deleo.website" target="_blank" rel="noopener">Dr.&nbsp;Roberto De&nbsp;Leo</a>.
+        </p>
+    </footer>
+
+</div><!-- .container -->
+
+<script src="levelSetMath.js"></script>
+<script src="levelSetApp.js"></script>
+</body>
+</html>

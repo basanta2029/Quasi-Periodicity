@@ -212,6 +212,11 @@ h4 {
     background: #fffaf5;
 }
 
+.novikov-box {
+    border-left-color: #E65100;
+    background: #fff8e1;
+}
+
 /* Figures */
 .figure {
     margin: 30px 0;

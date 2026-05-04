@@ -72,6 +72,7 @@
                         <li><a href="#tools-2d">2D Flat Torus Visualization</a></li>
                         <li><a href="#tools-3d">3D Embedded Torus</a></li>
                         <li><a href="#tools-precision">5.2 Numerical Precision and Challenges</a></li>
+                        <li><a href="#tools-level-sets">5.3 Level Set Explorer &amp; Novikov's Problem</a></li>
                     </ul>
                 </li>
                 <li><a href="#special-functions">Special Functions and Examples</a>
@@ -425,6 +426,56 @@
                     <li>The relationship between winding numbers and periodicity</li>
                     <li>Why some paths fill the surface densely</li>
                 </ul>
+            </div>
+
+            <h3 id="tools-level-sets">5.3 Level Set Explorer &amp; Novikov's Problem</h3>
+
+            <div class="tool-description">
+                <h4>Tool 3: Quasiperiodic Level Set Explorer</h4>
+                <p>This interactive tool visualizes the level sets of the quasiperiodic function:</p>
+                <p>$$f(x,y) = \cos(2\pi x) + \cos(2\pi y) + \cos(2\pi\alpha x)$$</p>
+                <p>where $\alpha$ is the quasiperiod. The level set at value $c$ is the set
+                $\{(x,y) \in \mathbb{T}^2 : f(x,y) = c\}$, drawn on the flat torus using the
+                <strong>marching squares algorithm</strong>. Each connected component of the level set
+                is classified as either a <span style="color:#1565C0;font-weight:700">closed curve</span>
+                (topological circle, zero winding number) or an
+                <span style="color:#BF360C;font-weight:700">open trajectory</span>
+                (wraps around the torus — nonzero winding).</p>
+
+                <div class="novikov-box">
+                    <h5>Novikov's Problem &amp; Physical Application</h5>
+                    <p>S.P. Novikov (1982) asked: for a quasiperiodic function $f$ on the torus,
+                    are the components of its level sets <em>open trajectories</em> (winding around
+                    the torus) or <em>closed loops</em>? This is not merely abstract — electrons in a
+                    metal move along level sets of the Fermi surface (a quasiperiodic function on
+                    the 3-torus). <strong>Open trajectories cause anomalous linear growth of
+                    magnetoresistance</strong> under strong magnetic fields, an effect observed
+                    experimentally in metals such as lead.</p>
+                    <p>Dr.&nbsp;Roberto De&nbsp;Leo's NSF-funded project <em>"Numerical Analysis of
+                    Quasiperiodic Topology"</em> at Howard University centers on classifying these
+                    trajectories and understanding the fractal structure of the phase diagram in
+                    $(\alpha, c)$ space.</p>
+                </div>
+
+                <p><strong>How to use:</strong> Adjust $\alpha$ (rational presets → all closed curves;
+                irrational presets → open trajectories appear) and drag the level $c$ slider to
+                watch the topology transition in real time.</p>
+            </div>
+
+            <div class="embedded-app" style="margin: 20px 0;">
+                <p style="margin-bottom:10px;">
+                    <a href="../app/level-sets/index.html" target="_blank">→ Open Level Set Explorer in new tab</a>
+                </p>
+                <iframe src="../app/level-sets/index.html" width="100%" height="1000"
+                    frameborder="0"
+                    style="background:white; border:1px solid #ddd; border-radius:8px;"
+                    sandbox="allow-scripts allow-same-origin"></iframe>
+                <p style="font-size:0.88rem; color:#586069; margin-top:8px; font-style:italic;">
+                    <strong>Interactive Figure:</strong>
+                    Level sets of $f(x,y)=\cos(2\pi x)+\cos(2\pi y)+\cos(2\pi\alpha x)$.
+                    Blue = closed curves. Orange = open trajectories (Novikov).
+                    Try $\alpha=\sqrt{2}$ vs $\alpha=1/2$ and vary $c$.
+                </p>
             </div>
 
             <h3 id="tools-precision">5.2 Numerical Precision and Challenges</h3>
